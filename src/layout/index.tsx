@@ -1,19 +1,16 @@
 import React, { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FloatButton, Layout, Menu, notification } from "antd";
+import { FloatButton, Layout, Menu } from "antd";
 import {
   PieChartOutlined,
-  UserOutlined,
   HomeOutlined,
   PushpinOutlined,
-  ShareAltOutlined,
   SmileOutlined,
-  TruckOutlined,
   BellOutlined,
 } from "@ant-design/icons";
 import LogoWeb from "@/assets/images/logo/logo_web.png";
 
-import { IoBusOutline, IoDocumentTextOutline } from "react-icons/io5";
+import { IoDocumentTextOutline } from "react-icons/io5";
 import { notify } from "@/components/Notification";
 
 interface LayoutProps {
