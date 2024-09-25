@@ -7,9 +7,8 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"]
     },
-    "declaration": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -25,13 +24,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
-  "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
+  "include": ["src", "src/sections/post-public/view/PostPublicView/.tsx"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
