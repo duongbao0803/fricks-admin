@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
+
+.scrollbar,
+#myTable {
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #d3d3d3;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background-color: #c7c7c7;
+  }
+}
+
+#myTable {
+  overflow-x: auto;
+}
+
+.sider {
+  position: fixed !important;
+}
+
+.first-column:hover {
+  cursor: pointer;
+  color: rgb(0, 153, 255);
+}
+
+.pagination {
+  position: sticky !important;
+  bottom: 0;
+}
+
+.header {
+  width: -webkit-fill-available !important;
+}
+
+.slick-list {
+  border-radius: 10px;
+}
+
+canvas {
+  min-width: 100% !important;
+  min-height: 100% !important;
+}
