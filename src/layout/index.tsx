@@ -12,6 +12,10 @@ import LogoWeb from "@/assets/images/logo/logo_web.png";
 
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { notify } from "@/components/Notification";
+import { useAuthStore } from "@/hooks/useAuthStore";
+import ADMIN from "@/assets/images/avatar/avatar_admin.jpg";
+import STORE from "@/assets/images/avatar/avatar_staff.jpg";
+import { Roles } from "@/enums";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -53,9 +57,10 @@ const items: MenuItem[] = [
 
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
   const [collapsed, setCollapsed] = useState<boolean>(true);
-  // const { userInfo } = useAuthService();
+  const userInfo = useAuthStore((s) => s.userInfo);
+  const isLoading = useAuthStore((s) => s.isLoading);
 
-  // const logout = useAuth((state) => state.logout);
+  const logout = useAuthStore((s) => s.logout);
 
   const navigate = useNavigate();
 
@@ -99,7 +104,7 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
 
   const handleLogout = () => {
     notify("success", "Đăng xuất thành công", 2);
-    // logout();
+    logout();
     navigate("/");
   };
 
@@ -116,7 +121,7 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
         collapsible
       >
         <div className="demo-logo-vertical" />
-        <div className="my-4 flex justify-center">
+        <div className="my-7 flex justify-center">
           <img
             className=" w-7/12 select-none object-cover"
             src={LogoWeb}
@@ -138,19 +143,23 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
       >
         <div className="header fixed z-[999] flex h-16 items-center justify-end gap-2 bg-[#f8f8f8] bg-opacity-80 pr-4 shadow-none backdrop-blur-[6px]">
           <>
-            {/* <img
+            <img
               className="h-[42px] w-[42px] rounded-full border object-cover ring-2 ring-gray-300 hover:ring-[#0077ff]"
-              src={userInfo?.["avatar-url"] && userInfo?.["avatar-url"] !== null ? userInfo["avatar-url"] :"https://maimoikethon.com/sieu-nhan-gao-do-chibi/imager_5946.jpg"}
-            /> */}
+              src={
+                userInfo && userInfo?.role?.includes(Roles.ADMIN)
+                  ? ADMIN
+                  : STORE
+              }
+            />
           </>
 
           <div className="flex flex-col">
-            {/* <strong>{userInfo?.["full-name"] || "Null"}</strong> */}
+            <strong>{userInfo?.fullName || "Null"}</strong>
             <div
               className="cursor-pointer font-semibold text-[#5099ff] hover:underline"
               onClick={handleLogout}
             >
-              Logout
+              Đăng xuất
             </div>
           </div>
         </div>

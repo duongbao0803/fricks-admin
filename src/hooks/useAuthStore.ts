@@ -1,51 +1,45 @@
-import { login } from "@/apis/authApi";
+import { getInfoUser } from "@/apis/authApi";
 import { notify } from "@/components/Notification";
-import { AuthState } from "@/types/auth.types";
-import { jwtDecode } from "jwt-decode";
+import { UserInfo } from "@/types/auth.types";
 import Cookies from "js-cookie";
 import { create } from "zustand";
-import { Roles } from "@/enums";
+
+interface AuthState {
+  userInfo: UserInfo | null;
+  isLoading: boolean;
+  isChecking: boolean;
+  login: () => void;
+  logout: () => void;
+  fetchUserInfo: () => Promise<void>;
+}
 
 export const useAuthStore = create<AuthState>((set) => ({
-  user: {},
+  userInfo: {},
   isLoading: false,
+  isChecking: !!Cookies.get("accessToken"),
+  login: () => {
+    set({ isChecking: true });
+  },
 
-  login: async (values: { email: string; password: string }) => {
+  logout: () => {
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
+    sessionStorage.removeItem("keys");
+    set({ isChecking: false });
+  },
+
+  fetchUserInfo: async () => {
     set({ isLoading: true });
     try {
-      console.log("object", values);
-      const res = await login({
-        email: values.email,
-        password: values.password,
-      });
-      console.log("check res", res);
-      if (res && res?.data.httpCode === 200) {
+      const res = await getInfoUser();
+      if (res && res.status === 200) {
+        set({ userInfo: res.data });
         set({ isLoading: false });
-        notify("success", "Đăng nhập thành công", 3);
-        Cookies.set("accessToken", res.data.accessToken);
-        Cookies.set("refreshToken", res.data.refreshToken);
-        const jwtToken = Cookies.get("accessToken");
-        if (jwtToken) {
-          const decoded: any = jwtDecode(jwtToken);
-          const role =
-            decoded[
-              "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-            ];
-          if (role !== Roles.ADMIN && role !== Roles.BUSCOMPANY) {
-            notify("success", "Bạn không có quyền truy cập và trang này", 3);
-            set({ isLoading: false });
-            return;
-          } else {
-            set({ user: res.data });
-            notify("success", "Đăng nhập thành công", 3);
-          }
-        }
       }
     } catch (err: any) {
       console.log("check err", err);
+      set({ userInfo: null });
       set({ isLoading: false });
-      notify("error", `${err.response.data.message}`, 3);
-      return;
     }
   },
 }));

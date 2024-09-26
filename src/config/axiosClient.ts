@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { requestRefreshToken } from "../apis/authApi";
 
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -21,33 +22,38 @@ axiosClient.interceptors.request.use(
   },
 );
 
-// axiosClient.interceptors.response.use(
-//   (response) => {
-//     return response;
-//   },
-//   async (error) => {
-//     const originalRequest = error.config;
-//     if (error?.response?.status === 401) {
-//       originalRequest._retry = true;
-//       const refreshToken = Cookies.get("refreshToken");
+axiosClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    const originalRequest = error.config;
+    if (error?.response?.status === 401) {
+      originalRequest._retry = true;
+      const refreshToken = Cookies.get("refreshToken");
 
-//       try {
-//         if (refreshToken) {
-//           const res = await requestRefreshToken(refreshToken);
-//           if (res && res.status === 200) {
-//             const data = res.data["access-token"];
-//             Cookies.set("accessToken", data);
-//             axiosClient.defaults.headers.common["Authorization"] =
-//               `Bearer ${data}`;
-//           }
-//           return axiosClient(originalRequest);
-//         }
-//       } catch (refreshError) {
-//         console.error("check refresh error", refreshError);
-//       }
-//     }
-//     return Promise.reject(error);
-//   },
-// );
+      try {
+        if (refreshToken) {
+          const res = await requestRefreshToken(refreshToken);
+          if (res && res.status === 200) {
+            const newAccessToken = res.data.accessToken;
+            const newRefreshToken = res.data.refreshToken;
+
+            console.log("check data", newAccessToken);
+            Cookies.set("accessToken", newAccessToken);
+            Cookies.set("refreshToken", newRefreshToken);
+
+            axiosClient.defaults.headers.common["Authorization"] =
+              `Bearer ${newAccessToken}`;
+          }
+          return axiosClient(originalRequest);
+        }
+      } catch (refreshError) {
+        console.error("check refresh error", refreshError);
+      }
+    }
+    return Promise.reject(error);
+  },
+);
 
 export default axiosClient;

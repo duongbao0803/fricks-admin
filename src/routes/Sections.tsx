@@ -1,16 +1,39 @@
 import { Error, Loading, ScrollToTop } from "@/components";
+import { Roles } from "@/enums";
+import { useAuthStore } from "@/hooks/useAuthStore";
 import DashboardLayout from "@/layout";
-import { AuthenView } from "@/sections/auth/view";
+import AuthenPage from "@/pages/AuthenPage";
 import React, { lazy, Suspense } from "react";
-import { Outlet, useRoutes } from "react-router-dom";
+import { Navigate, Outlet, useRoutes } from "react-router-dom";
 
 export const ChartPage = lazy(() => import("@/pages/ChartPage"));
 
+const checkAccessAdmin = (role: string) => {
+  return role === Roles.ADMIN;
+};
+
+const checkAccessStore = (role: string) => {
+  return role === Roles.STORE;
+};
+
 const Router: React.FC = () => {
+  const { isChecking, userInfo } = useAuthStore();
+  const role = userInfo?.role;
+  let hasAccessAdmin = false;
+  let hasAccessStore = false;
+
+  if (userInfo?.role !== null && typeof role === "string") {
+    hasAccessAdmin = checkAccessAdmin(role);
+    hasAccessStore = checkAccessStore(role);
+  }
+
   const routes = useRoutes([
-    { path: "/", element: <AuthenView /> },
     {
-      element: (
+      path: "/",
+      element: isChecking ? <Navigate to="/chart" /> : <AuthenPage />,
+    },
+    {
+      element: isChecking ? (
         <DashboardLayout>
           <ScrollToTop>
             <Suspense fallback={<Loading size="large" tip="Đang chờ" />}>
@@ -18,16 +41,16 @@ const Router: React.FC = () => {
             </Suspense>
           </ScrollToTop>
         </DashboardLayout>
+      ) : (
+        <Navigate to="/" />
       ),
       children: [
         {
           path: "/chart",
           element: <ChartPage />,
         },
-        {
-          path: "*",
-          element: <Error />,
-        },
+
+        { element: <Error />, path: "*" },
       ],
     },
   ]);
