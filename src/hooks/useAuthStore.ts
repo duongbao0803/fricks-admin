@@ -1,5 +1,4 @@
 import { getInfoUser } from "@/apis/authApi";
-import { notify } from "@/components/Notification";
 import { UserInfo } from "@/types/auth.types";
 import Cookies from "js-cookie";
 import { create } from "zustand";

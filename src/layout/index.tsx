@@ -58,7 +58,6 @@ const items: MenuItem[] = [
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
   const [collapsed, setCollapsed] = useState<boolean>(true);
   const userInfo = useAuthStore((s) => s.userInfo);
-  const isLoading = useAuthStore((s) => s.isLoading);
 
   const logout = useAuthStore((s) => s.logout);
 

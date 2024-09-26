@@ -1,5 +1,4 @@
 import { Error, Loading, ScrollToTop } from "@/components";
-import { Roles } from "@/enums";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import DashboardLayout from "@/layout";
 import AuthenPage from "@/pages/AuthenPage";
@@ -8,24 +7,24 @@ import { Navigate, Outlet, useRoutes } from "react-router-dom";
 
 export const ChartPage = lazy(() => import("@/pages/ChartPage"));
 
-const checkAccessAdmin = (role: string) => {
-  return role === Roles.ADMIN;
-};
+// const checkAccessAdmin = (role: string) => {
+//   return role === Roles.ADMIN;
+// };
 
-const checkAccessStore = (role: string) => {
-  return role === Roles.STORE;
-};
+// const checkAccessStore = (role: string) => {
+//   return role === Roles.STORE;
+// };
 
 const Router: React.FC = () => {
-  const { isChecking, userInfo } = useAuthStore();
-  const role = userInfo?.role;
-  let hasAccessAdmin = false;
-  let hasAccessStore = false;
+  const { isChecking } = useAuthStore();
+  // const role = userInfo?.role;
+  // let hasAccessAdmin = false;
+  // let hasAccessStore = false;
 
-  if (userInfo?.role !== null && typeof role === "string") {
-    hasAccessAdmin = checkAccessAdmin(role);
-    hasAccessStore = checkAccessStore(role);
-  }
+  // if (userInfo?.role !== null && typeof role === "string") {
+  //   hasAccessAdmin = checkAccessAdmin(role);
+  //   hasAccessStore = checkAccessStore(role);
+  // }
 
   const routes = useRoutes([
     {
