@@ -12,7 +12,6 @@ import { login } from "@/apis/authApi";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { Roles } from "@/enums";
-import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/hooks/useAuthStore";
 
 const provider = new GoogleAuthProvider();
@@ -20,8 +19,6 @@ const provider = new GoogleAuthProvider();
 const LoginForm: React.FC = () => {
   const [form] = Form.useForm();
   const [isLoading, setIsLoading] = useState(false);
-
-  const navigate = useNavigate();
 
   const onFinish = async (values: { email: string; password: string }) => {
     setIsLoading(true);

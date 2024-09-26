@@ -2,10 +2,9 @@ import Router from "./routes/Sections";
 import { NotificationProvider } from "./components/Notification";
 import { useAuthStore } from "./hooks/useAuthStore";
 import { useEffect } from "react";
-import { Loading } from "./components";
 
 function App() {
-  const { fetchUserInfo, isLoading } = useAuthStore();
+  const { fetchUserInfo } = useAuthStore();
 
   useEffect(() => {
     fetchUserInfo();
