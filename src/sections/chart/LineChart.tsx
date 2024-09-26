@@ -5,14 +5,18 @@ Chart.register(CategoryScale);
 
 interface LineChartProps {
   chartData: ChartData<"line">;
+  options: object;
 }
 
 const LineChart: React.FC<LineChartProps> = (props) => {
-  const { chartData } = props;
+  const { chartData, options } = props;
   return (
     <>
-      <div className="w-[500px]">
-        <Line data={chartData} options={{}} />
+      <div className="w-full  p-5 ">
+        <div className="mb-10">
+          <p className="text-xl font-bold">Tỉ lệ sử dụng dịch vụ</p>
+        </div>
+        <Line data={chartData} options={options} />
       </div>
     </>
   );

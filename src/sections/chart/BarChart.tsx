@@ -1,23 +1,35 @@
 import React from "react";
-import { Bar } from "react-chartjs-2";
-import Chart, { ChartData, CategoryScale } from "chart.js/auto";
-Chart.register(CategoryScale);
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  ChartData,
+} from "chart.js";
+import { Chart } from "react-chartjs-2"; // Sử dụng Chart thay vì Bar
 
-interface BarChartProps {
-  chartData: ChartData<"bar">;
-}
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+);
 
-const BarChart: React.FC<BarChartProps> = (props) => {
-  const { chartData } = props;
+const BarChart: React.FC<{
+  title: string;
+  chartData: ChartData<"line" | "bar", (number | [number, number] | null)[]>;
+  options: any;
+}> = ({ title, chartData, options }) => {
   return (
-    <>
-      <div className="w-full">
-        <div className="mb-10">
-          <p className="text-xl font-bold">Tỉ lệ sử dụng dịch vụ</p>
-        </div>
-        <Bar data={chartData} options={{}} />
+    <div className="w-full p-5">
+      <div className="mb-10">
+        <p className="text-xl font-bold">{title}</p>
       </div>
-    </>
+      <Chart type="bar" data={chartData} options={options} />{" "}
+    </div>
   );
 };
 
