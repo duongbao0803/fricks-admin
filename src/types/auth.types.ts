@@ -29,3 +29,21 @@ export interface AuthState {
   isLoading: boolean;
   login: (values: { email: string; password: string }) => Promise<void>;
 }
+
+export interface ResponseTokenProps {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface UserInfo {
+  email?: string;
+  confirmEmail?: boolean;
+  googleId?: string;
+  avatar?: string;
+  fullName?: string;
+  unsignFullName?: string;
+  address?: string;
+  phoneNumber?: string;
+  role?: string;
+  statuss?: string;
+}

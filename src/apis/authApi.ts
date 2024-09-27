@@ -1,12 +1,22 @@
 import axiosClient from "@/config/axiosClient";
-import { LoginFormParams } from "@/types/auth.types";
+import { LoginFormParams, ResponseTokenProps } from "@/types/auth.types";
+import { AxiosResponse } from "axios";
 
 const login = (formValues: LoginFormParams) => {
   return axiosClient.post("/authen/login", formValues);
 };
 
-const getInfoUser = () => {
-  return axiosClient.get("/api/authen/current-user");
+const requestRefreshToken = (
+  jwtToken: string,
+): Promise<AxiosResponse<ResponseTokenProps>> => {
+  return axiosClient.post<ResponseTokenProps>(
+    "/authen/refresh-token",
+    jwtToken,
+  );
 };
 
-export { login, getInfoUser };
+const getInfoUser = () => {
+  return axiosClient.get("/authen/current-user");
+};
+
+export { login, getInfoUser, requestRefreshToken };
