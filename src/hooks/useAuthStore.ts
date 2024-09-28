@@ -13,7 +13,7 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  userInfo: {},
+  userInfo: null,
   isLoading: false,
   isChecking: !!Cookies.get("accessToken"),
   login: () => {
