@@ -48,8 +48,8 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem("Thống kê", "1", <PieChartOutlined />, undefined, "/chart"),
-  getItem("Người dùng", "2", <PushpinOutlined />, undefined, "/city"),
-  getItem("Công ty", "3", <HomeOutlined />, undefined, "/company"),
+  getItem("Người dùng", "2", <PushpinOutlined />, undefined, "/user"),
+  getItem("Cửa hàng", "3", <HomeOutlined />, undefined, "/store"),
   getItem("Đơn hàng", "4", <IoDocumentTextOutline />, undefined, "/order"),
   getItem("Thông báo", "9", <BellOutlined />, undefined, "/notification"),
   getItem("Thông tin", "10", <SmileOutlined />, undefined, "/personal"),

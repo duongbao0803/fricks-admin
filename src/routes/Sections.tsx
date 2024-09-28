@@ -2,6 +2,8 @@ import { Error, Loading, ScrollToTop } from "@/components";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import DashboardLayout from "@/layout";
 import AuthenPage from "@/pages/AuthenPage";
+import StorePage from "@/pages/StorePage";
+import UserPage from "@/pages/UserPage";
 import React, { lazy, Suspense } from "react";
 import { Navigate, Outlet, useRoutes } from "react-router-dom";
 
@@ -47,6 +49,14 @@ const Router: React.FC = () => {
         {
           path: "/chart",
           element: <ChartPage />,
+        },
+        {
+          path: "/user",
+          element: <UserPage />,
+        },
+        {
+          path: "/store",
+          element: <StorePage />,
         },
 
         { element: <Error />, path: "*" },
