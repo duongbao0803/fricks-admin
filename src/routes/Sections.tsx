@@ -4,6 +4,7 @@ import DashboardLayout from "@/layout";
 import AuthenPage from "@/pages/AuthenPage";
 import StorePage from "@/pages/StorePage";
 import UserPage from "@/pages/UserPage";
+import ProductPage from "@/pages/UserPage copy";
 import React, { lazy, Suspense } from "react";
 import { Navigate, Outlet, useRoutes } from "react-router-dom";
 
@@ -57,6 +58,10 @@ const Router: React.FC = () => {
         {
           path: "/store",
           element: <StorePage />,
+        },
+        {
+          path: "/product",
+          element: <ProductPage />,
         },
 
         { element: <Error />, path: "*" },
