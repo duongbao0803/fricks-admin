@@ -2,6 +2,7 @@ import { Error, Loading, ScrollToTop } from "@/components";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import DashboardLayout from "@/layout";
 import AuthenPage from "@/pages/AuthenPage";
+import StoreDetailPage from "@/pages/StoreDetailPage";
 import StorePage from "@/pages/StorePage";
 import UserPage from "@/pages/UserPage";
 import React, { lazy, Suspense } from "react";
@@ -57,6 +58,10 @@ const Router: React.FC = () => {
         {
           path: "/store",
           element: <StorePage />,
+        },
+        {
+          path: "/store/:id",
+          element: <StoreDetailPage />,
         },
 
         { element: <Error />, path: "*" },

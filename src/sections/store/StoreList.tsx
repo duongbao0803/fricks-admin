@@ -1,48 +1,36 @@
 import React, { useCallback, useMemo, useState } from "react";
 import {
   Button,
-  Form,
   Image,
   Input,
   Table,
   Tag,
 } from "antd";
-import type { TablePaginationConfig, TableProps } from "antd";
+import type { TableProps } from "antd";
 import {
   FilterOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { StoreInfo } from "@/types/store.types";
-import { renderStatusTag } from "@/utils/renderStatusTag";
 import AddStoreModal from "./AddStoreModal";
-
-export interface DataType {
-  id: number;
-  // key: string;
-  // name: string;
-  // image: string;
-  // description: string;
-  // quantity: number;
-  // typeOfProduct: string;
-  // price: number;
-  // rating: number;
-}
+import { useNavigate } from "react-router-dom";
 
 const StoreList: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   // const { Stores, totalCount, isFetching, fetchStoreDetail } =
   //   useStoreService();
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [storeDetail, setStoreDetail] = useState<StoreInfo>();
-  const { TextArea } = Input;
+  // const [currentPage, setCurrentPage] = useState<number>(1);
+  const [, setIsModalOpen] = useState<boolean>(false);
+  // const [storeDetail, setStoreDetail] = useState<StoreInfo>();
+  const [, setStoreId] = useState<number | null>(null);
+  // const { TextArea } = Input;
+  const navigate = useNavigate();
   // const { statusText, tagColor } =
-  //   storeDetail && !storeDetail?.isDeleted
-  //     ? renderStatusTag(!storeDetail?.isDeleted)
+  //   storeDetail && !storeDetail?.isDeletedd
+  //     ? renderStatusTag(!storeDetail?.isDeletedd)
   //     : { statusText: <Skeleton count={1} width={90} />, tagColor: "" };
-  const [form] = Form.useForm();
+  // const [form] = Form.useForm();
 
   // const fetchData = async (StoreId: number) => {
   //   try {
@@ -55,16 +43,43 @@ const StoreList: React.FC = () => {
   //   }
   // };
 
-  const handleTableChange = useCallback((pagination: TablePaginationConfig) => {
-    setCurrentPage(pagination.current || 1);
-  }, []);
+  const dataSource = [
+    {
+      id: 1,
+      name: 'Cửa hàng A',
+      image: 'https://via.placeholder.com/100',
+      accountManager: 'manager_a',
+      address: 'TPHCM',
+      taxCode: '1234567890',
+      createDate: '2023-01-10',
+      updateDate: null,
+      isDeleted: false,
+    },
+    {
+      id: 2,
+      name: 'Cửa hàng B',
+      image: 'https://via.placeholder.com/100',
+      accountManager: 'manager_b',
+      address: 'TPHCM',
+      taxCode: '1234567890',
+      createDate: '2023-02-15',
+      updateDate: null,
+      isDeleted: true
+    },
+    {
+      id: 3,
+      name: 'Cửa hàng C',
+      image: 'https://via.placeholder.com/100',
+      accountManager: 'manager_c',
+      address: 'TPHCM',
+      taxCode: '1234567890',
+      createDate: '2023-03-05',
+      updateDate: null,
+      isDeleted: false
+    },
+  ];
 
-  const handleRowClick = async (record: number) => {
-    setStoreDetail(undefined);
-    // await fetchData(record);
-  };
-
-  const columns: TableProps<DataType>["columns"] = useMemo(
+  const columns: TableProps<StoreInfo>["columns"] = useMemo(
     () => [
       {
         title: "STT",
@@ -75,7 +90,7 @@ const StoreList: React.FC = () => {
       {
         title: "Tên cửa hàng",
         dataIndex: "name",
-        width: "20%",
+        width: "15%",
         className: "first-column",
         onCell: () => {
           return {
@@ -87,14 +102,14 @@ const StoreList: React.FC = () => {
       },
       {
         title: "Hình ảnh",
-        dataIndex: "img-url",
+        dataIndex: "image",
         width: "15%",
         render: (image) => (
           <Image
             src={image}
             style={{
-              width: "100px",
-              height: "100px",
+              width: "80px",
+              height: "80px",
               borderRadius: "100%",
               objectFit: "cover",
             }}
@@ -103,22 +118,27 @@ const StoreList: React.FC = () => {
       },
       {
         title: "Tài khoản quản lý",
-        dataIndex: "manager-email",
-        width: "25%",
+        dataIndex: "accountManager",
+        width: "20%",
       },
       {
-        title: "Mô tả ngắn gọn",
-        dataIndex: "short-description",
+        title: "Địa chỉ",
+        dataIndex: "address",
+        width: "20%",
+      },
+      {
+        title: "Mã số thuế",
+        dataIndex: "taxCode",
         width: "17%",
       },
       {
         title: "Ngày tạo",
-        dataIndex: "create-date",
+        dataIndex: "createDate",
         width: "13%",
       },
       {
         title: "Trạng thái",
-        dataIndex: "is-deleted",
+        dataIndex: "isDeleted",
         render: (isDeleted) => {
           let statusText = "";
           let tagColor = "";
@@ -142,6 +162,14 @@ const StoreList: React.FC = () => {
       },
     ],
     [],
+  );
+
+  const handleRowClick = useCallback(
+    (record: number) => {
+      setStoreId(record);
+      navigate(`/store/${record}`);
+    },
+    [navigate],
   );
 
   return (
@@ -175,6 +203,11 @@ const StoreList: React.FC = () => {
         className="pagination"
         id="myTable"
         columns={columns}
+        dataSource={dataSource}
+        rowKey={(record) => record.id}
+        onRow={(record) => ({
+          onClick: () => handleRowClick(record.id),
+        })}
         // dataSource={Stores?.map(
         //   (record: { id: unknown; "create-date": string | Date }) => ({
         //     ...record,
@@ -199,7 +232,7 @@ const StoreList: React.FC = () => {
         title={
           <p className="text-lg font-bold text-[red]">
             Chi tiết nhà xe &nbsp;
-            {!StoreDetail?.isDeleted && (
+            {!StoreDetail?.isDeletedd && (
               <Tag color={tagColor}>{statusText}</Tag>
             )}
           </p>

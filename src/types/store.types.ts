@@ -1,7 +1,7 @@
 import { CommonModel } from "./common.types";
 
 export interface StoreInfo extends CommonModel {
-    managerId: number;
+    accountManager?: string;
     name?: string;
     address?: string;
     taxCode?: string;
