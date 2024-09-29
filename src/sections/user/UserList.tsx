@@ -19,7 +19,6 @@ const UserList: React.FC = React.memo(() => {
   const { data, isFetching, totalCount, refetch } = useFetchUsers(
     currentPage,
     pageSize,
-    "",
   );
 
   const handleDeleteUser = useCallback(async (userId: number) => {
@@ -67,21 +66,19 @@ const UserList: React.FC = React.memo(() => {
         render: (dob) => {
           if (dob) {
             return formatDate2(dob);
+          } else {
+            return "N/A";
           }
-          else {
-            return "N/A"
-          }
-        }
+        },
       },
       {
         title: "Địa chỉ",
         dataIndex: "address",
         width: "17%",
         render: (address) => {
-          if (address)
-            return address
-          return "N/A"
-        }
+          if (address) return address;
+          return "N/A";
+        },
       },
       {
         title: "Số điện thoại",
@@ -94,7 +91,7 @@ const UserList: React.FC = React.memo(() => {
         width: "7%",
         render: (role) => {
           return Roles[role as keyof typeof Roles];
-        }
+        },
       },
       {
         title: "Trạng thái",
@@ -134,7 +131,9 @@ const UserList: React.FC = React.memo(() => {
             okText="Có"
             cancelText="Không"
           >
-            <Button danger size="small" className="border-none"><Trash2/></Button>
+            <Button danger size="small" className="border-none">
+              <Trash2 />
+            </Button>
           </Popconfirm>
         ),
       },

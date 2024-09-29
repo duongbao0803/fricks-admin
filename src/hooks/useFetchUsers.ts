@@ -4,16 +4,16 @@ import { useQuery } from "@tanstack/react-query";
 export const useFetchUsers = (
   currentPage: number,
   pageSize: number,
-  searchTerm: string,
+  // searchTerm: string,
 ) => {
   const fetchUsers = async ({ queryKey }: any) => {
-    const [, PageIndex, PageSize, searchTerm] = queryKey;
-    const res = await getUserList(PageIndex, PageSize, "");
+    const [, PageIndex, PageSize] = queryKey;
+    const res = await getUserList(PageIndex, PageSize);
     return res;
   };
 
   const { data, isFetching, refetch } = useQuery({
-    queryKey: ["userList", currentPage, pageSize, searchTerm],
+    queryKey: ["userList", currentPage, pageSize],
     queryFn: fetchUsers,
     staleTime: 5000,
   });

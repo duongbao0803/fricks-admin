@@ -3,7 +3,7 @@ import axiosClient from "@/config/axiosClient";
 export const getUserList = async (
   PageIndex: number,
   PageSize: number,
-  searchTerm: string,
+  // searchTerm: string,
 ) => {
   const response = await axiosClient.get(
     `/users?PageIndex=${PageIndex}&pageSize=${PageSize}`,

@@ -20,7 +20,7 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
   const [fileChange, setFileChange] = useState<string>("");
   // const { addNewProductItem } = useProductService();
   const [form] = Form.useForm();
-  const { TextArea } = Input;
+  // const { TextArea } = Input;
 
   useEffect(() => {
     form.setFieldsValue({ "img-url": fileChange });
@@ -81,7 +81,7 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
               className="formItem"
             >
               <Input
-                prefix={<CarOutlined className="site-form-item-icon mr-1"/>}
+                prefix={<CarOutlined className="site-form-item-icon mr-1" />}
                 placeholder="SKU"
                 autoFocus
               />
@@ -125,7 +125,9 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
               className="formItem"
             >
               <Input
-                prefix={<DotChartOutlined className="site-form-item-icon mr-1"/>}
+                prefix={
+                  <DotChartOutlined className="site-form-item-icon mr-1" />
+                }
                 placeholder="Đơn vị tính"
                 autoFocus
               />
@@ -146,7 +148,9 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
               className="formItem"
             >
               <Input
-                prefix={<TransactionOutlined className="site-form-item-icon mr-1" />}
+                prefix={
+                  <TransactionOutlined className="site-form-item-icon mr-1" />
+                }
                 placeholder="Đơn giá"
               />
             </Form.Item>
@@ -172,8 +176,6 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
           />
         </Form.Item>
 
-        
-        
         <Form.Item
           name="img-url"
           rules={[
@@ -187,7 +189,11 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
           labelCol={{ span: 24 }}
           className="formItem"
         >
-          <UploadImage onFileChange={handleFileChange} initialImage={""} titleButton={"Thêm ảnh"} />
+          <UploadImage
+            onFileChange={handleFileChange}
+            initialImage={""}
+            titleButton={"Thêm ảnh"}
+          />
         </Form.Item>
       </Form>
     </Modal>

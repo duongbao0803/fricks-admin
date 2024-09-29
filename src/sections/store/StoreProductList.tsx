@@ -1,4 +1,3 @@
-import { ProductInfo } from "@/types/product.types";
 import { FilterOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Button, Image, Input, Table, TableProps } from "antd";
 import React, { useMemo } from "react";
