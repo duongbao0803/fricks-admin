@@ -24,7 +24,6 @@
     "chartjs-plugin-zoom": "^2.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
-    "crypto-js": "^4.2.0",
     "dayjs": "^1.11.11",
     "file-saver": "^2.0.5",
     "firebase": "^10.11.1",
