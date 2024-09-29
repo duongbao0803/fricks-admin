@@ -7,6 +7,7 @@ import {
   PushpinOutlined,
   SmileOutlined,
   BellOutlined,
+  BoxPlotOutlined,
 } from "@ant-design/icons";
 import LogoWeb from "@/assets/images/logo/logo_web.png";
 
@@ -51,9 +52,10 @@ const items: MenuItem[] = [
   getItem("Thống kê", "1", <PieChartOutlined />, undefined, "/chart"),
   getItem("Người dùng", "2", <PushpinOutlined />, undefined, "/user"),
   getItem("Cửa hàng", "3", <HomeOutlined />, undefined, "/store"),
-  getItem("Đơn hàng", "4", <IoDocumentTextOutline />, undefined, "/order"),
-  getItem("Thông báo", "9", <BellOutlined />, undefined, "/notification"),
-  getItem("Thông tin", "10", <SmileOutlined />, undefined, "/personal"),
+  getItem("Sản phẩm", "4", <BoxPlotOutlined />, undefined, "/product"),
+  getItem("Đơn hàng", "5", <IoDocumentTextOutline />, undefined, "/order"),
+  getItem("Thông báo", "6", <BellOutlined />, undefined, "/notification"),
+  getItem("Thông tin", "7", <SmileOutlined />, undefined, "/personal"),
 ];
 
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
