@@ -7,12 +7,14 @@ import AddUserModal from "./AddUserModal";
 import { useFetchUsers } from "@/hooks/useFetchUsers";
 import { deleteUser } from "@/apis/userApi";
 import { notify } from "@/components/Notification";
-import { CustomError } from "@/types/error.types";
+import { formatDate2 } from "@/utils/validate";
+import { Trash2 } from "lucide-react";
+import { Roles } from "@/enums";
 
 const UserList: React.FC = React.memo(() => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageSize, setPageSize] = React.useState(3);
+  const [pageSize, setPageSize] = React.useState(10);
 
   const { data, isFetching, totalCount, refetch } = useFetchUsers(
     currentPage,
@@ -55,28 +57,44 @@ const UserList: React.FC = React.memo(() => {
       },
       {
         title: "Họ và tên",
-        dataIndex: "full-name",
+        dataIndex: "fullName",
         width: "15%",
       },
       {
         title: "Ngày sinh",
         dataIndex: "dob",
         width: "15%",
+        render: (dob) => {
+          if (dob) {
+            return formatDate2(dob);
+          }
+          else {
+            return "N/A"
+          }
+        }
       },
       {
         title: "Địa chỉ",
         dataIndex: "address",
         width: "17%",
+        render: (address) => {
+          if (address)
+            return address
+          return "N/A"
+        }
       },
       {
         title: "Số điện thoại",
-        dataIndex: "phone-number",
+        dataIndex: "phoneNumber",
         width: "10%",
       },
       {
         title: "Vai trò",
         dataIndex: "role",
-        width: "5%",
+        width: "7%",
+        render: (role) => {
+          return Roles[role as keyof typeof Roles];
+        }
       },
       {
         title: "Trạng thái",
@@ -111,12 +129,12 @@ const UserList: React.FC = React.memo(() => {
         dataIndex: "",
         render: (_, record) => (
           <Popconfirm
-            title="Are you sure to delete this user?"
+            title="Bạn có muốn xóa người dùng này?"
             onConfirm={() => handleDeleteUser(record.id)}
-            okText="Yes"
-            cancelText="No"
+            okText="Có"
+            cancelText="Không"
           >
-            <Button danger>Delete</Button>
+            <Button danger size="small" className="border-none"><Trash2/></Button>
           </Popconfirm>
         ),
       },

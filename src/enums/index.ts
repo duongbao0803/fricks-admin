@@ -1,11 +1,11 @@
 export enum Roles {
-  CUSTOMER = "CUSTOMER",
-  STORE = "STORE",
-  ADMIN = "ADMIN",
+  CUSTOMER = "Khách hàng",
+  STORE = "Cửa hàng",
+  ADMIN = "QTV",
 }
 
 export enum CreateRoles {
-  CUSTOMER = "Khách hàng",
-  STORE = "Cửa hàng",
-  ADMIN = "Quản trị viên",
+  CUSTOMER = 0,
+  STORE = 1,
+  ADMIN = 2,
 }

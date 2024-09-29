@@ -10,6 +10,8 @@ import { formatDate, validatePhoneNumber } from "@/utils/validate";
 import moment from "moment";
 import { CreateRoles } from "@/enums";
 import { UploadImage } from "@/components";
+import { addUser } from "@/apis/userApi";
+import { notify } from "@/components/Notification";
 
 export interface AddModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,17 +32,17 @@ const AddUserModal: React.FC<AddModalProps> = React.memo((props) => {
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
+      console.log("check value", values);
       const formattedDate = formatDate(values.dob);
-      const formatRole = +values.role;
       const updatedValues: string = JSON.stringify({
         ...values,
         dob: formattedDate,
-        role: formatRole,
       });
+      console.log("update value", updatedValues);
       setIsConfirmLoading(true);
       setTimeout(async () => {
         try {
-          // await addNewUserItem(updatedValues as unknown as UserInfo);
+          await handleAddUser(updatedValues);
           form.resetFields();
           setIsConfirmLoading(false);
           setIsOpen(false);
@@ -66,6 +68,27 @@ const AddUserModal: React.FC<AddModalProps> = React.memo((props) => {
   const handleFileChange = useCallback((newFileChange: string) => {
     setFileChange(newFileChange);
   }, []);
+
+  const handleAddUser = useCallback(async (userData: any) => {
+    try {
+      const res = await addUser(userData);
+      console.log("check res", res);
+      if (res && res.status === 200) {
+        // refetch();
+        notify("success", `${res.data.message}`, 3);
+      }
+      // refetch();
+    } catch (err: any) {
+      console.error("err", err);
+      notify("error", `${err.response.data.message}`, 3);
+    }
+  }, []);
+
+  const roleLabels = {
+    [CreateRoles.CUSTOMER]: "Khách hàng",
+    [CreateRoles.STORE]: "Cửa hàng",
+    [CreateRoles.ADMIN]: "Quản trị viên",
+  };
 
   return (
     <Modal
@@ -107,7 +130,7 @@ const AddUserModal: React.FC<AddModalProps> = React.memo((props) => {
           </Col>
           <Col span={12}>
             <Form.Item
-              name="full-name"
+              name="fullName"
               rules={[
                 {
                   required: true,
@@ -147,7 +170,7 @@ const AddUserModal: React.FC<AddModalProps> = React.memo((props) => {
           </Col>
           <Col span={12}>
             <Form.Item
-              name="phone-number"
+              name="phoneNumber"
               id="formItem"
               rules={[
                 {
@@ -205,35 +228,29 @@ const AddUserModal: React.FC<AddModalProps> = React.memo((props) => {
               className="formItem"
             >
               <Select placeholder="Chọn vai trò" className="h-10">
-                {Object.keys(CreateRoles).map((key: string) => {
-                  const roleValue =
-                  CreateRoles[key as keyof typeof CreateRoles];
-                    {console.log("check role", roleValue);
-                    }
-                  if (typeof roleValue === "string") {
-                    return (
-                      <Select.Option
-                        key={roleValue}
-                        value={roleValue}
-                      >
-                        {roleValue.toString()}
-                      </Select.Option>
-                    );
-                  }
-                  return null;
-                })}
+                {Object.values(CreateRoles)
+                  .filter((value) => typeof value === "number")
+                  .map((value) => (
+                    <Select.Option key={value} value={value}>
+                      {roleLabels[value as CreateRoles]}
+                    </Select.Option>
+                  ))}
               </Select>
             </Form.Item>
           </Col>
         </Row>
         <Form.Item
-          name="avatar-url"
+          name="avatar"
           colon={true}
           label="Hình ảnh"
           labelCol={{ span: 24 }}
           className="formItem"
         >
-          <UploadImage onFileChange={handleFileChange} initialImage={""} titleButton={"Chọn ảnh"}/>
+          <UploadImage
+            onFileChange={handleFileChange}
+            initialImage={""}
+            titleButton={"Chọn ảnh"}
+          />
         </Form.Item>
       </Form>
     </Modal>
