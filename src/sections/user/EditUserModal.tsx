@@ -15,12 +15,12 @@ export interface EditUserModalProps {
 const EditUserModal: React.FC<EditUserModalProps> = (props) => {
   const { setIsOpen, isOpen, userInfo } = props;
   const [fileChange, setFileChange] = useState<string>("");
-  const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
+  const [isConfirmLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
   const { Option } = Select;
   // const { updateUserItem } = useUserService();
-  const genderValue =
-    userInfo?.gender === 0 ? "Nam" : userInfo?.gender === 1 ? "Nữ" : "Khác";
+  // const genderValue =
+  //   userInfo?.gender === 0 ? "Nam" : userInfo?.gender === 1 ? "Nữ" : "Khác";
 
   useEffect(() => {
     form.setFieldsValue({ "avatar-url": fileChange });
