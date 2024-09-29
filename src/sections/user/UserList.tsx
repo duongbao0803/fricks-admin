@@ -104,7 +104,7 @@ const UserList: React.FC = React.memo(() => {
               statusText = "ACTIVE";
               tagColor = "green";
               break;
-            case "INACTIVE":
+            case "BANNED":
               statusText = "INACTIVE";
               tagColor = "pink";
               break;
