@@ -1,34 +1,33 @@
-import React, { useCallback, useMemo, useState } from "react";
-import {
-  Button,
-  Form,
-  Image,
-  Input,
-  Table,
-  Tag,
-} from "antd";
-import type { TablePaginationConfig, TableProps } from "antd";
-import {
-  FilterOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
+import React, { useMemo, useState } from "react";
+import { Button, Image, Input, Table } from "antd";
+import type { TableProps } from "antd";
+import { FilterOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "react-loading-skeleton/dist/skeleton.css";
-import { ProductInfo } from "@/types/product.types";
 import AddProductModal from "./AddProductModal";
+
+export interface DataType {
+  key: string;
+  sku: string;
+  image: string;
+  name: string;
+  unit: string;
+  price: string;
+  store: string;
+}
 
 const ProductList: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   // const { Products, totalCount, isFetching, fetchProductDetail } =
   //   useProductService();
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [productDetail, setProductDetail] = useState<ProductInfo>();
-  const { TextArea } = Input;
+  // const [currentPage, setCurrentPage] = useState<number>(1);
+  // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  // const [productDetail, setProductDetail] = useState<ProductInfo>();
+  // const { TextArea } = Input;
   // const { statusText, tagColor } =
   //   productDetail && !productDetail?.isDeleted
   //     ? renderStatusTag(!productDetail?.isDeleted)
   //     : { statusText: <Skeleton count={1} width={90} />, tagColor: "" };
-  const [form] = Form.useForm();
+  // const [form] = Form.useForm();
 
   // const fetchData = async (ProductId: number) => {
   //   try {
@@ -41,46 +40,46 @@ const ProductList: React.FC = () => {
   //   }
   // };
 
-  const handleTableChange = useCallback((pagination: TablePaginationConfig) => {
-    setCurrentPage(pagination.current || 1);
-  }, []);
+  // const handleTableChange = useCallback((pagination: TablePaginationConfig) => {
+  //   setCurrentPage(pagination.current || 1);
+  // }, []);
 
-  const handleRowClick = async (record: number) => {
-    setProductDetail(undefined);
-    // await fetchData(record);
-  };
+  // const handleRowClick = async (record: number) => {
+  //   setProductDetail(undefined);
+  //   // await fetchData(record);
+  // };
 
   const dataSource = [
     {
-      key: '1',
-      sku: 'SP001',
-      image: 'https://via.placeholder.com/100', // Link ảnh mẫu
-      name: 'Sản phẩm A',
-      unit: 'Chiếc',
-      price: '200,000 VND',
-      store: 'Cửa hàng 1',
+      key: "1",
+      sku: "SP001",
+      image: "https://via.placeholder.com/100",
+      name: "Sản phẩm A",
+      unit: "Chiếc",
+      price: "200,000 VND",
+      store: "Cửa hàng 1",
     },
     {
-      key: '2',
-      sku: 'SP002',
-      image: 'https://via.placeholder.com/100',
-      name: 'Sản phẩm B',
-      unit: 'Hộp',
-      price: '150,000 VND',
-      store: 'Cửa hàng 2',
+      key: "2",
+      sku: "SP002",
+      image: "https://via.placeholder.com/100",
+      name: "Sản phẩm B",
+      unit: "Hộp",
+      price: "150,000 VND",
+      store: "Cửa hàng 2",
     },
     {
-      key: '3',
-      sku: 'SP003',
-      image: 'https://via.placeholder.com/100',
-      name: 'Sản phẩm C',
-      unit: 'Chai',
-      price: '300,000 VND',
-      store: 'Cửa hàng 3',
+      key: "3",
+      sku: "SP003",
+      image: "https://via.placeholder.com/100",
+      name: "Sản phẩm C",
+      unit: "Chai",
+      price: "300,000 VND",
+      store: "Cửa hàng 3",
     },
   ];
 
-  const columns: TableProps<ProductInfo>["columns"] = useMemo(
+  const columns: TableProps<DataType>["columns"] = useMemo(
     () => [
       {
         title: "SKU",
@@ -108,13 +107,6 @@ const ProductList: React.FC = () => {
         dataIndex: "name",
         width: "20%",
         className: "first-column",
-        onCell: () => {
-          return {
-            onClick: () => {
-              setIsModalOpen(true);
-            },
-          };
-        },
       },
       {
         title: "Đơn vị tính",
@@ -130,7 +122,7 @@ const ProductList: React.FC = () => {
         title: "Cửa hàng",
         dataIndex: "store",
         width: "13%",
-      }
+      },
     ],
     [],
   );
@@ -149,9 +141,7 @@ const ProductList: React.FC = () => {
           </Button>
         </div>
         <div className="flex gap-x-2">
-          <div>
-            {/* <ExportProduct /> */}
-          </div>
+          <div>{/* <ExportProduct /> */}</div>
           <div>
             <Button type="primary" onClick={() => setIsOpen(true)}>
               <div className="flex justify-center">

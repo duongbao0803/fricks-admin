@@ -1,20 +1,11 @@
 import React, { useCallback, useMemo, useState } from "react";
-import {
-  Button,
-  Image,
-  Input,
-  Table,
-  Tag,
-} from "antd";
+import { Button, Image, Input, Table, Tag } from "antd";
 import type { TableProps } from "antd";
-import {
-  FilterOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
+import { FilterOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "react-loading-skeleton/dist/skeleton.css";
-import { StoreInfo } from "@/types/store.types";
 import AddStoreModal from "./AddStoreModal";
 import { useNavigate } from "react-router-dom";
+import { StoreInfo } from "@/types/store.types";
 
 const StoreList: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -46,36 +37,36 @@ const StoreList: React.FC = () => {
   const dataSource = [
     {
       id: 1,
-      name: 'Cửa hàng A',
-      image: 'https://via.placeholder.com/100',
-      accountManager: 'manager_a',
-      address: 'TPHCM',
-      taxCode: '1234567890',
-      createDate: '2023-01-10',
+      name: "Cửa hàng A",
+      image: "https://via.placeholder.com/100",
+      accountManager: "manager_a",
+      address: "TPHCM",
+      taxCode: "1234567890",
+      createDate: "2023-01-10",
       updateDate: null,
       isDeleted: false,
     },
     {
       id: 2,
-      name: 'Cửa hàng B',
-      image: 'https://via.placeholder.com/100',
-      accountManager: 'manager_b',
-      address: 'TPHCM',
-      taxCode: '1234567890',
-      createDate: '2023-02-15',
+      name: "Cửa hàng B",
+      image: "https://via.placeholder.com/100",
+      accountManager: "manager_b",
+      address: "TPHCM",
+      taxCode: "1234567890",
+      createDate: "2023-02-15",
       updateDate: null,
-      isDeleted: true
+      isDeleted: true,
     },
     {
       id: 3,
-      name: 'Cửa hàng C',
-      image: 'https://via.placeholder.com/100',
-      accountManager: 'manager_c',
-      address: 'TPHCM',
-      taxCode: '1234567890',
-      createDate: '2023-03-05',
+      name: "Cửa hàng C",
+      image: "https://via.placeholder.com/100",
+      accountManager: "manager_c",
+      address: "TPHCM",
+      taxCode: "1234567890",
+      createDate: "2023-03-05",
       updateDate: null,
-      isDeleted: false
+      isDeleted: false,
     },
   ];
 
@@ -186,9 +177,7 @@ const StoreList: React.FC = () => {
           </Button>
         </div>
         <div className="flex gap-x-2">
-          <div>
-            {/* <ExportStore /> */}
-          </div>
+          <div>{/* <ExportStore /> */}</div>
           <div>
             <Button type="primary" onClick={() => setIsOpen(true)}>
               <div className="flex justify-center">
