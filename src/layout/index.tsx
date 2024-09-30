@@ -7,6 +7,7 @@ import {
   PushpinOutlined,
   SmileOutlined,
   BellOutlined,
+  BoxPlotOutlined,
 } from "@ant-design/icons";
 import LogoWeb from "@/assets/images/logo/logo_web.png";
 
@@ -16,6 +17,7 @@ import { useAuthStore } from "@/hooks/useAuthStore";
 import ADMIN from "@/assets/images/avatar/avatar_admin.jpg";
 import STORE from "@/assets/images/avatar/avatar_staff.jpg";
 import { Roles } from "@/enums";
+import { Loading } from "@/components";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -48,16 +50,18 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem("Thống kê", "1", <PieChartOutlined />, undefined, "/chart"),
-  getItem("Người dùng", "2", <PushpinOutlined />, undefined, "/city"),
-  getItem("Công ty", "3", <HomeOutlined />, undefined, "/company"),
-  getItem("Đơn hàng", "4", <IoDocumentTextOutline />, undefined, "/order"),
-  getItem("Thông báo", "9", <BellOutlined />, undefined, "/notification"),
-  getItem("Thông tin", "10", <SmileOutlined />, undefined, "/personal"),
+  getItem("Người dùng", "2", <PushpinOutlined />, undefined, "/user"),
+  getItem("Cửa hàng", "3", <HomeOutlined />, undefined, "/store"),
+  getItem("Sản phẩm", "4", <BoxPlotOutlined />, undefined, "/product"),
+  getItem("Đơn hàng", "5", <IoDocumentTextOutline />, undefined, "/order"),
+  getItem("Thông báo", "6", <BellOutlined />, undefined, "/notification"),
+  getItem("Thông tin", "7", <SmileOutlined />, undefined, "/personal"),
 ];
 
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
   const [collapsed, setCollapsed] = useState<boolean>(true);
   const userInfo = useAuthStore((s) => s.userInfo);
+  const isLoading = useAuthStore((s) => s.isLoading);
 
   const logout = useAuthStore((s) => s.logout);
 
@@ -141,26 +145,29 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
         style={{ marginLeft: collapsed ? 55 : 230 }}
       >
         <div className="header fixed z-[999] flex h-16 items-center justify-end gap-2 bg-[#f8f8f8] bg-opacity-80 pr-4 shadow-none backdrop-blur-[6px]">
-          <>
-            <img
-              className="h-[42px] w-[42px] rounded-full border object-cover ring-2 ring-gray-300 hover:ring-[#0077ff]"
-              src={
-                userInfo && userInfo?.role?.includes(Roles.ADMIN)
-                  ? ADMIN
-                  : STORE
-              }
-            />
-          </>
-
-          <div className="flex flex-col">
-            <strong>{userInfo?.fullName || "Null"}</strong>
-            <div
-              className="cursor-pointer font-semibold text-[#5099ff] hover:underline"
-              onClick={handleLogout}
-            >
-              Đăng xuất
-            </div>
-          </div>
+          {isLoading ? (
+            <Loading></Loading>
+          ) : (
+            <>
+              <img
+                className="h-[42px] w-[42px] rounded-full border object-cover ring-2 ring-gray-300 hover:ring-[#0077ff]"
+                src={
+                  userInfo && userInfo?.role?.includes(Roles.ADMIN)
+                    ? ADMIN
+                    : STORE
+                }
+              />
+              <div className="flex flex-col">
+                <strong>{userInfo?.fullName || "Null"}</strong>
+                <div
+                  className="cursor-pointer font-semibold text-[#5099ff] hover:underline"
+                  onClick={handleLogout}
+                >
+                  Đăng xuất
+                </div>
+              </div>
+            </>
+          )}
         </div>
         <Content className="mx-4 mt-[80px]">
           <div className="min-w-[250px] overflow-x-auto rounded-xl ">

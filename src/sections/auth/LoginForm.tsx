@@ -11,7 +11,7 @@ import { notify } from "@/components/Notification";
 import { login } from "@/apis/authApi";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-import { Roles } from "@/enums";
+import { RolesLogin } from "@/enums";
 import { useAuthStore } from "@/hooks/useAuthStore";
 
 const provider = new GoogleAuthProvider();
@@ -28,21 +28,21 @@ const LoginForm: React.FC = () => {
         password: values.password,
       });
       if (res && res.status === 200) {
-        Cookies.set("accessToken", res.data.accessToken);
-        Cookies.set("refreshToken", res.data.refreshToken);
-        const jwtToken = Cookies.get("accessToken");
-        if (jwtToken) {
-          const decoded: any = jwtDecode(jwtToken);
+        const accessToken = res.data.accessToken;
+        if (accessToken) {
+          const decoded: any = jwtDecode(accessToken);
           const role =
             decoded[
               "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
             ];
-          if (role !== Roles.ADMIN && role !== Roles.STORE) {
-            notify("success", "Bạn không có quyền truy cập và trang này", 3);
+          if (role !== RolesLogin.ADMIN && role !== RolesLogin.STORE) {
+            notify("error", "Bạn không có quyền truy cập và trang này", 3);
             setIsLoading(false);
             return;
           } else {
             notify("success", "Đăng nhập thành công", 3);
+            Cookies.set("accessToken", res.data.accessToken);
+            Cookies.set("refreshToken", res.data.refreshToken);
             const authStore = useAuthStore.getState();
             authStore.login();
           }

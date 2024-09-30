@@ -36,6 +36,7 @@ export interface ResponseTokenProps {
 }
 
 export interface UserInfo {
+  id: number;
   email?: string;
   confirmEmail?: boolean;
   googleId?: string;
@@ -45,5 +46,6 @@ export interface UserInfo {
   address?: string;
   phoneNumber?: string;
   role?: string;
-  statuss?: string;
+  status?: string;
+  gender?: number;
 }
