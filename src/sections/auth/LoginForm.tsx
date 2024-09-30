@@ -39,6 +39,13 @@ const LoginForm: React.FC = () => {
             notify("error", "Bạn không có quyền truy cập và trang này", 3);
             setIsLoading(false);
             return;
+          } else if (role === RolesLogin.ADMIN) {
+            notify("success", "Đăng nhập thành công", 3);
+            Cookies.set("accessToken", res.data.accessToken);
+            Cookies.set("refreshToken", res.data.refreshToken);
+            const authStore = useAuthStore.getState();
+            authStore.login();
+            return;
           } else {
             notify("success", "Đăng nhập thành công", 3);
             Cookies.set("accessToken", res.data.accessToken);

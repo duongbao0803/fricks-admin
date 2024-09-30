@@ -15,8 +15,7 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { notify } from "@/components/Notification";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import ADMIN from "@/assets/images/avatar/avatar_admin.jpg";
-import STORE from "@/assets/images/avatar/avatar_staff.jpg";
-import { Roles } from "@/enums";
+import { RolesLogin } from "@/enums";
 import { Loading } from "@/components";
 
 interface LayoutProps {
@@ -51,6 +50,7 @@ function getItem(
 const items: MenuItem[] = [
   getItem("Thống kê", "1", <PieChartOutlined />, undefined, "/chart"),
   getItem("Người dùng", "2", <PushpinOutlined />, undefined, "/user"),
+  getItem("Sản phẩm", "8", <BoxPlotOutlined />, undefined, "/store/product"),
   getItem("Cửa hàng", "3", <HomeOutlined />, undefined, "/store"),
   getItem("Sản phẩm", "4", <BoxPlotOutlined />, undefined, "/product"),
   getItem("Đơn hàng", "5", <IoDocumentTextOutline />, undefined, "/order"),
@@ -63,6 +63,17 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
   const userInfo = useAuthStore((s) => s.userInfo);
   const isLoading = useAuthStore((s) => s.isLoading);
 
+  const filteredItems =
+    userInfo?.role === RolesLogin.STORE
+      ? items.filter(
+          (item) =>
+            item.key !== "1" &&
+            item.key !== "2" &&
+            item.key !== "3" &&
+            item.key !== "4",
+        )
+      : items;
+
   const logout = useAuthStore((s) => s.logout);
 
   const navigate = useNavigate();
@@ -73,6 +84,10 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
 
   const resetDefaultSelectedKeys = () => {
     const selectedKeys = sessionStorage.getItem("keys");
+
+    if (userInfo?.role === RolesLogin.STORE) {
+      return ["8"];
+    }
     return selectedKeys ? selectedKeys.split(",") : ["1"];
   };
 
@@ -137,7 +152,7 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
           mode="inline"
           className="select-none"
         >
-          {renderMenuItems(items)}
+          {renderMenuItems(filteredItems)}
         </Menu>
       </Sider>
       <Layout
@@ -151,11 +166,7 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
             <>
               <img
                 className="h-[42px] w-[42px] rounded-full border object-cover ring-2 ring-gray-300 hover:ring-[#0077ff]"
-                src={
-                  userInfo && userInfo?.role?.includes(Roles.ADMIN)
-                    ? ADMIN
-                    : STORE
-                }
+                src={userInfo && userInfo?.avatar ? userInfo?.avatar : ADMIN}
               />
               <div className="flex flex-col">
                 <strong>{userInfo?.fullName || "Null"}</strong>

@@ -16,7 +16,7 @@ import BarChart from "../BarChart";
 
 const ChartView: React.FC = React.memo(() => {
   const [donutData] = useState({
-    labels: ["Gạch", "Bàn", "Máy tính", "Tivi"],
+    labels: ["Gạch", "Thiết bị điện", "Xi măng", "Đất"],
     datasets: [
       {
         label: "Doanh thu",

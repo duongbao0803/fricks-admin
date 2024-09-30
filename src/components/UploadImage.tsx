@@ -67,7 +67,7 @@ const UploadImage: React.FC<UploadImageProps> = React.memo((props) => {
 
     if (newFile && newFile.originFileObj) {
       try {
-        const storageRef = ref(storage, `/FTravel/${newFile.name}`);
+        const storageRef = ref(storage, `/Fricks/${newFile.name}`);
         await uploadBytes(storageRef, newFile.originFileObj);
         const downloadURL = await getDownloadURL(storageRef);
         newFile.status = "done";

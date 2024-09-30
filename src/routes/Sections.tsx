@@ -1,39 +1,43 @@
 import { Error, Loading, ScrollToTop } from "@/components";
+import { RolesLogin } from "@/enums";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import DashboardLayout from "@/layout";
 import AuthenPage from "@/pages/AuthenPage";
-import StoreDetailPage from "@/pages/StoreDetailPage";
-import StorePage from "@/pages/StorePage";
-import UserPage from "@/pages/UserPage";
-import ProductPage from "@/pages/UserPage copy";
 import React, { lazy, Suspense } from "react";
 import { Navigate, Outlet, useRoutes } from "react-router-dom";
 
 export const ChartPage = lazy(() => import("@/pages/ChartPage"));
-
-// const checkAccessAdmin = (role: string) => {
-//   return role === Roles.ADMIN;
-// };
-
-// const checkAccessStore = (role: string) => {
-//   return role === Roles.STORE;
-// };
+export const UserPage = lazy(() => import("@/pages/UserPage"));
+export const StorePage = lazy(() => import("@/pages/StorePage"));
+export const StoreDetailPage = lazy(() => import("@/pages/StoreDetailPage"));
+export const ProductPage = lazy(() => import("@/pages/UserPage copy"));
 
 const Router: React.FC = () => {
-  const { isChecking } = useAuthStore();
-  // const role = userInfo?.role;
-  // let hasAccessAdmin = false;
-  // let hasAccessStore = false;
+  const isChecking = useAuthStore((s) => s.isChecking);
+  const userInfo = useAuthStore((s) => s.userInfo);
 
-  // if (userInfo?.role !== null && typeof role === "string") {
-  //   hasAccessAdmin = checkAccessAdmin(role);
-  //   hasAccessStore = checkAccessStore(role);
-  // }
+  const isAdmin = userInfo?.role === RolesLogin.ADMIN;
+  const isStore = userInfo?.role === RolesLogin.STORE;
 
   const routes = useRoutes([
+    // {
+    //   path: "/",
+    //   element:
+    //     isChecking && isAdmin ? <Navigate to="/chart" /> : <AuthenPage />,
+    // },
     {
       path: "/",
-      element: isChecking ? <Navigate to="/chart" /> : <AuthenPage />,
+      element: isChecking ? (
+        isAdmin ? (
+          <Navigate to="/chart" />
+        ) : isStore ? (
+          <Navigate to="/store/product" />
+        ) : (
+          <AuthenPage />
+        )
+      ) : (
+        <AuthenPage />
+      ),
     },
     {
       element: isChecking ? (
@@ -50,23 +54,43 @@ const Router: React.FC = () => {
       children: [
         {
           path: "/chart",
-          element: <ChartPage />,
+          element: isAdmin ? (
+            <ChartPage />
+          ) : (
+            <Navigate to="/store/product" replace />
+          ),
         },
         {
           path: "/user",
-          element: <UserPage />,
+          element: isAdmin ? (
+            <UserPage />
+          ) : (
+            <Navigate to="/store/product" replace />
+          ),
         },
         {
           path: "/store",
-          element: <StorePage />,
+          element: isAdmin ? (
+            <StorePage />
+          ) : (
+            <Navigate to="/store/product" replace />
+          ),
         },
         {
           path: "/store/:id",
-          element: <StoreDetailPage />,
+          element: isAdmin ? (
+            <StoreDetailPage />
+          ) : (
+            <Navigate to="/store/product" replace />
+          ),
         },
         {
           path: "/product",
           element: <ProductPage />,
+        },
+        {
+          path: "/store/product",
+          element: "",
         },
 
         { element: <Error />, path: "*" },

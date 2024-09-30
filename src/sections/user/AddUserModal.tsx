@@ -16,17 +16,18 @@ import { notify } from "@/components/Notification";
 export interface AddModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
+  handleRefetch: () => void;
 }
 
 const AddUserModal: React.FC<AddModalProps> = React.memo((props) => {
   // const { addNewUserItem } = useUserService();
-  const { setIsOpen, isOpen } = props;
+  const { setIsOpen, isOpen, handleRefetch } = props;
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [fileChange, setFileChange] = useState<string>("");
   const [form] = Form.useForm();
 
   useEffect(() => {
-    form.setFieldsValue({ "avatar-url": fileChange });
+    form.setFieldsValue({ avatar: fileChange });
   }, [fileChange, form]);
 
   const handleOk = async () => {
@@ -74,10 +75,9 @@ const AddUserModal: React.FC<AddModalProps> = React.memo((props) => {
       const res = await addUser(userData);
       console.log("check res", res);
       if (res && res.status === 200) {
-        // refetch();
         notify("success", `${res.data.message}`, 3);
+        handleRefetch();
       }
-      // refetch();
     } catch (err: any) {
       console.error("err", err);
       notify("error", `${err.response.data.message}`, 3);

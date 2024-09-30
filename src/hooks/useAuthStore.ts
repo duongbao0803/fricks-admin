@@ -24,6 +24,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     Cookies.remove("accessToken");
     Cookies.remove("refreshToken");
     sessionStorage.removeItem("keys");
+    set({ userInfo: null });
     set({ isChecking: false });
   },
 

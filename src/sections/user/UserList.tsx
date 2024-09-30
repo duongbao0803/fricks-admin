@@ -8,8 +8,8 @@ import { useFetchUsers } from "@/hooks/useFetchUsers";
 import { deleteUser } from "@/apis/userApi";
 import { notify } from "@/components/Notification";
 import { formatDate2 } from "@/utils/validate";
-import { Trash2 } from "lucide-react";
 import { Roles } from "@/enums";
+import { FaBan } from "react-icons/fa";
 
 const UserList: React.FC = React.memo(() => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -21,15 +21,18 @@ const UserList: React.FC = React.memo(() => {
     pageSize,
   );
 
+  const handleRefetch = useCallback(() => {
+    refetch();
+  }, []);
+
   const handleDeleteUser = useCallback(async (userId: number) => {
     try {
       const res = await deleteUser(userId);
       console.log("check res", res);
       if (res && res.status === 200) {
-        refetch();
+        handleRefetch();
         notify("success", `${res.data.message}`, 3);
       }
-      refetch();
     } catch (err: any) {
       console.error("err", err);
       notify("error", `${err.response.data.message}`, 3);
@@ -122,17 +125,17 @@ const UserList: React.FC = React.memo(() => {
         dataIndex: "",
       },
       {
-        title: "Actions",
+        title: "Chức năng",
         dataIndex: "",
         render: (_, record) => (
           <Popconfirm
-            title="Bạn có muốn xóa người dùng này?"
+            title="Bạn có muốn cấm người dùng này không?"
             onConfirm={() => handleDeleteUser(record.id)}
             okText="Có"
             cancelText="Không"
           >
             <Button danger size="small" className="border-none">
-              <Trash2 />
+              <FaBan />
             </Button>
           </Popconfirm>
         ),
@@ -179,7 +182,11 @@ const UserList: React.FC = React.memo(() => {
         loading={isFetching}
         // rowKey={(record) => record.id}
       />
-      <AddUserModal setIsOpen={setIsOpen} isOpen={isOpen} />
+      <AddUserModal
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        handleRefetch={handleRefetch}
+      />
     </>
   );
 });
