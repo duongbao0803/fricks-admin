@@ -54,3 +54,7 @@ canvas {
   min-width: 100% !important;
   min-height: 100% !important;
 }
+
+.ant-table-cell:last-child {
+  text-align: center!important;
+}

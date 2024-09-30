@@ -10,7 +10,10 @@ export const ChartPage = lazy(() => import("@/pages/ChartPage"));
 export const UserPage = lazy(() => import("@/pages/UserPage"));
 export const StorePage = lazy(() => import("@/pages/StorePage"));
 export const StoreDetailPage = lazy(() => import("@/pages/StoreDetailPage"));
-export const ProductPage = lazy(() => import("@/pages/UserPage copy"));
+export const ProductAdminPage = lazy(() => import("@/pages/product/ProductAdminPage"));
+export const ProductStorePage = lazy(() => import("@/pages/product/ProductStorePage"));
+export const ProductStoreDetailPage = lazy(() => import("@/pages/product/detail/ProductStoreDetail"));
+
 
 const Router: React.FC = () => {
   const isChecking = useAuthStore((s) => s.isChecking);
@@ -86,13 +89,17 @@ const Router: React.FC = () => {
         },
         {
           path: "/product",
-          element: <ProductPage />,
+          element: <ProductAdminPage />,
         },
         {
           path: "/store/product",
-          element: "",
+          element: <ProductStorePage/>,
         },
 
+        {
+          path: "/store/product/:id",
+          element: <ProductStoreDetailPage/>,
+        },
         { element: <Error />, path: "*" },
       ],
     },

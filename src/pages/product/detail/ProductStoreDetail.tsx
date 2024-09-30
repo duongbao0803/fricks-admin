@@ -1,16 +1,16 @@
-import { ProductView } from "@/sections/product/view";
+import { ProductDetailView } from "@/sections/product/store/view";
 import React from "react";
 import { Helmet } from "react-helmet";
 
-const ProductPage: React.FC = () => {
+const ProductStoreDetail: React.FC = () => {
   return (
     <>
       <Helmet>
         <title> Fricks | Sản phẩm  </title>
       </Helmet>
-      <ProductView />
+      <ProductDetailView />
     </>
   );
 };
 
-export default ProductPage;
+export default ProductStoreDetail;
