@@ -1,24 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Form, Input, Select, Col, Row } from "antd";
 import { formatDate } from "@/utils/validate";
+import { unitsByCategory } from "@/constants/units";
 
 export interface AddModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
   productName?: string;
+  cateCode: string;
   handleRefetch: () => void;
 }
 
 const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
   // const { addNewUserItem } = useUserService();
-  const { setIsOpen, isOpen, handleRefetch, productName } = props;
+  const { setIsOpen, isOpen, handleRefetch, productName, cateCode } = props;
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [fileChange, setFileChange] = useState<string>("");
   const [form] = Form.useForm();
+  const [units, setUnits] = useState<string[]>([]);
+  const { Option } = Select;
 
   useEffect(() => {
     form.setFieldsValue({ avatar: fileChange });
-  }, [fileChange, form]);
+    setUnits(filterUnitsByCategory(cateCode))
+  }, [fileChange, form, cateCode]);
 
   const handleOk = async () => {
     try {
@@ -50,6 +55,10 @@ const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
   const handleCancel = () => {
     setIsOpen(false);
     form.resetFields();
+  };
+
+  const filterUnitsByCategory = (categoryCode: string): string[] => {
+    return unitsByCategory[categoryCode] || [];
   };
 
   // const disabledDate = (current: object) => {
@@ -110,11 +119,12 @@ const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
               labelCol={{ span: 24 }}
               className="formItem"
             >
-              <Select placeholder="Chọn đơn vị tính" autoFocus>
-                <Select.Option value="1">Mét</Select.Option>
-                <Select.Option value="2">Cái</Select.Option>
-                <Select.Option value="3">Bao</Select.Option>
-                <Select.Option value="4">Cây</Select.Option>
+              <Select placeholder="Chọn đơn vị tính">
+                {units.map((unit, index) => (
+                  <Option key={index} value={unit}>
+                    {unit}
+                  </Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
@@ -132,9 +142,7 @@ const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
               labelCol={{ span: 24 }}
               className="formItem"
             >
-              <Input
-                placeholder="Giá"
-              />
+              <Input placeholder="Giá" />
             </Form.Item>
           </Col>
         </Row>

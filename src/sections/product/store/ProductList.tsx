@@ -6,6 +6,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import AddProductModal from "./AddProductModal";
 import DropdownProductFunc from "./DropdownProductFunc";
 import { ProductInfo } from "@/types/product.types";
+import { useNavigate } from "react-router-dom";
 
 export interface DataType {
   key: string;
@@ -18,7 +19,8 @@ export interface DataType {
 }
 
 const ProductList: React.FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  // const [isOpen, setIsOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
   // const { Products, totalCount, isFetching, fetchProductDetail } =
   //   useProductService();
   // const [currentPage, setCurrentPage] = useState<number>(1);
@@ -50,6 +52,10 @@ const ProductList: React.FC = () => {
   //   setProductDetail(undefined);
   //   // await fetchData(record);
   // };
+
+  const handleAddProduct = () => {
+    navigate("/store/product/add");
+  };
 
   const dataSource = [
     {
@@ -318,7 +324,7 @@ const ProductList: React.FC = () => {
         <div className="flex gap-x-2">
           <div>{/* <ExportProduct /> */}</div>
           <div>
-            <Button type="primary" onClick={() => setIsOpen(true)}>
+            <Button type="primary" onClick={handleAddProduct}>
               <div className="flex justify-center">
                 <PlusCircleOutlined className="mr-1 text-lg" />
                 Thêm sản phẩm
@@ -351,7 +357,7 @@ const ProductList: React.FC = () => {
         //   onClick: () => handleRowClick(record.id),
         // })}
       />
-      <AddProductModal setIsOpen={setIsOpen} isOpen={isOpen} />
+      {/* <AddProductModal setIsOpen={setIsOpen} isOpen={isOpen} /> */}
       {/* <Modal
         title={
           <p className="text-lg font-bold text-[red]">

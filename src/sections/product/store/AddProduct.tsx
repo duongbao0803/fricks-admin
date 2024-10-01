@@ -19,7 +19,7 @@ import { PriceInfo } from "@/types/product.types";
 import { notify } from "@/components/Notification";
 import { useNavigate } from "react-router-dom";
 
-const ProductDetail: React.FC = () => {
+const AddProduct: React.FC = () => {
   const [form] = Form.useForm();
   const { Option } = Select;
   const { TextArea } = Input;
@@ -368,7 +368,7 @@ const ProductDetail: React.FC = () => {
                   Hủy bỏ
                 </Button>
                 <Button type="primary" htmlType="submit">
-                  Cập nhật
+                  Thêm sản phẩm
                 </Button>
               </Space>
             </Form.Item>
@@ -393,4 +393,4 @@ const ProductDetail: React.FC = () => {
   );
 };
 
-export default ProductDetail;
+export default AddProduct;

@@ -13,6 +13,8 @@ export const StoreDetailPage = lazy(() => import("@/pages/StoreDetailPage"));
 export const ProductAdminPage = lazy(() => import("@/pages/product/ProductAdminPage"));
 export const ProductStorePage = lazy(() => import("@/pages/product/ProductStorePage"));
 export const ProductStoreDetailPage = lazy(() => import("@/pages/product/detail/ProductStoreDetail"));
+export const AddProductStorePage = lazy(() => import("@/pages/product/detail/AddProductStore"));
+
 
 
 const Router: React.FC = () => {
@@ -99,6 +101,10 @@ const Router: React.FC = () => {
         {
           path: "/store/product/:id",
           element: <ProductStoreDetailPage/>,
+        },
+        {
+          path: "/store/product/add",
+          element: <AddProductStorePage/>,
         },
         { element: <Error />, path: "*" },
       ],
