@@ -6,3 +6,10 @@ export const getCategoryList = async (PageIndex: number, PageSize: number) => {
   );
   return response;
 };
+
+export const getAllCategory = async () => {
+  const response = await axiosClient.get(
+    `/categories/get-all-category`,
+  );
+  return response;
+};
