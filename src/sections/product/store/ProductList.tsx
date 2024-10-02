@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Button, Image, Input, Table } from "antd";
-import type { TableProps } from "antd";
+import type { TablePaginationConfig, TableProps } from "antd";
 import { FilterOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "react-loading-skeleton/dist/skeleton.css";
 import AddProductModal from "./AddProductModal";
 import DropdownProductFunc from "./DropdownProductFunc";
 import { ProductInfo } from "@/types/product.types";
 import { useNavigate } from "react-router-dom";
+import { useFetchProducts } from "@/hooks/useFetchProducts";
 
 export interface DataType {
   key: string;
@@ -21,6 +22,16 @@ export interface DataType {
 const ProductList: React.FC = () => {
   // const [isOpen, setIsOpen] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = React.useState(10);
+
+  const { data, isFetching, totalCount, refetch } = useFetchProducts(
+    currentPage,
+    pageSize,
+    0,
+    0,
+  );
+
   // const { Products, totalCount, isFetching, fetchProductDetail } =
   //   useProductService();
   // const [currentPage, setCurrentPage] = useState<number>(1);
@@ -53,6 +64,11 @@ const ProductList: React.FC = () => {
   //   // await fetchData(record);
   // };
 
+  const handleTableChange = useCallback((pagination: TablePaginationConfig) => {
+    setCurrentPage(pagination.current || 1);
+    setPageSize(pagination.pageSize || 10);
+  }, []);
+
   const handleAddProduct = () => {
     navigate("/store/product/add");
   };
@@ -62,7 +78,7 @@ const ProductList: React.FC = () => {
       id: 1,
       sku: "BM_21",
       name: "Ống nước phi 21",
-      image: 'https://via.placeholder.com/100',
+      image: "https://via.placeholder.com/100",
       categoryId: 5,
       brandId: 3,
       description: "Đây là ống nước",
@@ -71,11 +87,11 @@ const ProductList: React.FC = () => {
       soldQuantity: 0,
       brand: {
         id: 3,
-        name: "Bình Minh"
+        name: "Bình Minh",
       },
       category: {
         id: 5,
-        name: "Ống nước & Phụ kiện"
+        name: "Ống nước & Phụ kiện",
       },
       price: [
         {
@@ -85,8 +101,8 @@ const ProductList: React.FC = () => {
           price: 100000,
           unit: {
             id: 1,
-            name: "Cây"
-          }
+            name: "Cây",
+          },
         },
         {
           id: 2,
@@ -95,20 +111,20 @@ const ProductList: React.FC = () => {
           price: 20000,
           unit: {
             id: 2,
-            name: "Mét"
-          }
-        }
+            name: "Mét",
+          },
+        },
       ],
       createDate: "2024-09-25T22:27:01.7236043",
       updateDate: null,
       isDeleted: false,
-      version: "AAAAAAAAD88="
+      version: "AAAAAAAAD88=",
     },
     {
       id: 2,
       sku: "BM_22",
       name: "Ống nước phi 22",
-      image: 'https://via.placeholder.com/100',
+      image: "https://via.placeholder.com/100",
       categoryId: 5,
       brandId: 3,
       description: "Đây là ống nước phi 22",
@@ -117,11 +133,11 @@ const ProductList: React.FC = () => {
       soldQuantity: 5,
       brand: {
         id: 3,
-        name: "Bình Minh"
+        name: "Bình Minh",
       },
       category: {
         id: 5,
-        name: "Ống nước & Phụ kiện"
+        name: "Ống nước & Phụ kiện",
       },
       price: [
         {
@@ -131,8 +147,8 @@ const ProductList: React.FC = () => {
           price: 120000,
           unit: {
             id: 1,
-            name: "Cây"
-          }
+            name: "Cây",
+          },
         },
         {
           id: 4,
@@ -141,20 +157,20 @@ const ProductList: React.FC = () => {
           price: 25000,
           unit: {
             id: 2,
-            name: "Mét"
-          }
-        }
+            name: "Mét",
+          },
+        },
       ],
       createDate: "2024-09-26T10:15:00.0000000",
       updateDate: null,
       isDeleted: false,
-      version: "AAAAAAAAD89="
+      version: "AAAAAAAAD89=",
     },
     {
       id: 3,
       sku: "BM_23",
       name: "Ống nước phi 23",
-      image: 'https://via.placeholder.com/100',
+      image: "https://via.placeholder.com/100",
       categoryId: 5,
       brandId: 3,
       description: "Đây là ống nước phi 23",
@@ -163,11 +179,11 @@ const ProductList: React.FC = () => {
       soldQuantity: 10,
       brand: {
         id: 3,
-        name: "Bình Minh"
+        name: "Bình Minh",
       },
       category: {
         id: 5,
-        name: "Ống nước & Phụ kiện"
+        name: "Ống nước & Phụ kiện",
       },
       price: [
         {
@@ -177,8 +193,8 @@ const ProductList: React.FC = () => {
           price: 130000,
           unit: {
             id: 1,
-            name: "Cây"
-          }
+            name: "Cây",
+          },
         },
         {
           id: 6,
@@ -187,20 +203,20 @@ const ProductList: React.FC = () => {
           price: 27000,
           unit: {
             id: 2,
-            name: "Mét"
-          }
-        }
+            name: "Mét",
+          },
+        },
       ],
       createDate: "2024-09-27T14:45:00.0000000",
       updateDate: null,
       isDeleted: false,
-      version: "AAAAAAAAD90="
+      version: "AAAAAAAAD90=",
     },
     {
       id: 4,
       sku: "BM_24",
       name: "Ống nước phi 24",
-      image: 'https://via.placeholder.com/100',
+      image: "https://via.placeholder.com/100",
       categoryId: 5,
       brandId: 3,
       description: "Đây là ống nước phi 24",
@@ -209,11 +225,11 @@ const ProductList: React.FC = () => {
       soldQuantity: 2,
       brand: {
         id: 3,
-        name: "Bình Minh"
+        name: "Bình Minh",
       },
       category: {
         id: 5,
-        name: "Ống nước & Phụ kiện"
+        name: "Ống nước & Phụ kiện",
       },
       price: [
         {
@@ -223,8 +239,8 @@ const ProductList: React.FC = () => {
           price: 140000,
           unit: {
             id: 1,
-            name: "Cây"
-          }
+            name: "Cây",
+          },
         },
         {
           id: 8,
@@ -233,17 +249,16 @@ const ProductList: React.FC = () => {
           price: 28000,
           unit: {
             id: 2,
-            name: "Mét"
-          }
-        }
+            name: "Mét",
+          },
+        },
       ],
       createDate: "2024-09-28T09:30:00.0000000",
       updateDate: null,
       isDeleted: false,
-      version: "AAAAAAAAD91="
-    }
-  ];  
-
+      version: "AAAAAAAAD91=",
+    },
+  ];
 
   const columns: TableProps<ProductInfo>["columns"] = useMemo(
     () => [
@@ -303,7 +318,6 @@ const ProductList: React.FC = () => {
           </>
         ),
       },
-      
     ],
     [],
   );
@@ -337,7 +351,14 @@ const ProductList: React.FC = () => {
         className="pagination"
         id="myTable"
         columns={columns}
-        dataSource={dataSource}
+        dataSource={data?.data}
+        pagination={{
+          current: currentPage,
+          total: totalCount || 0,
+          pageSize: pageSize,
+        }}
+        onChange={handleTableChange}
+        loading={isFetching}
         // dataSource={Products?.map(
         //   (record: { id: unknown; "create-date": string | Date }) => ({
         //     ...record,

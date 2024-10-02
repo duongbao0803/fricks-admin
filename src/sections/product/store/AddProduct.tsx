@@ -39,7 +39,7 @@ const AddProduct: React.FC = () => {
       setIsOpenEdit(true);
     } else {
       notify(
-        "error",
+        "warning",
         "Vui lòng chọn danh mục trước khi chỉnh sửa giá sản phẩm",
         3,
       );
@@ -55,7 +55,11 @@ const AddProduct: React.FC = () => {
     if (currentCate && currentCate !== "") {
       setIsOpenAdd(true);
     } else {
-      notify("error", "Vui lòng chọn danh mục trước khi thêm giá sản phẩm", 3);
+      notify(
+        "warning",
+        "Vui lòng chọn danh mục trước khi thêm giá sản phẩm",
+        3,
+      );
     }
   };
 
@@ -238,9 +242,19 @@ const AddProduct: React.FC = () => {
     [],
   );
 
+  const onFinish = (values: any) => {
+    console.log("check value", values);
+  };
+
   return (
     <>
-      <Form form={form} name="product" layout="vertical" autoComplete="off">
+      <Form
+        form={form}
+        onFinish={onFinish}
+        name="product"
+        layout="vertical"
+        autoComplete="off"
+      >
         <Row gutter={16}>
           <Col span={8}>
             <Image

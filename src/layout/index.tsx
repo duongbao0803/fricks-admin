@@ -56,7 +56,13 @@ const items: MenuItem[] = [
   getItem("Đơn hàng", "5", <IoDocumentTextOutline />, undefined, "/order"),
   getItem("Thông báo", "6", <BellOutlined />, undefined, "/notification"),
   getItem("Thông tin", "7", <SmileOutlined />, undefined, "/personal"),
-  getItem("Đơn hàng", "9", <IoDocumentTextOutline />, undefined, "/store/order"),
+  getItem(
+    "Đơn hàng",
+    "9",
+    <IoDocumentTextOutline />,
+    undefined,
+    "/store/order",
+  ),
 ];
 
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
@@ -71,12 +77,10 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
             item.key !== "1" &&
             item.key !== "2" &&
             item.key !== "3" &&
-            item.key !== "4",
+            item.key !== "4" &&
+            item.key !== "5",
         )
-      : items.filter(
-        (items) => 
-          items.key !== '3' && items.key !== '8',
-      );
+      : items.filter((items) => items.key !== "9" && items.key !== "8");
 
   const logout = useAuthStore((s) => s.logout);
 
