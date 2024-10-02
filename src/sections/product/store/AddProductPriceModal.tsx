@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Form, Input, Select, Col, Row } from "antd";
 import { formatDate } from "@/utils/validate";
 import { unitsByCategory } from "@/constants/units";
+import { useFetchUnits } from "@/hooks/useFetchUnits";
 
 export interface AddModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,6 +19,8 @@ const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
   const [fileChange] = useState<string>("");
   const [form] = Form.useForm();
   const [units, setUnits] = useState<string[]>([]);
+  const { data: unitsData } = useFetchUnits();
+
   const { Option } = Select;
 
   useEffect(() => {
@@ -120,9 +123,9 @@ const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
               className="formItem"
             >
               <Select placeholder="Chọn đơn vị tính">
-                {units.map((unit, index) => (
-                  <Option key={index} value={unit}>
-                    {unit}
+                {unitsData?.data?.map((unit: any, index: number) => (
+                  <Option key={index} value={unit?.code}>
+                    {unit?.name}
                   </Option>
                 ))}
               </Select>

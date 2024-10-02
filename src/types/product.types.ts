@@ -23,6 +23,7 @@ export interface BrandInfoProduct {
 export interface CategoryInfoProduct {
   id: number;
   name: string;
+  code: string;
 }
 
 export interface PriceInfo {

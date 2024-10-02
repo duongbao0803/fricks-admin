@@ -95,7 +95,6 @@ const UploadImage: React.FC<UploadImageProps> = React.memo((props) => {
         onChange={handleChange}
         accept="image/*"
         beforeUpload={() => false}
-        className="custom-upload"
       >
         {file ? null : uploadButton}
       </Upload>

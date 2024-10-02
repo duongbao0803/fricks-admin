@@ -18,6 +18,7 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
   const { setIsOpen, isOpen } = props;
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [fileChange, setFileChange] = useState<string>("");
+
   // const { addNewProductItem } = useProductService();
   const [form] = Form.useForm();
   // const { TextArea } = Input;
