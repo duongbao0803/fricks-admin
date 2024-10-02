@@ -5,12 +5,11 @@ import {
   PieChartOutlined,
   HomeOutlined,
   PushpinOutlined,
-  SmileOutlined,
   BellOutlined,
   BoxPlotOutlined,
 } from "@ant-design/icons";
 import LogoWeb from "@/assets/images/logo/logo_web.png";
-import { MdBrandingWatermark } from "react-icons/md";
+import { MdBrandingWatermark, MdCategory } from "react-icons/md";
 
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { notify } from "@/components/Notification";
@@ -51,13 +50,13 @@ function getItem(
 const items: MenuItem[] = [
   getItem("Thống kê", "1", <PieChartOutlined />, undefined, "/chart"),
   getItem("Người dùng", "2", <PushpinOutlined />, undefined, "/user"),
-  getItem("Sản phẩm", "8", <BoxPlotOutlined />, undefined, "/store/product"),
   getItem("Cửa hàng", "3", <HomeOutlined />, undefined, "/store"),
+  getItem("Thương hiệu", "10", <MdBrandingWatermark />, undefined, "/brand"),
+  getItem("Sản phẩm", "8", <BoxPlotOutlined />, undefined, "/store/product"),
   getItem("Sản phẩm", "4", <BoxPlotOutlined />, undefined, "/product"),
   getItem("Đơn hàng", "5", <IoDocumentTextOutline />, undefined, "/order"),
+  getItem("Danh mục", "11", <MdCategory />, undefined, "/category"),
   getItem("Thông báo", "6", <BellOutlined />, undefined, "/notification"),
-  getItem("Thông tin", "7", <SmileOutlined />, undefined, "/personal"),
-  getItem("Thương hiệu", "10", <MdBrandingWatermark />, undefined, "/brand"),
   getItem(
     "Đơn hàng",
     "9",

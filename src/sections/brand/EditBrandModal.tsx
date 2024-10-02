@@ -3,7 +3,7 @@ import { Modal, Form, Input } from "antd";
 import { notify } from "@/components/Notification";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { editBrand } from "@/apis/brandApi";
-import { BrandInfo } from "@/types/product.types";
+import { BrandInfo } from "@/types/brand.types";
 
 export interface EditModalProps {
   setIsOpenEdit: React.Dispatch<React.SetStateAction<boolean>>;
@@ -100,7 +100,7 @@ const EditBrandModal: React.FC<EditModalProps> = React.memo((props) => {
             prefix={
               <MdOutlineDriveFileRenameOutline className="site-form-item-icon mr-1" />
             }
-            placeholder="Thương hiệu"
+            placeholder="Tên thương hiệu"
             className="p-2"
             autoFocus
           />

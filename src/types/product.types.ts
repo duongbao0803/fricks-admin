@@ -10,17 +10,17 @@ export interface ProductInfo extends CommonModel {
   quantity: number;
   storeId: number;
   soldQuantity?: number;
-  brand?: BrandInfo;
-  category?: CategoryInfo;
+  brand?: BrandInfoProduct;
+  category?: CategoryInfoProduct;
   price?: PriceInfo[];
 }
 
-export interface BrandInfo {
+export interface BrandInfoProduct {
   id: number;
   name: string;
 }
 
-export interface CategoryInfo {
+export interface CategoryInfoProduct {
   id: number;
   name: string;
 }

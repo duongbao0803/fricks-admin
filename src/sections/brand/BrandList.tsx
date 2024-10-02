@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { Button, Input, Popconfirm, Table } from "antd";
 import type { TablePaginationConfig, TableProps } from "antd";
-import { FilterOutlined, UserAddOutlined } from "@ant-design/icons";
+import { FilterOutlined, PlusCircleOutlined, UserAddOutlined } from "@ant-design/icons";
 import { notify } from "@/components/Notification";
 import { Roles } from "@/enums";
 import { FaBan } from "react-icons/fa";
@@ -10,8 +10,9 @@ import { deleteBrand } from "@/apis/brandApi";
 import { CiEdit } from "react-icons/ci";
 import AddBrandModal from "./AddBrandModal";
 import EditBrandModal from "./EditBrandModal";
-import { BrandInfo } from "@/types/product.types";
 import { useAuthStore } from "@/hooks/useAuthStore";
+import { BrandInfo } from "@/types/brand.types";
+import { formatDate2 } from "@/utils/validate";
 
 export const BrandList: React.FC = React.memo(() => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -65,6 +66,18 @@ export const BrandList: React.FC = React.memo(() => {
         dataIndex: "name",
       },
       {
+        title: "Ngày tạo",
+        dataIndex: "createDate",
+        width: "15%",
+        render: (createDate) => {
+          if (createDate) {
+            return formatDate2(createDate);
+          } else {
+            return "N/A";
+          }
+        },
+      },
+      {
         title: "Chức năng",
         dataIndex: "",
         render: (_, record: BrandInfo) => (
@@ -111,7 +124,7 @@ export const BrandList: React.FC = React.memo(() => {
         <div className="flex gap-x-2">
           <Button type="primary" onClick={() => setIsOpen(true)}>
             <div className="flex justify-center">
-              <UserAddOutlined className="mr-1 text-lg" /> Thêm thương hiệu
+              <PlusCircleOutlined className="mr-1 text-lg" /> Thêm thương hiệu
             </div>
           </Button>
         </div>

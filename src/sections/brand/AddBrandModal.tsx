@@ -81,7 +81,7 @@ const AddBrandModal: React.FC<AddModalProps> = React.memo((props) => {
             prefix={
               <MdOutlineDriveFileRenameOutline className="site-form-item-icon mr-1" />
             }
-            placeholder="Email"
+            placeholder="Tên thương hiệu"
             className="p-2"
             autoFocus
           />
