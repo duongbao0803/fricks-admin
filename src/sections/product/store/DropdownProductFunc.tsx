@@ -3,7 +3,6 @@ import { Dropdown } from "antd";
 import { DeleteOutlined, EditOutlined, MoreOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import EditProductModal from "./EditProductModal";
-import { ProductInfo } from "@/types/product.types";
 
 export interface DropdownProductFuncProps {
   productId: number;
@@ -15,10 +14,6 @@ const DropdownProductFunc: React.FC<DropdownProductFuncProps> = React.memo(
     // const { deleteProductItem } = useProductService();
     const { productId } = props;
     // const busproductId = productInfo?.id;
-
-    const openEditModal = () => {
-      setIsOpen(true);
-    };
 
     return (
       <>

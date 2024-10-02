@@ -15,6 +15,8 @@ export const useFetchUsers = (
   const { data, isFetching, refetch } = useQuery({
     queryKey: ["userList", currentPage, pageSize],
     queryFn: fetchUsers,
+    refetchOnWindowFocus: false,
+
     staleTime: 5000,
   });
 

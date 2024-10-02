@@ -10,6 +10,7 @@ import {
   BoxPlotOutlined,
 } from "@ant-design/icons";
 import LogoWeb from "@/assets/images/logo/logo_web.png";
+import { MdBrandingWatermark } from "react-icons/md";
 
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { notify } from "@/components/Notification";
@@ -56,6 +57,7 @@ const items: MenuItem[] = [
   getItem("Đơn hàng", "5", <IoDocumentTextOutline />, undefined, "/order"),
   getItem("Thông báo", "6", <BellOutlined />, undefined, "/notification"),
   getItem("Thông tin", "7", <SmileOutlined />, undefined, "/personal"),
+  getItem("Thương hiệu", "10", <MdBrandingWatermark />, undefined, "/brand"),
   getItem(
     "Đơn hàng",
     "9",

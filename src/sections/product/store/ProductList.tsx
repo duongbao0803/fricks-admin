@@ -3,7 +3,6 @@ import { Button, Image, Input, Table } from "antd";
 import type { TablePaginationConfig, TableProps } from "antd";
 import { FilterOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "react-loading-skeleton/dist/skeleton.css";
-import AddProductModal from "./AddProductModal";
 import DropdownProductFunc from "./DropdownProductFunc";
 import { ProductInfo } from "@/types/product.types";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +24,7 @@ const ProductList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = React.useState(10);
 
-  const { data, isFetching, totalCount, refetch } = useFetchProducts(
+  const { data, isFetching, totalCount } = useFetchProducts(
     currentPage,
     pageSize,
     0,
@@ -72,193 +71,6 @@ const ProductList: React.FC = () => {
   const handleAddProduct = () => {
     navigate("/store/product/add");
   };
-
-  const dataSource = [
-    {
-      id: 1,
-      sku: "BM_21",
-      name: "Ống nước phi 21",
-      image: "https://via.placeholder.com/100",
-      categoryId: 5,
-      brandId: 3,
-      description: "Đây là ống nước",
-      quantity: 50,
-      storeId: 1,
-      soldQuantity: 0,
-      brand: {
-        id: 3,
-        name: "Bình Minh",
-      },
-      category: {
-        id: 5,
-        name: "Ống nước & Phụ kiện",
-      },
-      price: [
-        {
-          id: 1,
-          productId: 1,
-          unitId: 1,
-          price: 100000,
-          unit: {
-            id: 1,
-            name: "Cây",
-          },
-        },
-        {
-          id: 2,
-          productId: 1,
-          unitId: 2,
-          price: 20000,
-          unit: {
-            id: 2,
-            name: "Mét",
-          },
-        },
-      ],
-      createDate: "2024-09-25T22:27:01.7236043",
-      updateDate: null,
-      isDeleted: false,
-      version: "AAAAAAAAD88=",
-    },
-    {
-      id: 2,
-      sku: "BM_22",
-      name: "Ống nước phi 22",
-      image: "https://via.placeholder.com/100",
-      categoryId: 5,
-      brandId: 3,
-      description: "Đây là ống nước phi 22",
-      quantity: 30,
-      storeId: 1,
-      soldQuantity: 5,
-      brand: {
-        id: 3,
-        name: "Bình Minh",
-      },
-      category: {
-        id: 5,
-        name: "Ống nước & Phụ kiện",
-      },
-      price: [
-        {
-          id: 3,
-          productId: 2,
-          unitId: 1,
-          price: 120000,
-          unit: {
-            id: 1,
-            name: "Cây",
-          },
-        },
-        {
-          id: 4,
-          productId: 2,
-          unitId: 2,
-          price: 25000,
-          unit: {
-            id: 2,
-            name: "Mét",
-          },
-        },
-      ],
-      createDate: "2024-09-26T10:15:00.0000000",
-      updateDate: null,
-      isDeleted: false,
-      version: "AAAAAAAAD89=",
-    },
-    {
-      id: 3,
-      sku: "BM_23",
-      name: "Ống nước phi 23",
-      image: "https://via.placeholder.com/100",
-      categoryId: 5,
-      brandId: 3,
-      description: "Đây là ống nước phi 23",
-      quantity: 40,
-      storeId: 1,
-      soldQuantity: 10,
-      brand: {
-        id: 3,
-        name: "Bình Minh",
-      },
-      category: {
-        id: 5,
-        name: "Ống nước & Phụ kiện",
-      },
-      price: [
-        {
-          id: 5,
-          productId: 3,
-          unitId: 1,
-          price: 130000,
-          unit: {
-            id: 1,
-            name: "Cây",
-          },
-        },
-        {
-          id: 6,
-          productId: 3,
-          unitId: 2,
-          price: 27000,
-          unit: {
-            id: 2,
-            name: "Mét",
-          },
-        },
-      ],
-      createDate: "2024-09-27T14:45:00.0000000",
-      updateDate: null,
-      isDeleted: false,
-      version: "AAAAAAAAD90=",
-    },
-    {
-      id: 4,
-      sku: "BM_24",
-      name: "Ống nước phi 24",
-      image: "https://via.placeholder.com/100",
-      categoryId: 5,
-      brandId: 3,
-      description: "Đây là ống nước phi 24",
-      quantity: 20,
-      storeId: 1,
-      soldQuantity: 2,
-      brand: {
-        id: 3,
-        name: "Bình Minh",
-      },
-      category: {
-        id: 5,
-        name: "Ống nước & Phụ kiện",
-      },
-      price: [
-        {
-          id: 7,
-          productId: 4,
-          unitId: 1,
-          price: 140000,
-          unit: {
-            id: 1,
-            name: "Cây",
-          },
-        },
-        {
-          id: 8,
-          productId: 4,
-          unitId: 2,
-          price: 28000,
-          unit: {
-            id: 2,
-            name: "Mét",
-          },
-        },
-      ],
-      createDate: "2024-09-28T09:30:00.0000000",
-      updateDate: null,
-      isDeleted: false,
-      version: "AAAAAAAAD91=",
-    },
-  ];
 
   const columns: TableProps<ProductInfo>["columns"] = useMemo(
     () => [

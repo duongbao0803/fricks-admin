@@ -13,16 +13,16 @@ export interface AddModalProps {
 
 const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
   // const { addNewUserItem } = useUserService();
-  const { setIsOpen, isOpen, handleRefetch, productName, cateCode } = props;
+  const { setIsOpen, isOpen, productName, cateCode } = props;
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
-  const [fileChange, setFileChange] = useState<string>("");
+  const [fileChange] = useState<string>("");
   const [form] = Form.useForm();
   const [units, setUnits] = useState<string[]>([]);
   const { Option } = Select;
 
   useEffect(() => {
     form.setFieldsValue({ avatar: fileChange });
-    setUnits(filterUnitsByCategory(cateCode))
+    setUnits(filterUnitsByCategory(cateCode));
   }, [fileChange, form, cateCode]);
 
   const handleOk = async () => {

@@ -23,6 +23,8 @@ export const AddProductStorePage = lazy(
   () => import("@/pages/product/detail/AddProductStore"),
 );
 
+export const BrandPage = lazy(() => import("@/pages/BrandPage"));
+
 const Router: React.FC = () => {
   const isChecking = useAuthStore((s) => s.isChecking);
   const userInfo = useAuthStore((s) => s.userInfo);
@@ -94,6 +96,10 @@ const Router: React.FC = () => {
         {
           path: "/store/product",
           element: <ProductStorePage />,
+        },
+        {
+          path: "/brand",
+          element: <BrandPage />,
         },
 
         {

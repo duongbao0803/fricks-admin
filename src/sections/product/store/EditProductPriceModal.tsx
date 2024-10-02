@@ -13,9 +13,9 @@ export interface EditModalProps {
 
 const EditProductPriceModal: React.FC<EditModalProps> = React.memo((props) => {
   // const { addNewUserItem } = useUserService();
-  const { setIsOpen, isOpen, handleRefetch, productName } = props;
+  const { setIsOpen, isOpen, productName } = props;
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
-  const [fileChange, setFileChange] = useState<string>("");
+  const [fileChange] = useState<string>("");
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -78,7 +78,9 @@ const EditProductPriceModal: React.FC<EditModalProps> = React.memo((props) => {
 
   return (
     <Modal
-      title={<p className="text-lg font-bold text-[red] ">Chỉnh sửa giá sản phẩm</p>}
+      title={
+        <p className="text-lg font-bold text-[red] ">Chỉnh sửa giá sản phẩm</p>
+      }
       open={isOpen}
       onOk={handleOk}
       confirmLoading={isConfirmLoading}
@@ -134,9 +136,7 @@ const EditProductPriceModal: React.FC<EditModalProps> = React.memo((props) => {
               labelCol={{ span: 24 }}
               className="formItem"
             >
-              <Input
-                placeholder="Giá"
-              />
+              <Input placeholder="Giá" />
             </Form.Item>
           </Col>
         </Row>
