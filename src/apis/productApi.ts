@@ -12,12 +12,7 @@ export const getProductList = async (
   return response;
 };
 
-export const addUser = async (userData: any) => {
-  const response = await axiosClient.post("/users", userData);
-  return response;
-};
-
-export const deleteUser = async (userId: number) => {
-  const response = await axiosClient.delete(`/users/${userId}`);
+export const addProduct = async (productData: any) => {
+  const response = await axiosClient.post("/products", productData);
   return response;
 };

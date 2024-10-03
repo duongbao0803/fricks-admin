@@ -83,6 +83,7 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
               <Input
                 prefix={<CarOutlined className="site-form-item-icon mr-1" />}
                 placeholder="SKU"
+                max={10}
                 autoFocus
               />
             </Form.Item>

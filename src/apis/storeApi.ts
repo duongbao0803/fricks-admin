@@ -1,12 +1,14 @@
 import axiosClient from "@/config/axiosClient";
 
-export const getStoreList = async (
-  PageIndex: number,
-  PageSize: number
-) => {
+export const getStoreList = async (PageIndex: number, PageSize: number) => {
   const response = await axiosClient.get(
     `/stores?PageIndex=${PageIndex}&pageSize=${PageSize}`,
   );
+  return response;
+};
+
+export const getStoreManager = async (userId: number) => {
+  const response = await axiosClient.get(`/stores/manager/${userId}`);
   return response;
 };
 

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Form, Input, Select, Col, Row } from "antd";
+import { Modal, Form, Input, Select, Col, Row, InputNumber } from "antd";
 import { formatDate } from "@/utils/validate";
 import { unitsByCategory } from "@/constants/units";
 import { useFetchUnits } from "@/hooks/useFetchUnits";
+import useStore from "@/hooks/useStore";
 
 export interface AddModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedUnit: [];
   isOpen: boolean;
   productName?: string;
   cateCode: string;
@@ -14,24 +16,20 @@ export interface AddModalProps {
 
 const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
   // const { addNewUserItem } = useUserService();
-  const { setIsOpen, isOpen, productName, cateCode } = props;
+  const { setIsOpen, isOpen, productName, cateCode, selectedUnit } = props;
+  const setData = useStore((s) => s.setData);
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [fileChange] = useState<string>("");
   const [form] = Form.useForm();
-  const [units, setUnits] = useState<string[]>([]);
   const { data: unitsData } = useFetchUnits();
 
   const { Option } = Select;
 
-  useEffect(() => {
-    form.setFieldsValue({ avatar: fileChange });
-    setUnits(filterUnitsByCategory(cateCode));
-  }, [fileChange, form, cateCode]);
-
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-      console.log("check value", values);
+      const updateValues = [values];
+      setData(updateValues);
       const formattedDate = formatDate(values.dob);
       const updatedValues: string = JSON.stringify({
         ...values,
@@ -110,7 +108,7 @@ const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
         <Row gutter={16} className="relative mt-1">
           <Col span={12}>
             <Form.Item
-              name="Đơn vị tính"
+              name="unit"
               rules={[
                 {
                   required: true,
@@ -123,7 +121,7 @@ const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
               className="formItem"
             >
               <Select placeholder="Chọn đơn vị tính">
-                {unitsData?.data?.map((unit: any, index: number) => (
+                {selectedUnit?.map((unit: any, index: number) => (
                   <Option key={index} value={unit?.code}>
                     {unit?.name}
                   </Option>
@@ -145,7 +143,7 @@ const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
               labelCol={{ span: 24 }}
               className="formItem"
             >
-              <Input placeholder="Giá" />
+              <InputNumber placeholder="Giá" />
             </Form.Item>
           </Col>
         </Row>

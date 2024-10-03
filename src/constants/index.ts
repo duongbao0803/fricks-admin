@@ -87,7 +87,44 @@ export const SystemData = [
 
 export const genders = ["Nam", "Nữ"];
 
-export enum ROLE {
-  ADMIN = "ADMIN",
-  BUSCOMPANY = "BUSCOMPANY",
-}
+export const unitsByCategory = {
+  CT001: [
+    { name: "xe", code: "PU01" },
+    { name: "bao", code: "PU02" },
+  ],
+  CT002: [
+    { name: "bao", code: "PU02" },
+    { name: "kg", code: "PU03" },
+  ],
+  CT003: [
+    { name: "viên", code: "PU04" },
+    { name: "thiêng", code: "PU05" },
+    { name: "mét", code: "PU06" },
+  ],
+  CT004: [
+    { name: "cây", code: "PU07" },
+    { name: "mét", code: "PU06" },
+  ],
+  CT005: [
+    { name: "mét", code: "PU06" },
+    { name: "tấm", code: "PU08" },
+  ],
+  CT006: [{ name: "thùng", code: "PU09" }],
+  CT007: [
+    { name: "mét", code: "PU06" },
+    { name: "tấm", code: "PU08" },
+  ],
+  CT008: [{ name: "cái", code: "PU10" }],
+  CT009: [
+    { name: "mét", code: "PU06" },
+    { name: "cái", code: "PU10" },
+    { name: "cây", code: "PU07" },
+  ],
+  CT010: [
+    { name: "cái", code: "PU10" },
+    { name: "mét", code: "PU06" },
+    { name: "cuộn", code: "PU11" },
+  ],
+  CT011: [{ name: "cái", code: "PU10" }],
+  CT012: [{ name: "cái", code: "PU10" }],
+};

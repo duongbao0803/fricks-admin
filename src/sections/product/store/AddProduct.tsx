@@ -4,6 +4,7 @@ import {
   Col,
   Form,
   Input,
+  InputNumber,
   Popconfirm,
   Row,
   Select,
@@ -20,6 +21,11 @@ import { useNavigate } from "react-router-dom";
 import { useFetchBrands } from "@/hooks/useFetchBrands";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { UploadImage } from "@/components";
+import useStore from "@/hooks/useStore";
+import { unitsByCategory } from "@/constants";
+import { useFetchStoreManager } from "@/hooks/useFetchStoreManager";
+import { useAuthStore } from "@/hooks/useAuthStore";
+import { addProduct } from "@/apis/productApi";
 
 const AddProduct: React.FC = () => {
   const [form] = Form.useForm();
@@ -32,14 +38,16 @@ const AddProduct: React.FC = () => {
   const navigate = useNavigate();
   const { data: brandsData } = useFetchBrands(1, 50);
   const { data: categoriesData } = useFetchCategories(1, 50);
-
+  const [selectedUnit, setSelectedUnit] = useState([]);
   const [fileChange, setFileChange] = useState<string>("");
+  const [productName, setProductName] = useState<string>("");
+  const data = useStore((s) => s.data);
+  const userInfo = useAuthStore((s) => s.userInfo);
+  const { data: manager } = useFetchStoreManager(userInfo?.id);
 
   useEffect(() => {
     form.setFieldsValue({ image: fileChange });
   }, [fileChange, form]);
-
-  console.log("check fileChange", fileChange);
 
   const brands = useMemo(() => brandsData?.data || [], [brandsData]);
   const categories = useMemo(
@@ -65,8 +73,9 @@ const AddProduct: React.FC = () => {
   };
 
   const handleCategoryChange = (value: any) => {
-    console.log("check cate", value);
-    setCurrentCate(value);
+    const { code, id } = JSON.parse(value);
+    setSelectedUnit(unitsByCategory[code]);
+    setCurrentCate(id);
   };
 
   const openAddProductPriceModal = () => {
@@ -84,127 +93,6 @@ const AddProduct: React.FC = () => {
   const handleCancel = () => {
     navigate("/store/product");
   };
-
-  // const categories = [
-  //   {
-  //     id: 1,
-  //     name: "Cát, đá",
-  //     code: "CT001",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Xi măng, bột trét",
-  //     code: "CT002",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Gạch",
-  //     code: "CT003",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Sắt, thép",
-  //     code: "CT004",
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Gỗ, ván ép",
-  //     code: "CT005",
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Sơn",
-  //     code: "CT006",
-  //   },
-  //   {
-  //     id: 7,
-  //     name: "Vật liệu cách nhiệt",
-  //     code: "CT007",
-  //   },
-  //   {
-  //     id: 8,
-  //     name: "Dụng cụ xây dựng",
-  //     code: "CT008",
-  //   },
-  //   {
-  //     id: 9,
-  //     name: "Ống nước, phụ kiện",
-  //     code: "CT009",
-  //   },
-  //   {
-  //     id: 10,
-  //     name: "Thiết bị điện",
-  //     code: "CT010",
-  //   },
-  //   {
-  //     id: 11,
-  //     name: "Thiết bị vệ sinh",
-  //     code: "CT011",
-  //   },
-  //   {
-  //     id: 12,
-  //     name: "Phụ kiện khác",
-  //     code: "CT012",
-  //   },
-  // ];
-
-  const dataSource = [
-    {
-      id: 1,
-      sku: "BM_21",
-      name: "Ống nước phi 21",
-      image: "https://via.placeholder.com/100",
-      categoryId: 5,
-      brandId: 3,
-      description: "Đây là ống nước",
-      quantity: 50,
-      storeId: 1,
-      soldQuantity: 0,
-      brand: {
-        id: 3,
-        name: "Bình Minh",
-      },
-      category: {
-        id: 5,
-        name: "Ống nước & Phụ kiện",
-      },
-      price: [
-        {
-          id: 1,
-          productId: 1,
-          unitId: 1,
-          price: 100000,
-          unit: {
-            id: 1,
-            name: "Cây",
-          },
-        },
-        {
-          id: 2,
-          productId: 1,
-          unitId: 2,
-          price: 20000,
-          unit: {
-            id: 2,
-            name: "Mét",
-          },
-        },
-      ],
-      createDate: "2024-09-25T22:27:01.7236043",
-      updateDate: null,
-      isDeleted: false,
-      version: "AAAAAAAAD88=",
-    },
-  ];
-
-  const transformedData = dataSource.flatMap((product) =>
-    product.price.map((priceDetail) => ({
-      id: priceDetail.id,
-      name: product.name,
-      unit: priceDetail.unit.name,
-      price: priceDetail.price,
-    })),
-  );
 
   const columns = useMemo(
     () => [
@@ -225,7 +113,7 @@ const AddProduct: React.FC = () => {
         dataIndex: "price",
         key: "price",
         with: "30%",
-        render: (text: any) => `${text.toLocaleString()} VND`,
+        render: (text: any) => `${text} VND`,
       },
       {
         title: "Thao tác",
@@ -259,9 +147,32 @@ const AddProduct: React.FC = () => {
     ],
     [],
   );
+  console.log("chjeck data[0].unit", data[0].unit);
 
-  const onFinish = (values: any) => {
-    console.log("check value", values);
+  const onFinish = async (values: any) => {
+    const updateData = {
+      sku: values?.sku,
+      name: values?.name,
+      image: values?.image,
+      categoryId: JSON.parse(values?.category)?.id,
+      brandId: values?.brand,
+      description: values?.description,
+      quantity: values?.quantity,
+      storeId: manager?.data[0].id,
+      productPrices: [
+        {
+          unitCode: data[0].unit,
+          price: data[0].price,
+        },
+      ],
+    };
+    console.log("check updateData", JSON.stringify(updateData));
+    try {
+      const res = await addProduct(updateData);
+      console.log("check res", res);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleFileChange = useCallback((newFileChange: string) => {
@@ -317,7 +228,7 @@ const AddProduct: React.FC = () => {
                     { required: true, message: "Vui lòng nhập tên sản phẩm" },
                   ]}
                 >
-                  <Input />
+                  <Input onChange={(e) => setProductName(e.target.value)} />
                 </Form.Item>
               </Col>
             </Row>
@@ -364,7 +275,13 @@ const AddProduct: React.FC = () => {
                     onChange={handleCategoryChange}
                   >
                     {categories?.map((category: CategoryInfo) => (
-                      <Option key={category?.id} value={category?.code}>
+                      <Option
+                        key={category?.id}
+                        value={JSON.stringify({
+                          code: category?.code,
+                          id: category?.id,
+                        })}
+                      >
                         {category?.name}
                       </Option>
                     ))}
@@ -385,7 +302,7 @@ const AddProduct: React.FC = () => {
                     { required: true, message: "Vui lòng nhập số lượng" },
                   ]}
                 >
-                  <Input type="number" />
+                  <InputNumber min={1} type="number" />
                 </Form.Item>
               </Col>
             </Row>
@@ -415,7 +332,7 @@ const AddProduct: React.FC = () => {
               </div>
             </div>
             <Table
-              dataSource={transformedData}
+              dataSource={data}
               columns={columns}
               rowKey="id"
               pagination={false}
@@ -437,15 +354,16 @@ const AddProduct: React.FC = () => {
         setIsOpen={setIsOpenAdd}
         isOpen={isOpenAdd}
         handleRefetch={handleRefetch}
-        productName={dataSource[0]?.name}
+        productName={productName}
         cateCode={currentCate}
+        selectedUnit={selectedUnit}
       />
       <EditProductPriceModal
         setIsOpen={setIsOpenEdit}
         isOpen={isOpenEdit}
         handleRefetch={handleRefetch}
         priceInfo={currentRecord}
-        productName={dataSource[0]?.name}
+        productName={productName}
       />
     </>
   );
