@@ -103,7 +103,7 @@ const StoreProductList: React.FC<StoreProductListProps> = React.memo(
     return (
       <>
         <p className="mb-3 text-[1.2rem] font-bold text-[#000000]">
-          Danh sách sản phẩm cửa hàng {storeId}
+          Danh sách sản phẩm
         </p>
         <div className="flex justify-between">
           <div className="flex gap-x-2">

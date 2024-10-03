@@ -1,13 +1,17 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { Button, Image, Input, Table, Tag } from "antd";
-import type { TableProps } from "antd";
+import type { TablePaginationConfig, TableProps } from "antd";
 import { FilterOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import "react-loading-skeleton/dist/skeleton.css";
 import AddStoreModal from "./AddStoreModal";
 import { useNavigate } from "react-router-dom";
 import { StoreInfo } from "@/types/store.types";
+import { useFetchStores } from "@/hooks/useFetchStores";
+import { formatDate2 } from "@/utils/validate";
 
 const StoreList: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = React.useState(10);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   // const { Stores, totalCount, isFetching, fetchStoreDetail } =
   //   useStoreService();
@@ -33,6 +37,11 @@ const StoreList: React.FC = () => {
   //     console.error("Error fetching route detail:", error);
   //   }
   // };
+
+  const { data, isFetching, totalCount } = useFetchStores(
+    currentPage,
+    pageSize,
+  );
 
   const dataSource = [
     {
@@ -94,7 +103,7 @@ const StoreList: React.FC = () => {
       {
         title: "Hình ảnh",
         dataIndex: "image",
-        width: "15%",
+        width: "10%",
         render: (image) => (
           <Image
             src={image}
@@ -109,8 +118,8 @@ const StoreList: React.FC = () => {
       },
       {
         title: "Tài khoản quản lý",
-        dataIndex: "accountManager",
-        width: "20%",
+        dataIndex: "managerEmail",
+        width: "15%",
       },
       {
         title: "Địa chỉ",
@@ -120,12 +129,19 @@ const StoreList: React.FC = () => {
       {
         title: "Mã số thuế",
         dataIndex: "taxCode",
-        width: "17%",
+        width: "15%",
       },
       {
         title: "Ngày tạo",
         dataIndex: "createDate",
         width: "13%",
+        render: (createDate) => {
+          if (createDate) {
+            return formatDate2(createDate);
+          } else {
+            return "N/A";
+          }
+        },
       },
       {
         title: "Trạng thái",
@@ -163,6 +179,11 @@ const StoreList: React.FC = () => {
     [navigate],
   );
 
+  const handleTableChange = useCallback((pagination: TablePaginationConfig) => {
+    setCurrentPage(pagination.current || 1);
+    setPageSize(pagination.pageSize || 10);
+  }, []);
+
   return (
     <>
       <div className="flex justify-between">
@@ -192,8 +213,14 @@ const StoreList: React.FC = () => {
         className="pagination"
         id="myTable"
         columns={columns}
-        dataSource={dataSource}
-        rowKey={(record) => record.id}
+        dataSource={data?.data}
+        pagination={{
+          current: currentPage,
+          total: totalCount || 0,
+          pageSize: pageSize,
+        }}
+        onChange={handleTableChange}
+        loading={isFetching}
         onRow={(record) => ({
           onClick: () => handleRowClick(record.id),
         })}
