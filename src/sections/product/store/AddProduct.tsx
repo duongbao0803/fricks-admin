@@ -15,7 +15,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import AddProductPriceModal from "./AddProductPriceModal";
 import EditProductPriceModal from "./EditProductPriceModal";
-import { BrandInfo, CategoryInfo, PriceInfo } from "@/types/product.types";
+import { PriceInfo } from "@/types/product.types";
 import { notify } from "@/components/Notification";
 import { useNavigate } from "react-router-dom";
 import { useFetchBrands } from "@/hooks/useFetchBrands";
@@ -23,9 +23,10 @@ import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { UploadImage } from "@/components";
 import useStore from "@/hooks/useStore";
 import { unitsByCategory } from "@/constants";
-import { useFetchStoreManager } from "@/hooks/useFetchStoreManager";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import { addProduct } from "@/apis/productApi";
+import { CategoryInfo } from "@/types/category.types";
+import { BrandInfo } from "@/types/brand.types";
 
 const AddProduct: React.FC = () => {
   const [form] = Form.useForm();
@@ -43,7 +44,7 @@ const AddProduct: React.FC = () => {
   const [productName, setProductName] = useState<string>("");
   const data = useStore((s) => s.data);
   const userInfo = useAuthStore((s) => s.userInfo);
-  const { data: manager } = useFetchStoreManager(userInfo?.id);
+  // const { data: manager } = useFetchStoreManager(userInfo?.id);
 
   useEffect(() => {
     form.setFieldsValue({ image: fileChange });
@@ -147,7 +148,7 @@ const AddProduct: React.FC = () => {
     ],
     [],
   );
-  console.log("chjeck data[0].unit", data[0].unit);
+  // console.log("chjeck data[0].unit", data[0].unit);
 
   const onFinish = async (values: any) => {
     const updateData = {
@@ -158,7 +159,7 @@ const AddProduct: React.FC = () => {
       brandId: values?.brand,
       description: values?.description,
       quantity: values?.quantity,
-      storeId: manager?.data[0].id,
+      storeId: 0,
       productPrices: [
         {
           unitCode: data[0].unit,
@@ -170,8 +171,14 @@ const AddProduct: React.FC = () => {
     try {
       const res = await addProduct(updateData);
       console.log("check res", res);
-    } catch (err) {
+      if (res && res.status === 200) {
+        notify("success", "Thêm sản phẩm mới thành công", 3);
+        handleRefetch();
+        // navigate("/store/product");
+      }
+    } catch (err: any) {
       console.error(err);
+      notify("error", `${err.response.data.message}`, 3);
     }
   };
 
