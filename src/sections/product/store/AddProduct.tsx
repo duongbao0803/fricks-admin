@@ -27,6 +27,7 @@ import { useAuthStore } from "@/hooks/useAuthStore";
 import { addProduct } from "@/apis/productApi";
 import { CategoryInfo } from "@/types/category.types";
 import { BrandInfo } from "@/types/brand.types";
+import AddBrandModal from "@/sections/brand/AddBrandModal";
 
 const AddProduct: React.FC = () => {
   const [form] = Form.useForm();
@@ -37,27 +38,38 @@ const AddProduct: React.FC = () => {
   const [currentRecord, setCurrentRecord] = useState<PriceInfo>();
   const [currentCate, setCurrentCate] = useState<string>("");
   const navigate = useNavigate();
-  const { data: brandsData } = useFetchBrands(1, 50);
+  const { data: brandsData, refetch: refetchBrand } = useFetchBrands(1, 50);
   const { data: categoriesData } = useFetchCategories(1, 50);
-  const [selectedUnit, setSelectedUnit] = useState([]);
+  const [selectedUnit, setSelectedUnit] = useState<[]>([]);
   const [fileChange, setFileChange] = useState<string>("");
   const [productName, setProductName] = useState<string>("");
-  const data = useStore((s) => s.data);
-  const userInfo = useAuthStore((s) => s.userInfo);
-  // const { data: manager } = useFetchStoreManager(userInfo?.id);
+  const { data, setData } = useStore();
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     form.setFieldsValue({ image: fileChange });
   }, [fileChange, form]);
 
   const brands = useMemo(() => brandsData?.data || [], [brandsData]);
+
+  const otherBrand = { id: 0, name: "Khác" };
+  const updateBrand = [...brands, otherBrand];
+
+  const handleAddBrand = (values: number) => {
+    const otherBrand = values === 0 ? true : false;
+    if (otherBrand) {
+      setIsOpen(true);
+    }
+  };
+
   const categories = useMemo(
     () => categoriesData?.data || [],
     [categoriesData],
   );
 
   const handleRefetch = useCallback(() => {
-    // refetch();
+    refetchBrand();
   }, []);
 
   const showEditModal = (record: any) => {
@@ -148,7 +160,6 @@ const AddProduct: React.FC = () => {
     ],
     [],
   );
-  // console.log("chjeck data[0].unit", data[0].unit);
 
   const onFinish = async (values: any) => {
     const updateData = {
@@ -174,6 +185,8 @@ const AddProduct: React.FC = () => {
       if (res && res.status === 200) {
         notify("success", "Thêm sản phẩm mới thành công", 3);
         handleRefetch();
+        setData([]);
+        form.resetFields();
         // navigate("/store/product");
       }
     } catch (err: any) {
@@ -185,6 +198,11 @@ const AddProduct: React.FC = () => {
   const handleFileChange = useCallback((newFileChange: string) => {
     setFileChange(newFileChange);
   }, []);
+
+  const filterOption = (
+    input: string,
+    option?: { label: string; value: string },
+  ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   return (
     <>
@@ -222,7 +240,11 @@ const AddProduct: React.FC = () => {
                   label="SKU"
                   labelCol={{ span: 24 }}
                   className="formItem"
-                  rules={[{ required: true, message: "Vui lòng nhập sku" }]}
+                  rules={[
+                    { required: true, message: "Vui lòng nhập sku" },
+                    { min: 10, message: "SKU phải có ít nhất 10 ký tự" },
+                    { max: 10, message: "SKU không được vượt quá 10 ký tự" },
+                  ]}
                 >
                   <Input />
                 </Form.Item>
@@ -232,10 +254,18 @@ const AddProduct: React.FC = () => {
                   name="name"
                   label="Tên sản phẩm"
                   rules={[
-                    { required: true, message: "Vui lòng nhập tên sản phẩm" },
+                    {
+                      required: true,
+                      message: "Vui lòng nhập tên sản phẩm",
+                    },
+                    {
+                      pattern: /^(?!^\d+$)[\p{L}\d\s]*$/u,
+                      message:
+                        "Tên sản phẩm không được chỉ chứa số hoặc ký tự đặc biệt",
+                    },
                   ]}
                 >
-                  <Input onChange={(e) => setProductName(e.target.value)} />
+                  <Input />
                 </Form.Item>
               </Col>
             </Row>
@@ -255,10 +285,19 @@ const AddProduct: React.FC = () => {
                 >
                   <Select
                     placeholder="Chọn thương hiệu"
-                    // onChange={handleCategoryChange}
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={filterOption}
+                    onChange={handleAddBrand}
                   >
-                    {brands?.map((brand: BrandInfo) => (
-                      <Option key={brand.id}>{brand.name}</Option>
+                    {updateBrand?.map((brand: BrandInfo) => (
+                      <Option
+                        key={brand.id}
+                        value={brand.id}
+                        label={brand.name}
+                      >
+                        {brand.name}
+                      </Option>
                     ))}
                   </Select>
                 </Form.Item>
@@ -371,6 +410,11 @@ const AddProduct: React.FC = () => {
         handleRefetch={handleRefetch}
         priceInfo={currentRecord}
         productName={productName}
+      />
+      <AddBrandModal
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        handleRefetch={handleRefetch}
       />
     </>
   );

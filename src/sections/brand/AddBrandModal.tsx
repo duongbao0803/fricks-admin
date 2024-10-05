@@ -47,6 +47,7 @@ const AddBrandModal: React.FC<AddModalProps> = React.memo((props) => {
       if (res && res.status === 200) {
         notify("success", `${res.data.message}`, 3);
         handleRefetch();
+        form.resetFields();
       }
     } catch (err: any) {
       notify("error", `${err.response.data.message}`, 3);

@@ -1,7 +1,11 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { Button, Input, Popconfirm, Table } from "antd";
 import type { TablePaginationConfig, TableProps } from "antd";
-import { FilterOutlined, PlusCircleOutlined, UserAddOutlined } from "@ant-design/icons";
+import {
+  FilterOutlined,
+  PlusCircleOutlined,
+  UserAddOutlined,
+} from "@ant-design/icons";
 import { notify } from "@/components/Notification";
 import { Roles } from "@/enums";
 import { FaBan } from "react-icons/fa";
@@ -19,7 +23,7 @@ export const BrandList: React.FC = React.memo(() => {
   const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState(10);
-  const [selectedBrand, setSelectedBrand] = useState<BrandInfo | null>(null); // State to hold selected brand
+  const [selectedBrand, setSelectedBrand] = useState<BrandInfo | null>(null);
   const userInfo = useAuthStore((s) => s.userInfo);
 
   const { data, isFetching, totalCount, refetch } = useFetchBrands(
