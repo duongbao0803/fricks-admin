@@ -7,6 +7,7 @@ import {
   PushpinOutlined,
   BellOutlined,
   BoxPlotOutlined,
+  BookOutlined,
 } from "@ant-design/icons";
 import LogoWeb from "@/assets/images/logo/logo_web.png";
 import { MdBrandingWatermark, MdCategory } from "react-icons/md";
@@ -64,6 +65,7 @@ const items: MenuItem[] = [
     undefined,
     "/store/order",
   ),
+  getItem("Bài viết", "12", <BookOutlined />, undefined, "/post"),
 ];
 
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {

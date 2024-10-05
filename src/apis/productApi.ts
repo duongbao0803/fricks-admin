@@ -5,9 +5,10 @@ export const getProductList = async (
   PageSize: number,
   brandId: number,
   categoryId: number,
+  storeId: number,
 ) => {
   const response = await axiosClient.get(
-    `/products?PageIndex=${PageIndex}&pageSize=${PageSize}&brandId=${brandId}&categoryId=${categoryId}`,
+    `/products?PageIndex=${PageIndex}&PageSize=${PageSize}&StoreId=${storeId}&BrandId=${brandId}&CategoryId=${categoryId}`,
   );
   return response;
 };

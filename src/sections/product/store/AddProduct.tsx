@@ -23,7 +23,6 @@ import { useFetchCategories } from "@/hooks/useFetchCategories";
 import { UploadImage } from "@/components";
 import useStore from "@/hooks/useStore";
 import { unitsByCategory } from "@/constants";
-import { useAuthStore } from "@/hooks/useAuthStore";
 import { addProduct } from "@/apis/productApi";
 import { CategoryInfo } from "@/types/category.types";
 import { BrandInfo } from "@/types/brand.types";

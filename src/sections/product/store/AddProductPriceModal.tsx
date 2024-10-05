@@ -16,12 +16,11 @@ export interface AddModalProps {
 
 const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
   // const { addNewUserItem } = useUserService();
-  const { setIsOpen, isOpen, productName, cateCode, selectedUnit } = props;
+  const { setIsOpen, isOpen, productName, selectedUnit } = props;
   const setData = useStore((s) => s.setData);
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
-  const [fileChange] = useState<string>("");
   const [form] = Form.useForm();
-  const { data: unitsData } = useFetchUnits();
+  useFetchUnits();
 
   const { Option } = Select;
 
@@ -56,10 +55,6 @@ const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
   const handleCancel = () => {
     setIsOpen(false);
     form.resetFields();
-  };
-
-  const filterUnitsByCategory = (categoryCode: string): string[] => {
-    return unitsByCategory[categoryCode] || [];
   };
 
   // const disabledDate = (current: object) => {

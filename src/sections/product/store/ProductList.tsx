@@ -7,6 +7,7 @@ import DropdownProductFunc from "./DropdownProductFunc";
 import { ProductInfo } from "@/types/product.types";
 import { useNavigate } from "react-router-dom";
 import { useFetchProducts } from "@/hooks/useFetchProducts";
+import { useAuthStore } from "@/hooks/useAuthStore";
 
 export interface DataType {
   key: string;
@@ -23,13 +24,18 @@ const ProductList: React.FC = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = React.useState(10);
+  const userInfo = useAuthStore((s) => s.userInfo);
+  console.log("userInfo", userInfo);
 
   const { data, isFetching, totalCount } = useFetchProducts(
     currentPage,
     pageSize,
     0,
     0,
+    0,
   );
+
+  console.log("check data", data);
 
   // const { Products, totalCount, isFetching, fetchProductDetail } =
   //   useProductService();
@@ -75,6 +81,12 @@ const ProductList: React.FC = () => {
   const columns: TableProps<ProductInfo>["columns"] = useMemo(
     () => [
       {
+        title: "STT",
+        dataIndex: "index",
+        key: "index",
+        render: (_, _record, index) => index + 1,
+      },
+      {
         title: "SKU",
         dataIndex: "sku",
         width: "10%",
@@ -90,7 +102,7 @@ const ProductList: React.FC = () => {
               width: "80px",
               height: "80px",
               borderRadius: "100%",
-              objectFit: "cover",
+              objectFit: "contain",
             }}
           />
         ),
@@ -114,15 +126,16 @@ const ProductList: React.FC = () => {
       {
         title: "Số lượng",
         dataIndex: "quantity",
-        width: "10%",
+        width: "8%",
       },
       {
         title: "Đã bán",
         dataIndex: "soldQuantity",
-        width: "10%",
+        width: "6%",
       },
       {
         title: "Chức năng",
+        width: "8%",
         dataIndex: "",
         render: (_, record) => (
           <>

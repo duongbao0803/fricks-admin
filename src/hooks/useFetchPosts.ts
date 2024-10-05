@@ -1,28 +1,16 @@
-import { getProductList } from "@/apis/productApi";
+import { getPostList } from "@/apis/postApi";
 import { useQuery } from "@tanstack/react-query";
 
-export const useFetchProducts = (
-  currentPage: number,
-  pageSize: number,
-  storeId: number,
-  brandId: number,
-  categoryId: number,
-) => {
-  const fetchProducts = async ({ queryKey }: any) => {
+export const useFetchPosts = (currentPage: number, pageSize: number) => {
+  const fetchPosts = async ({ queryKey }: any) => {
     const [, PageIndex, PageSize] = queryKey;
-    const res = await getProductList(
-      PageIndex,
-      PageSize,
-      storeId,
-      brandId,
-      categoryId,
-    );
+    const res = await getPostList(PageIndex, PageSize);
     return res;
   };
 
   const { data, isFetching, refetch } = useQuery({
-    queryKey: ["productList", currentPage, pageSize],
-    queryFn: fetchProducts,
+    queryKey: ["postList", currentPage, pageSize],
+    queryFn: fetchPosts,
     refetchOnWindowFocus: false,
     staleTime: 5000,
   });
