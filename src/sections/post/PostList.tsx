@@ -80,7 +80,7 @@ const PostList: React.FC = React.memo(() => {
       {
         title: "Chức năng",
         dataIndex: "",
-        render: (_, record) => (
+        render: (_) => (
           <Popconfirm
             title="Bạn có muốn cấm người dùng này không?"
             // onConfirm={() => handleDeleteUser(record.id)}

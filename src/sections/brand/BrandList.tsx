@@ -1,11 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { Button, Input, Popconfirm, Table } from "antd";
 import type { TablePaginationConfig, TableProps } from "antd";
-import {
-  FilterOutlined,
-  PlusCircleOutlined,
-  UserAddOutlined,
-} from "@ant-design/icons";
+import { FilterOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { notify } from "@/components/Notification";
 import { Roles } from "@/enums";
 import { FaBan } from "react-icons/fa";
