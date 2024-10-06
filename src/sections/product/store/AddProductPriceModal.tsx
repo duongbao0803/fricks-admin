@@ -21,20 +21,34 @@ const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
   useFetchUnits();
+  const [productUnit, setProductUnit] = useState(null);
 
   const { Option } = Select;
 
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-      const updateValues = [values];
-      setData(updateValues);
-      const formattedDate = formatDate(values.dob);
-      const updatedValues: string = JSON.stringify({
-        ...values,
-        dob: formattedDate,
-      });
-      console.log("update value", updatedValues);
+      const unit = JSON.parse(values?.unit)
+
+      const updatedValues = [{
+        name: values?.name,
+        price: values?.price,
+        code: unit?.code
+      }]
+      const tableData = [{
+        name: values?.name,
+        price: values?.price,
+        unitName: unit?.name
+      }]
+      setData(tableData);
+
+      
+      // setData(updateValues);
+      // const updatedValues: string = JSON.stringify({
+      //   ...values,
+      //   dob: formattedDate,
+      // });
+      // console.log("update value", updatedValues);
       setIsConfirmLoading(true);
       setTimeout(async () => {
         try {
@@ -57,31 +71,19 @@ const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
     form.resetFields();
   };
 
-  // const disabledDate = (current: object) => {
-  //   return current && current > moment().startOf("day");
-  // };
+  const handleUnitChange = (value: any) => {
+   if (value) {
 
-  // const handleFileChange = useCallback((newFileChange: string) => {
-  //   setFileChange(newFileChange);
-  // }, []);
-
-  // const handleAddUser = useCallback(async (userData: any) => {
-  //   try {
-  //     const res = await addUser(userData);
-  //     console.log("check res", res);
-  //     if (res && res.status === 200) {
-  //       notify("success", `${res.data.message}`, 3);
-  //       handleRefetch();
-  //     }
-  //   } catch (err: any) {
-  //     console.error("err", err);
-  //     notify("error", `${err.response.data.message}`, 3);
-  //   }
-  // }, []);
+     const {code, name} = JSON.parse(value);
+     setProductUnit(code)
+     setData(value);
+   }
+    
+  }
 
   return (
     <Modal
-      title={<p className="text-lg font-bold text-[red] ">Thêm giá sản phẩm</p>}
+      title={<p className="text-lg font-bold text-[red] ">Thêm giá sản phẩm</p>} 
       open={isOpen}
       onOk={handleOk}
       confirmLoading={isConfirmLoading}
@@ -115,9 +117,15 @@ const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
               labelCol={{ span: 24 }}
               className="formItem"
             >
-              <Select placeholder="Chọn đơn vị tính">
+              <Select placeholder="Chọn đơn vị tính" onChange={handleUnitChange}>
                 {selectedUnit?.map((unit: any, index: number) => (
-                  <Option key={index} value={unit?.code}>
+                  <Option
+                    key={index}
+                    value={JSON.stringify({
+                      name: unit?.name,
+                      code: unit?.code,
+                    })}
+                  >
                     {unit?.name}
                   </Option>
                 ))}

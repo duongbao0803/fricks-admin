@@ -17,7 +17,12 @@ export const addStore = async (storeData: any) => {
   return response;
 };
 
-export const deleteUser = async (storeId: number) => {
+export const deleteStore = async (storeId: number) => {
   const response = await axiosClient.delete(`/stores/${storeId}`);
+  return response;
+};
+
+export const getStoreId = async (storeId: number) => {
+  const response = await axiosClient.get(`/stores/${storeId}`);
   return response;
 };

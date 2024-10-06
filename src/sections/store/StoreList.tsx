@@ -7,7 +7,7 @@ import AddStoreModal from "./AddStoreModal";
 import { useNavigate } from "react-router-dom";
 import { StoreInfo } from "@/types/store.types";
 import { useFetchStores } from "@/hooks/useFetchStores";
-import { formatDate2 } from "@/utils/validate";
+import { formatTimestampWithHour } from "@/utils/validate";
 
 const StoreList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -38,46 +38,50 @@ const StoreList: React.FC = () => {
   //   }
   // };
 
-  const { data, isFetching, totalCount } = useFetchStores(
+  const { data, isFetching, totalCount, refetch } = useFetchStores(
     currentPage,
     pageSize,
   );
 
-  const dataSource = [
-    {
-      id: 1,
-      name: "Cửa hàng A",
-      image: "https://via.placeholder.com/100",
-      accountManager: "manager_a",
-      address: "TPHCM",
-      taxCode: "1234567890",
-      createDate: "2023-01-10",
-      updateDate: null,
-      isDeleted: false,
-    },
-    {
-      id: 2,
-      name: "Cửa hàng B",
-      image: "https://via.placeholder.com/100",
-      accountManager: "manager_b",
-      address: "TPHCM",
-      taxCode: "1234567890",
-      createDate: "2023-02-15",
-      updateDate: null,
-      isDeleted: true,
-    },
-    {
-      id: 3,
-      name: "Cửa hàng C",
-      image: "https://via.placeholder.com/100",
-      accountManager: "manager_c",
-      address: "TPHCM",
-      taxCode: "1234567890",
-      createDate: "2023-03-05",
-      updateDate: null,
-      isDeleted: false,
-    },
-  ];
+  const handleRefetch = useCallback(() => {
+    refetch();
+  }, []);
+
+  // const dataSource = [
+  //   {
+  //     id: 1,
+  //     name: "Cửa hàng A",
+  //     image: "https://via.placeholder.com/100",
+  //     accountManager: "manager_a",
+  //     address: "TPHCM",
+  //     taxCode: "1234567890",
+  //     createDate: "2023-01-10",
+  //     updateDate: null,
+  //     isDeleted: false,
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Cửa hàng B",
+  //     image: "https://via.placeholder.com/100",
+  //     accountManager: "manager_b",
+  //     address: "TPHCM",
+  //     taxCode: "1234567890",
+  //     createDate: "2023-02-15",
+  //     updateDate: null,
+  //     isDeleted: true,
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Cửa hàng C",
+  //     image: "https://via.placeholder.com/100",
+  //     accountManager: "manager_c",
+  //     address: "TPHCM",
+  //     taxCode: "1234567890",
+  //     createDate: "2023-03-05",
+  //     updateDate: null,
+  //     isDeleted: false,
+  //   },
+  // ];
 
   const columns: TableProps<StoreInfo>["columns"] = useMemo(
     () => [
@@ -92,10 +96,10 @@ const StoreList: React.FC = () => {
         dataIndex: "name",
         width: "15%",
         className: "first-column",
-        onCell: () => {
+        onCell: (record) => {
           return {
             onClick: () => {
-              setIsModalOpen(true);
+              handleRowClick(record.id)
             },
           };
         },
@@ -137,7 +141,7 @@ const StoreList: React.FC = () => {
         width: "13%",
         render: (createDate) => {
           if (createDate) {
-            return formatDate2(createDate);
+            return formatTimestampWithHour(createDate);
           } else {
             return "N/A";
           }
@@ -221,163 +225,8 @@ const StoreList: React.FC = () => {
         }}
         onChange={handleTableChange}
         loading={isFetching}
-        onRow={(record) => ({
-          onClick: () => handleRowClick(record.id),
-        })}
-        // dataSource={Stores?.map(
-        //   (record: { id: unknown; "create-date": string | Date }) => ({
-        //     ...record,
-        //     key: record.id,
-        //     "create-date": formatDate2(record["create-date"]),
-        //   }),
-        // )}
-        // pagination={{
-        //   current: currentPage,
-        //   total: totalCount || 0,
-        //   pageSize: 5,
-        // }}
-        // onChange={handleTableChange}
-        // loading={isFetching}
-        // rowKey={(record) => record.id}
-        // onRow={(record) => ({
-        //   onClick: () => handleRowClick(record.id),
-        // })}
       />
-      <AddStoreModal setIsOpen={setIsOpen} isOpen={isOpen} />
-      {/* <Modal
-        title={
-          <p className="text-lg font-bold text-[red]">
-            Chi tiết nhà xe &nbsp;
-            {!StoreDetail?.isDeletedd && (
-              <Tag color={tagColor}>{statusText}</Tag>
-            )}
-          </p>
-        }
-        open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
-        footer={null}
-      >
-        {StoreDetail ? (
-          <Form name="normal_login" className="login-form" form={form}>
-            <Row gutter={16} className="relative mt-1">
-              <Col span={12}>
-                <Form.Item
-                  label="Tên nhà xe"
-                  labelCol={{ span: 24 }}
-                  className="formItem"
-                >
-                  <Input
-                    prefix={
-                      <EnvironmentOutlined className="site-form-item-icon mr-1" />
-                    }
-                    className="p-2"
-                    defaultValue={StoreDetail?.name}
-                    readOnly
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Email quản lý"
-                  labelCol={{ span: 24 }}
-                  className="formItem"
-                >
-                  <Input
-                    prefix={
-                      <MailOutlined className="site-form-item-icon mr-1" />
-                    }
-                    className="p-2"
-                    defaultValue={StoreDetail?.["manager-email"]}
-                    readOnly
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Row gutter={16} className="relative mt-1">
-              <Col span={12}>
-                <Form.Item
-                  label="Ngày tạo"
-                  labelCol={{ span: 24 }}
-                  className="formItem"
-                >
-                  <DatePicker
-                    picker="date"
-                    format="DD/MM/YYYY"
-                    className="formItem w-full p-2"
-                    defaultValue={dayjs(StoreDetail["create-date"])}
-                    disabled
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Ngày chỉnh sửa"
-                  labelCol={{ span: 24 }}
-                  className="formItem"
-                >
-                  <DatePicker
-                    picker="date"
-                    format="DD/MM/YYYY"
-                    className="formItem w-full p-2"
-                    defaultValue={dayjs(StoreDetail["update-date"])}
-                    disabled
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Form.Item
-              label="Mô tả ngắn gọn"
-              labelCol={{ span: 24 }}
-              className="formItem"
-            >
-              <Input
-                prefix={
-                  <EnvironmentOutlined className="site-form-item-icon mr-1" />
-                }
-                className="p-2"
-                defaultValue={StoreDetail?.["short-description"]}
-                readOnly
-              />
-            </Form.Item>
-            <Form.Item
-              name="full-description"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-              colon={true}
-              label="Mô tả chi tiết"
-              labelCol={{ span: 24 }}
-              className="formItem"
-            >
-              <TextArea
-                showCount
-                placeholder="Mô tả chi tiết"
-                defaultValue={StoreDetail?.["full-description"]}
-              />
-            </Form.Item>
-
-            <Image
-              src={StoreDetail["img-url"]}
-              style={{
-                width: "100px",
-                height: "100px",
-                borderRadius: "100%",
-                objectFit: "cover",
-              }}
-            />
-          </Form>
-        ) : (
-          <>
-            <Skeleton count={1} width={100} className="mb-2" />
-            <Skeleton count={10} className="mb-2" />
-            <Skeleton count={1} width={100} className="mb-2" />
-            <Skeleton count={10} className="mb-2" />
-          </>
-        )}
-      </Modal> */}
+      <AddStoreModal setIsOpen={setIsOpen} isOpen={isOpen} handleRefetch={handleRefetch} />
     </>
   );
 };

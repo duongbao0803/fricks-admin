@@ -115,12 +115,12 @@ const ProductList: React.FC = () => {
       },
       {
         title: "Loại",
-        dataIndex: ["category", "name"],
+        dataIndex: "categoryName",
         width: "15%",
       },
       {
         title: "Thương hiệu",
-        dataIndex: ["brand", "name"],
+        dataIndex: "brandName",
         width: "15%",
       },
       {
