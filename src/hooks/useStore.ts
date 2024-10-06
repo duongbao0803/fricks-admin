@@ -1,10 +1,12 @@
-import { AuthState } from "@/types/auth.types";
-import Cookies from "js-cookie";
+import { ProductType } from "@/types/product.types";
 import { create } from "zustand";
 
-const useStore = create((set) => ({
+const useStore = create<{
+  data: ProductType[];
+  setData: (data: ProductType[]) => void;
+}>((set) => ({
   data: [],
-  setData: (data: any) => set({ data }),
+  setData: (data: ProductType[]) => set({ data }),
 }));
 
 export default useStore;

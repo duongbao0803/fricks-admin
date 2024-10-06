@@ -15,7 +15,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import AddProductPriceModal from "./AddProductPriceModal";
 import EditProductPriceModal from "./EditProductPriceModal";
-import { PriceInfo } from "@/types/product.types";
+import { PriceInfo, Unit } from "@/types/product.types";
 import { notify } from "@/components/Notification";
 import { useNavigate } from "react-router-dom";
 import { useFetchBrands } from "@/hooks/useFetchBrands";
@@ -39,7 +39,7 @@ const AddProduct: React.FC = () => {
   const navigate = useNavigate();
   const { data: brandsData, refetch: refetchBrand } = useFetchBrands(1, 50);
   const { data: categoriesData } = useFetchCategories(1, 50);
-  const [selectedUnit, setSelectedUnit] = useState<[]>([]);
+  const [selectedUnit, setSelectedUnit] = useState<Unit[]>([]);
   const [fileChange, setFileChange] = useState<string>("");
   const [productName, setProductName] = useState<string>("");
   const { data, setData } = useStore();
@@ -84,10 +84,15 @@ const AddProduct: React.FC = () => {
     }
   };
 
-  const handleCategoryChange = (value: any) => {
-    const { code, id } = JSON.parse(value);
-    setSelectedUnit(unitsByCategory[code]);
-    setCurrentCate(id);
+  const handleCategoryChange = (value: string) => {
+    const { code, id }: { code: keyof typeof unitsByCategory; id: string } =
+      JSON.parse(value);
+    if (unitsByCategory[code]) {
+      setSelectedUnit(unitsByCategory[code]);
+      setCurrentCate(id);
+    } else {
+      console.error("Invalid category code");
+    }
   };
 
   const openAddProductPriceModal = () => {
@@ -172,21 +177,19 @@ const AddProduct: React.FC = () => {
       storeId: 0,
       productPrices: [
         {
-          unitCode: data[0].unit,
+          unitCode: data[0].unitCode,
           price: data[0].price,
         },
       ],
     };
-    console.log("check updateData", JSON.stringify(updateData));
     try {
       const res = await addProduct(updateData);
-      console.log("check res", res);
       if (res && res.status === 200) {
         notify("success", "Thêm sản phẩm mới thành công", 3);
         handleRefetch();
         setData([]);
         form.resetFields();
-        // navigate("/store/product");
+        navigate("/store/product");
       }
     } catch (err: any) {
       console.error(err);
@@ -241,8 +244,8 @@ const AddProduct: React.FC = () => {
                   className="formItem"
                   rules={[
                     { required: true, message: "Vui lòng nhập sku" },
-                    { min: 10, message: "SKU phải có ít nhất 10 ký tự" },
-                    { max: 10, message: "SKU không được vượt quá 10 ký tự" },
+                    { min: 9, message: "SKU phải có ít nhất 9 ký tự" },
+                    { max: 9, message: "SKU không được vượt quá 9 ký tự" },
                   ]}
                 >
                   <Input />
@@ -264,7 +267,7 @@ const AddProduct: React.FC = () => {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input onChange={(e) => setProductName(e.target.value)} />
                 </Form.Item>
               </Col>
             </Row>

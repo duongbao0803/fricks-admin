@@ -45,7 +45,7 @@ const AddBrandModal: React.FC<AddModalProps> = React.memo((props) => {
     try {
       const res = await addBrand(name);
       if (res && res.status === 200) {
-        notify("success", `${res.data.message}`, 3);
+        notify("success", "Thêm thương hiệu thành công", 3);
         handleRefetch();
         form.resetFields();
       }

@@ -47,7 +47,6 @@ const ProductDetail: React.FC = () => {
   };
 
   const handleCategoryChange = (value: any) => {
-    console.log("check cate", value);
     setCurrentCate(value);
   };
 

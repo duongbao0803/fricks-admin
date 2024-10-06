@@ -1,10 +1,8 @@
-import { getProductList } from "@/apis/productApi";
 import { getUnitList } from "@/apis/unitApi";
 import { useQuery } from "@tanstack/react-query";
 
 export const useFetchUnits = () => {
-  const fetchUnits = async ({ queryKey }: any) => {
-    const [, PageIndex, PageSize] = queryKey;
+  const fetchUnits = async ({}: any) => {
     const res = await getUnitList();
     return res;
   };

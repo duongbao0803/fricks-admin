@@ -7,7 +7,7 @@ import AddUserModal from "./AddUserModal";
 import { useFetchUsers } from "@/hooks/useFetchUsers";
 import { deleteUser } from "@/apis/userApi";
 import { notify } from "@/components/Notification";
-import { formatDate2, formatTimestamp } from "@/utils/validate";
+import { formatTimestamp } from "@/utils/validate";
 import { Roles } from "@/enums";
 import { FaBan } from "react-icons/fa";
 

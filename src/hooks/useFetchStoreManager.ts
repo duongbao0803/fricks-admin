@@ -1,4 +1,4 @@
-import { getStoreList, getStoreManager } from "@/apis/storeApi";
+import { getStoreManager } from "@/apis/storeApi";
 import { useQuery } from "@tanstack/react-query";
 
 export const useFetchStoreManager = (userId: number) => {

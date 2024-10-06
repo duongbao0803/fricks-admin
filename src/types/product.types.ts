@@ -40,3 +40,15 @@ export interface PriceUnitInfo {
   id: number;
   name: string;
 }
+
+export interface ProductType {
+  name: string;
+  price: number;
+  unit: string;
+  unitCode: string;
+}
+
+export interface Unit {
+  name: string;
+  code: string;
+}

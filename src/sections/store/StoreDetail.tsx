@@ -25,7 +25,7 @@ const StoreDetail: React.FC<StoreDeatilProps> = (props) => {
   const { TextArea } = Input;
   const [storeData, setStoreData] = useState<StoreInfo>();
   const [fileChange, setFileChange] = useState<string>("");
-  const [isReadOnly, setisReadOnly] = useState<boolean>(true);
+  const [isReadOnly] = useState<boolean>(true);
 
   const filterOption = (
     input: string,
@@ -45,11 +45,11 @@ const StoreDetail: React.FC<StoreDeatilProps> = (props) => {
   }, [storeId]);
 
   useEffect(() => {
-    form.setFieldsValue(storeData); 
+    form.setFieldsValue(storeData);
   }, [storeData, form]);
 
   useEffect(() => {
-    form.setFieldsValue({ "image": fileChange });
+    form.setFieldsValue({ image: fileChange });
   }, [fileChange, form]);
 
   const handleFileChange = useCallback((newFileChange: string) => {
@@ -280,7 +280,11 @@ const StoreDetail: React.FC<StoreDeatilProps> = (props) => {
               labelCol={{ span: 24 }}
               className="formItem"
             >
-              <TextArea showCount placeholder="Viết mô tả ngắn gọn" readOnly={isReadOnly}/>
+              <TextArea
+                showCount
+                placeholder="Viết mô tả ngắn gọn"
+                readOnly={isReadOnly}
+              />
             </Form.Item>
             <Form.Item>
               <Space className="mt-5 flex justify-end">

@@ -16,7 +16,6 @@ const StoreList: React.FC = () => {
   // const { Stores, totalCount, isFetching, fetchStoreDetail } =
   //   useStoreService();
   // const [currentPage, setCurrentPage] = useState<number>(1);
-  const [, setIsModalOpen] = useState<boolean>(false);
   // const [storeDetail, setStoreDetail] = useState<StoreInfo>();
   const [, setStoreId] = useState<number | null>(null);
   // const { TextArea } = Input;
@@ -99,7 +98,7 @@ const StoreList: React.FC = () => {
         onCell: (record) => {
           return {
             onClick: () => {
-              handleRowClick(record.id)
+              handleRowClick(record.id);
             },
           };
         },
@@ -226,7 +225,11 @@ const StoreList: React.FC = () => {
         onChange={handleTableChange}
         loading={isFetching}
       />
-      <AddStoreModal setIsOpen={setIsOpen} isOpen={isOpen} handleRefetch={handleRefetch} />
+      <AddStoreModal
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        handleRefetch={handleRefetch}
+      />
     </>
   );
 };
