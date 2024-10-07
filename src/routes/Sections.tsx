@@ -10,7 +10,25 @@ export const ChartPage = lazy(() => import("@/pages/ChartPage"));
 export const UserPage = lazy(() => import("@/pages/UserPage"));
 export const StorePage = lazy(() => import("@/pages/StorePage"));
 export const StoreDetailPage = lazy(() => import("@/pages/StoreDetailPage"));
-export const ProductPage = lazy(() => import("@/pages/UserPage copy"));
+export const ProductAdminPage = lazy(
+  () => import("@/pages/product/ProductAdminPage"),
+);
+export const ProductStorePage = lazy(
+  () => import("@/pages/product/ProductStorePage"),
+);
+export const ProductStoreDetailPage = lazy(
+  () => import("@/pages/product/detail/ProductStoreDetail"),
+);
+export const AddProductStorePage = lazy(
+  () => import("@/pages/product/detail/AddProductStore"),
+);
+export const CategoryPage = lazy(() => import("@/pages/CategoryPage"));
+export const OrderAdminPage = lazy(
+  () => import("@/pages/order/OrderAdminPage"),
+);
+
+export const BrandPage = lazy(() => import("@/pages/BrandPage"));
+export const PostPage = lazy(() => import("@/pages/PostPage"));
 
 const Router: React.FC = () => {
   const isChecking = useAuthStore((s) => s.isChecking);
@@ -70,29 +88,45 @@ const Router: React.FC = () => {
         },
         {
           path: "/store",
-          element: isAdmin ? (
-            <StorePage />
-          ) : (
-            <Navigate to="/store/product" replace />
-          ),
+          element: isAdmin && <StorePage />,
         },
         {
           path: "/store/:id",
-          element: isAdmin ? (
-            <StoreDetailPage />
-          ) : (
-            <Navigate to="/store/product" replace />
-          ),
+          element: isAdmin && <StoreDetailPage />,
         },
         {
           path: "/product",
-          element: <ProductPage />,
+          element: <ProductAdminPage />,
         },
         {
           path: "/store/product",
-          element: "",
+          element: <ProductStorePage />,
+        },
+        {
+          path: "/brand",
+          element: <BrandPage />,
         },
 
+        {
+          path: "/store/product/:id",
+          element: <ProductStoreDetailPage />,
+        },
+        {
+          path: "/store/product/add",
+          element: <AddProductStorePage />,
+        },
+        {
+          path: "/order",
+          element: <OrderAdminPage />,
+        },
+        {
+          path: "/category",
+          element: <CategoryPage />,
+        },
+        {
+          path: "/post",
+          element: <PostPage />,
+        },
         { element: <Error />, path: "*" },
       ],
     },

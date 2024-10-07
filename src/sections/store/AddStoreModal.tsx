@@ -1,43 +1,46 @@
 import { useCallback, useEffect, useState } from "react";
-import { Modal, Form, Input, Row, Col } from "antd";
+import { Modal, Form, Input, Row, Col, Select } from "antd";
 import {
   ContainerOutlined,
   MailOutlined,
   CarOutlined,
   PhoneOutlined,
+  UserOutlined,
+  BankOutlined,
 } from "@ant-design/icons";
 import { UploadImage } from "@/components";
+import { banks } from "@/constants/bank";
+import { addStore } from "@/apis/storeApi";
+import { notify } from "@/components/Notification";
 
 export interface AddStoreProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
+  handleRefetch: () => void;
 }
 
 const AddStoreModal: React.FC<AddStoreProps> = (props) => {
-  const { setIsOpen, isOpen } = props;
+  const { setIsOpen, isOpen, handleRefetch } = props;
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [fileChange, setFileChange] = useState<string>("");
-  // const { addNewStoreItem } = useStoreService();
   const [form] = Form.useForm();
   // const { TextArea } = Input;
+  const { Option } = Select;
 
   useEffect(() => {
-    form.setFieldsValue({ "img-url": fileChange });
+    form.setFieldsValue({ "image": fileChange });
   }, [fileChange, form]);
 
   const handleOk = async () => {
     try {
-      // const values = await form.validateFields();
+      const values = await form.validateFields();
       setIsConfirmLoading(true);
       setTimeout(async () => {
         try {
-          // await addNewStoreItem(values);
-          form.resetFields();
+          await handleAddStore(values);
           setIsConfirmLoading(false);
-          setIsOpen(false);
         } catch (error) {
           setIsConfirmLoading(false);
-          setIsOpen(true);
         }
       }, 1500);
     } catch (errorInfo) {
@@ -52,6 +55,27 @@ const AddStoreModal: React.FC<AddStoreProps> = (props) => {
   const handleFileChange = useCallback((newFileChange: string) => {
     setFileChange(newFileChange);
   }, []);
+
+  const handleAddStore = useCallback(async (storeData: any) => {
+    try {
+      const res = await addStore(storeData);
+      if (res && res.status === 200) {
+        console.log("check res", res);
+        notify("success", "Thêm cửa hàng mới thành công", 3);
+        handleRefetch();
+        form.resetFields();
+        setIsOpen(false);
+      }
+    } catch (err: any) {
+      notify("error", `${err.response.data.message}`, 3);
+      setIsOpen(true);
+    }
+  }, []);
+
+  const filterOption = (
+    input: string,
+    option?: { label: string; value: string },
+  ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   return (
     <Modal
@@ -88,7 +112,7 @@ const AddStoreModal: React.FC<AddStoreProps> = (props) => {
           </Col>
           <Col span={12}>
             <Form.Item
-              name="manager-email"
+              name="managerEmail"
               rules={[
                 {
                   required: true,
@@ -109,7 +133,7 @@ const AddStoreModal: React.FC<AddStoreProps> = (props) => {
         </Row>
 
         <Form.Item
-          name="short-description"
+          name="address"
           rules={[
             {
               required: true,
@@ -130,7 +154,7 @@ const AddStoreModal: React.FC<AddStoreProps> = (props) => {
         <Row gutter={16} className="relative mt-1">
           <Col span={12}>
             <Form.Item
-              name="name"
+              name="phoneNumber"
               rules={[
                 {
                   required: true,
@@ -153,7 +177,7 @@ const AddStoreModal: React.FC<AddStoreProps> = (props) => {
           </Col>
           <Col span={12}>
             <Form.Item
-              name="manager-email"
+              name="taxCode"
               rules={[
                 {
                   required: true,
@@ -174,7 +198,88 @@ const AddStoreModal: React.FC<AddStoreProps> = (props) => {
         </Row>
 
         <Form.Item
-          name="img-url"
+          name="bankCode"
+          rules={[
+            {
+              required: true,
+              message: "Vui lòng chọn ngân hàng",
+            },
+          ]}
+          colon={true}
+          label="Ngân hàng"
+          labelCol={{ span: 24 }}
+          className="formItem"
+        >
+          <Select
+            placeholder="Chọn ngân hàng"
+            showSearch
+            filterOption={filterOption}
+            // onChange={handleCategoryChange}
+          >
+            {banks?.map((bank: any) => (
+              <Option
+                key={bank.id}
+                value={bank.code}
+                label={bank.name}
+              >
+                {bank.name}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        <Row gutter={16} className="relative mt-1">
+          <Col span={12}>
+            <Form.Item
+              name="accountNumber"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập số tài khoản",
+                },
+                {
+                  max: 20,
+                  message: "Tài khoản chứa tối đa 20 chữ số"
+                }
+              ]}
+              colon={true}
+              label="Số tài khoản"
+              labelCol={{ span: 24 }}
+              className="formItem"
+            >
+              <Input
+                prefix={
+                  <BankOutlined className="site-form-item-icon mr-1" />
+                }
+                placeholder="Số tài khoản"
+                autoFocus
+              />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="accountName"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập tên chủ tài khoản",
+                },
+              ]}
+              colon={true}
+              label="Chủ tài khoản"
+              labelCol={{ span: 24 }}
+              className="formItem"
+            >
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon mr-1" />}
+                placeholder="Chủ tài khoản"
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Form.Item
+          name="image"
           rules={[
             {
               required: true,

@@ -4,3 +4,4 @@ export { default as Loading } from "./Loading";
 export { default as Error } from "./Error";
 export { default as ForBidden } from "./ForBidden";
 export { default as UploadImage } from "./UploadImage";
+export { default as LoadingWrapper } from "./LoadingWrapper";

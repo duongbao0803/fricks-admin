@@ -5,11 +5,12 @@ import {
   PieChartOutlined,
   HomeOutlined,
   PushpinOutlined,
-  SmileOutlined,
   BellOutlined,
   BoxPlotOutlined,
+  BookOutlined,
 } from "@ant-design/icons";
 import LogoWeb from "@/assets/images/logo/logo_web.png";
+import { MdBrandingWatermark, MdCategory } from "react-icons/md";
 
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { notify } from "@/components/Notification";
@@ -50,12 +51,21 @@ function getItem(
 const items: MenuItem[] = [
   getItem("Thống kê", "1", <PieChartOutlined />, undefined, "/chart"),
   getItem("Người dùng", "2", <PushpinOutlined />, undefined, "/user"),
-  getItem("Sản phẩm", "8", <BoxPlotOutlined />, undefined, "/store/product"),
   getItem("Cửa hàng", "3", <HomeOutlined />, undefined, "/store"),
+  getItem("Thương hiệu", "10", <MdBrandingWatermark />, undefined, "/brand"),
+  getItem("Sản phẩm", "8", <BoxPlotOutlined />, undefined, "/store/product"),
   getItem("Sản phẩm", "4", <BoxPlotOutlined />, undefined, "/product"),
   getItem("Đơn hàng", "5", <IoDocumentTextOutline />, undefined, "/order"),
+  getItem("Danh mục", "11", <MdCategory />, undefined, "/category"),
   getItem("Thông báo", "6", <BellOutlined />, undefined, "/notification"),
-  getItem("Thông tin", "7", <SmileOutlined />, undefined, "/personal"),
+  getItem(
+    "Đơn hàng",
+    "9",
+    <IoDocumentTextOutline />,
+    undefined,
+    "/store/order",
+  ),
+  getItem("Bài viết", "12", <BookOutlined />, undefined, "/post"),
 ];
 
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
@@ -70,9 +80,10 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
             item.key !== "1" &&
             item.key !== "2" &&
             item.key !== "3" &&
-            item.key !== "4",
+            item.key !== "4" &&
+            item.key !== "5",
         )
-      : items;
+      : items.filter((items) => items.key !== "9" && items.key !== "8");
 
   const logout = useAuthStore((s) => s.logout);
 

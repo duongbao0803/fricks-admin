@@ -20,7 +20,6 @@ export interface AddModalProps {
 }
 
 const AddUserModal: React.FC<AddModalProps> = React.memo((props) => {
-  // const { addNewUserItem } = useUserService();
   const { setIsOpen, isOpen, handleRefetch } = props;
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [fileChange, setFileChange] = useState<string>("");

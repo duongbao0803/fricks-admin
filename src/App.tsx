@@ -4,7 +4,7 @@ import { useAuthStore } from "./hooks/useAuthStore";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import LoadingWrapper from "./components/LoadingWrapper";
+import { LoadingWrapper } from "./components";
 const queryClient = new QueryClient();
 
 function App() {

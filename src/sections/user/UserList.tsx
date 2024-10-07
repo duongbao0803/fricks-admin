@@ -7,7 +7,7 @@ import AddUserModal from "./AddUserModal";
 import { useFetchUsers } from "@/hooks/useFetchUsers";
 import { deleteUser } from "@/apis/userApi";
 import { notify } from "@/components/Notification";
-import { formatDate2 } from "@/utils/validate";
+import { formatTimestamp } from "@/utils/validate";
 import { Roles } from "@/enums";
 import { FaBan } from "react-icons/fa";
 
@@ -68,7 +68,7 @@ const UserList: React.FC = React.memo(() => {
         width: "15%",
         render: (dob) => {
           if (dob) {
-            return formatDate2(dob);
+            return formatTimestamp(dob);
           } else {
             return "N/A";
           }

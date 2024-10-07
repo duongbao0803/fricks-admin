@@ -1,41 +1,49 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Form, Input, Row, Col } from "antd";
 import {
-  MailOutlined,
   CarOutlined,
-  DotChartOutlined,
+  MailOutlined,
   TransactionOutlined,
   SwitcherOutlined,
+  DotChartOutlined,
 } from "@ant-design/icons";
 import { UploadImage } from "@/components";
 
-export interface AddProductProps {
+export interface EditProductModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
 }
 
-const AddProductModal: React.FC<AddProductProps> = (props) => {
+const EditProductModal: React.FC<EditProductModalProps> = (props) => {
   const { setIsOpen, isOpen } = props;
-  const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [fileChange, setFileChange] = useState<string>("");
-  // const { addNewProductItem } = useProductService();
+  const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
-  // const { TextArea } = Input;
+
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     form.setFieldsValue(productInfo);
+  //   }
+  // }, [isOpen]);
 
   useEffect(() => {
-    form.setFieldsValue({ "img-url": fileChange });
+    form.setFieldsValue({ image: fileChange });
   }, [fileChange, form]);
 
   const handleOk = async () => {
     try {
       // const values = await form.validateFields();
+
       setIsConfirmLoading(true);
       setTimeout(async () => {
         try {
-          // await addNewProductItem(values);
-          form.resetFields();
-          setIsConfirmLoading(false);
-          setIsOpen(false);
+          // if (productInfo && productInfo._id) {
+          //   await updateProductItem(productInfo._id, values);
+          //   setIsConfirmLoading(false);
+          //   setIsOpen(false);
+          // } else {
+          //   console.error("User is undefined");
+          // }
         } catch (error) {
           setIsConfirmLoading(false);
           setIsOpen(true);
@@ -50,13 +58,13 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
     setIsOpen(false);
   };
 
-  const handleFileChange = useCallback((newFileChange: string) => {
+  const handleFileChange = (newFileChange: string) => {
     setFileChange(newFileChange);
-  }, []);
+  };
 
   return (
     <Modal
-      title={<p className="text-lg font-bold text-[red]">Thêm sản phẩm mới</p>}
+      title={<p className="text-lg text-[red]">Chỉnh sửa cửa hàng</p>}
       open={isOpen}
       onOk={handleOk}
       confirmLoading={isConfirmLoading}
@@ -81,7 +89,7 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
               className="formItem"
             >
               <Input
-                prefix={<CarOutlined className="site-form-item-icon mr-1" />}
+                prefix={<CarOutlined className="site-form-item-icon mr-1"/>}
                 placeholder="SKU"
                 autoFocus
               />
@@ -125,9 +133,7 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
               className="formItem"
             >
               <Input
-                prefix={
-                  <DotChartOutlined className="site-form-item-icon mr-1" />
-                }
+                prefix={<DotChartOutlined className="site-form-item-icon mr-1"/>}
                 placeholder="Đơn vị tính"
                 autoFocus
               />
@@ -148,9 +154,7 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
               className="formItem"
             >
               <Input
-                prefix={
-                  <TransactionOutlined className="site-form-item-icon mr-1" />
-                }
+                prefix={<TransactionOutlined className="site-form-item-icon mr-1" />}
                 placeholder="Đơn giá"
               />
             </Form.Item>
@@ -176,6 +180,8 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
           />
         </Form.Item>
 
+        
+        
         <Form.Item
           name="img-url"
           rules={[
@@ -189,15 +195,11 @@ const AddProductModal: React.FC<AddProductProps> = (props) => {
           labelCol={{ span: 24 }}
           className="formItem"
         >
-          <UploadImage
-            onFileChange={handleFileChange}
-            initialImage={""}
-            titleButton={"Thêm ảnh"}
-          />
+          <UploadImage onFileChange={handleFileChange} initialImage={""} titleButton={"Thêm ảnh"} />
         </Form.Item>
       </Form>
     </Modal>
   );
 };
 
-export default AddProductModal;
+export default EditProductModal;
