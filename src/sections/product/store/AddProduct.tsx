@@ -167,7 +167,7 @@ const AddProduct: React.FC = () => {
 
   const onFinish = async (values: any) => {
     const updateData = {
-      sku: values?.sku,
+      sku: "daylasku",
       name: values?.name,
       image: values?.image,
       categoryId: JSON.parse(values?.category)?.id,
@@ -233,44 +233,23 @@ const AddProduct: React.FC = () => {
             </Form.Item>
           </Col>
           <Col span={16}>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item
-                  id="formItem"
-                  name="sku"
-                  colon={true}
-                  label="SKU"
-                  labelCol={{ span: 24 }}
-                  className="formItem"
-                  rules={[
-                    { required: true, message: "Vui lòng nhập sku" },
-                    { min: 9, message: "SKU phải có ít nhất 9 ký tự" },
-                    { max: 9, message: "SKU không được vượt quá 9 ký tự" },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  name="name"
-                  label="Tên sản phẩm"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập tên sản phẩm",
-                    },
-                    {
-                      pattern: /^(?!^\d+$)[\p{L}\d\s]*$/u,
-                      message:
-                        "Tên sản phẩm không được chỉ chứa số hoặc ký tự đặc biệt",
-                    },
-                  ]}
-                >
-                  <Input onChange={(e) => setProductName(e.target.value)} />
-                </Form.Item>
-              </Col>
-            </Row>
+            <Form.Item
+              name="name"
+              label="Tên sản phẩm"
+              rules={[
+                {
+                  required: true,
+                  message: "Vui lòng nhập tên sản phẩm",
+                },
+                {
+                  pattern: /^(?!^\d+$)[\p{L}\d\s]*$/u,
+                  message:
+                    "Tên sản phẩm không được chỉ chứa số hoặc ký tự đặc biệt",
+                },
+              ]}
+            >
+              <Input onChange={(e) => setProductName(e.target.value)} />
+            </Form.Item>
 
             <Row gutter={16} className="relative mt-1">
               <Col span={12}>
