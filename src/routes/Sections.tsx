@@ -27,6 +27,11 @@ export const OrderAdminPage = lazy(
   () => import("@/pages/order/OrderAdminPage"),
 );
 
+export const OrderStorePage = lazy(
+  () => import("@/pages/order/OrderStorePage"),
+);
+
+
 export const BrandPage = lazy(() => import("@/pages/BrandPage"));
 export const PostPage = lazy(() => import("@/pages/PostPage"));
 
@@ -118,6 +123,10 @@ const Router: React.FC = () => {
         {
           path: "/order",
           element: <OrderAdminPage />,
+        },
+        {
+          path: "/store/order",
+          element: <OrderStorePage />,
         },
         {
           path: "/category",
