@@ -55,6 +55,14 @@ canvas {
   min-height: 100% !important;
 }
 
-.ant-table-cell:last-child {
+/* .ant-table-cell:last-child {
   text-align: center!important;
+} */
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Button, Image, Input, Popconfirm, Table } from "antd";
+import { Button, Image, Input, Table } from "antd";
 import type { TablePaginationConfig, TableProps } from "antd";
 import { BookOutlined, FilterOutlined } from "@ant-design/icons";
 import { UserInfo } from "@/types/auth.types";
-import { FaBan } from "react-icons/fa";
 import { useFetchPosts } from "@/hooks/useFetchPosts";
 import AddPostModal from "./AddPostModal";
+import { formatTimestampWithHour } from "@/utils/validate";
+import DropdownPostFunc from "./DropdownPostFunc";
 
 const PostList: React.FC = React.memo(() => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -46,6 +47,7 @@ const PostList: React.FC = React.memo(() => {
         title: "STT",
         dataIndex: "index",
         key: "index",
+        width: "5%",
         render: (_, _record, index) => index + 1,
       },
       {
@@ -60,7 +62,7 @@ const PostList: React.FC = React.memo(() => {
               width: "80px",
               height: "80px",
               borderRadius: "100%",
-              objectFit: "contain",
+              objectFit: "cover",
             }}
           />
         ),
@@ -70,27 +72,54 @@ const PostList: React.FC = React.memo(() => {
         dataIndex: "title",
         width: "20%",
       },
+      {
+        title: "Nội dung",
+        dataIndex: "content",
+        width: "15%",
+        render: (content) => {
+          return <div className="line-clamp-2">{content}</div>;
+        },
+      },
 
       {
         title: "Sản phẩm",
-        dataIndex: "productId",
+        dataIndex: "productName",
         width: "15%",
       },
 
       {
+        title: "Ngày tạo",
+        dataIndex: "createDate",
+        width: "10%",
+        render: (createDate) => {
+          if (createDate) {
+            return formatTimestampWithHour(createDate);
+          } else {
+            return "N/A";
+          }
+        },
+      },
+      {
+        title: "Chỉnh sửa",
+        dataIndex: "updateDate",
+        width: "10%",
+        render: (updateDate) => {
+          if (updateDate) {
+            return formatTimestampWithHour(updateDate);
+          } else {
+            return "N/A";
+          }
+        },
+      },
+
+      {
         title: "Chức năng",
+        width: "8%",
         dataIndex: "",
-        render: (_) => (
-          <Popconfirm
-            title="Bạn có muốn cấm người dùng này không?"
-            // onConfirm={() => handleDeleteUser(record.id)}
-            okText="Có"
-            cancelText="Không"
-          >
-            <Button danger size="small" className="border-none">
-              <FaBan />
-            </Button>
-          </Popconfirm>
+        render: (_, record) => (
+          <>
+            <DropdownPostFunc postId={record.id} handleRefetch={handleRefetch} />
+          </>
         ),
       },
     ],

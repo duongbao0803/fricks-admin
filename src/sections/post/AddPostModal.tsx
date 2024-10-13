@@ -136,19 +136,19 @@ const AddPostModal: React.FC<AddModalProps> = React.memo((props) => {
         <Form.Item
           name="content"
           colon={true}
-          label="Mô tả sản phẩm"
+          label="Nội dung bài viết"
           labelCol={{ span: 24 }}
           className="formItem"
-          rules={[{ required: true, message: "Vui lòng nhập mô tả sản phẩm" }]}
+          rules={[{ required: true, message: "Vui lòng nhập nội dung bài viết" }]}
         >
-          <TextArea showCount placeholder="Mô tả sản phẩm" />
+          <TextArea showCount placeholder="Nội dung" />
         </Form.Item>
         <Form.Item
           name="image"
           rules={[
             {
               required: true,
-              message: "Vui lòng chọn hỉnh ảnh",
+              message: "Vui lòng chọn hình ảnh",
             },
           ]}
           colon={true}
