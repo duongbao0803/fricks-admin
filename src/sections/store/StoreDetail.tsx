@@ -14,11 +14,11 @@ import { Button, Col, Form, Image, Input, Row, Select, Space } from "antd";
 import React, { useCallback, useEffect, useState } from "react";
 import { TbReceiptTax } from "react-icons/tb";
 
-export interface StoreDeatilProps {
+export interface StoreDetailProps {
   storeId: number;
 }
 
-const StoreDetail: React.FC<StoreDeatilProps> = (props) => {
+const StoreDetail: React.FC<StoreDetailProps> = (props) => {
   const { storeId } = props;
   const [form] = Form.useForm();
   const { Option } = Select;

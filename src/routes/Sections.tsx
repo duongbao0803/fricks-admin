@@ -33,7 +33,10 @@ export const OrderStorePage = lazy(
 
 
 export const BrandPage = lazy(() => import("@/pages/BrandPage"));
-export const PostPage = lazy(() => import("@/pages/PostPage"));
+export const PostPage = lazy(() => import("@/pages/post/PostPage"));
+export const PostDetailPage = lazy(() => import("@/pages/post/PostDetailPage"));
+
+export const WalletStorePage = lazy(() => import("@/pages/wallet/WalletStorePage"));
 
 const Router: React.FC = () => {
   const isChecking = useAuthStore((s) => s.isChecking);
@@ -135,6 +138,14 @@ const Router: React.FC = () => {
         {
           path: "/post",
           element: <PostPage />,
+        },
+        {
+          path: "/post/:id",
+          element: <PostDetailPage />,
+        },
+        {
+          path: "/store/wallet",
+          element: <WalletStorePage />,
         },
         { element: <Error />, path: "*" },
       ],
