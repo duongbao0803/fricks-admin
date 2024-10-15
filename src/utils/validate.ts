@@ -44,7 +44,10 @@ export function formatDate2(dateString: string | number | Date) {
   }
 }
 
-export function formatTimestamp(timestampStr: string): string {
+export function formatTimestamp(timestampStr: string | null | undefined): string {
+  if (timestampStr === null || timestampStr === undefined) {
+    return "-";
+  }
   const timestamp = new Date(timestampStr);
   return timestamp.toLocaleString('en-GB', {
       day: '2-digit',
@@ -53,7 +56,10 @@ export function formatTimestamp(timestampStr: string): string {
   });
 }
 
-export function formatTimestampWithHour(timestampStr: string): string {
+export function formatTimestampWithHour(timestampStr: string | null | undefined): string {
+  if (timestampStr === null || timestampStr === undefined) {
+    return "-";
+  }
   const timestamp = new Date(timestampStr);
   return timestamp.toLocaleString('en-GB', {
       day: '2-digit',

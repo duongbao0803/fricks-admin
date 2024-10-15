@@ -31,6 +31,10 @@ export const OrderStorePage = lazy(
   () => import("@/pages/order/OrderStorePage"),
 );
 
+export const OrderDetailPage = lazy(
+  () => import("@/pages/order/OrderDetailPage"),
+);
+
 
 export const BrandPage = lazy(() => import("@/pages/BrandPage"));
 export const PostPage = lazy(() => import("@/pages/post/PostPage"));
@@ -130,6 +134,10 @@ const Router: React.FC = () => {
         {
           path: "/store/order",
           element: <OrderStorePage />,
+        },
+        {
+          path: "/store/order/:id",
+          element: <OrderDetailPage />,
         },
         {
           path: "/category",

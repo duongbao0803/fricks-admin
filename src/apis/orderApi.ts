@@ -7,6 +7,11 @@ export const getOrderList = async (PageIndex: number, PageSize: number) => {
   return response;
 };
 
+export const getOrderDetail = async(orderId: number) => {
+  const response = await axiosClient.get(`/orders/${orderId}`);
+  return response;
+}
+
 export const deleteOrder = async (orderId: number) => {
   const response = await axiosClient.delete(`/orders/${orderId}`);
   return response;
