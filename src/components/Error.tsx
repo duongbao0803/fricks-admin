@@ -7,10 +7,11 @@ interface ErrorParams {
   title?: string;
   status?: ResultStatusType;
   subTitle?: string;
+  path?: string;
 }
 
 const Error: React.FC<ErrorParams> = React.memo(
-  ({ title, status, subTitle }) => {
+  ({ title, status, subTitle, path }) => {
     return (
       <Result
         status={status}
@@ -18,7 +19,7 @@ const Error: React.FC<ErrorParams> = React.memo(
         subTitle={subTitle}
         extra={
           <Button type="primary" className="bg-[#1677ff]">
-            <Link to="/chart">Trở về trang chủ</Link>
+            <Link to={path}>Trở về trang chủ</Link>
           </Button>
         }
       />

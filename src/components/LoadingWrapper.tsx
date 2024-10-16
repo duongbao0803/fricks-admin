@@ -9,15 +9,6 @@ export default function LoadingWrapper({
   children: React.ReactNode;
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
-
-  const token = Cookies.get("accessToken");
-
-  useEffect(() => {
-    if (token) {
-      navigate("/");
-    }
-  }, [token]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
