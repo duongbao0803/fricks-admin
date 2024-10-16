@@ -1,4 +1,5 @@
 import { CommonModel } from "./common.types";
+import { ProductInfo } from "./product.types";
 
 export interface OrderInfo extends CommonModel {
   code: string;
@@ -22,5 +23,15 @@ export interface OrderInfo extends CommonModel {
   storePhone: string;
   storeAddress: string;
   voucherId: number | null;
-  orderDetails: any;
+  orderDetails: OrderDetails | any;
+}
+
+export interface OrderDetails {
+  id: number;
+  orderId: number;
+  productId: number;
+  price: number;
+  quantity: number;
+  productUnit: string | null;
+  product: ProductInfo;
 }

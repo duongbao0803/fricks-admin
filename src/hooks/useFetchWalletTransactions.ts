@@ -1,28 +1,16 @@
-import { getProductList } from "@/apis/productApi";
+import { getStoreWalletTransactions } from "@/apis/walletApi";
 import { useQuery } from "@tanstack/react-query";
 
-export const useFetchProducts = (
-  currentPage: number,
-  pageSize: number,
-  storeId: number,
-  brandId: number,
-  categoryId: number,
-) => {
-  const fetchProducts = async ({ queryKey }: any) => {
+export const useFetchWalletTransactions = (currentPage: number, pageSize: number) => {
+  const fetchWalletTransactions = async ({ queryKey }: any) => {
     const [, PageIndex, PageSize] = queryKey;
-    const res = await getProductList(
-      PageIndex,
-      PageSize,
-      storeId,
-      brandId,
-      categoryId,
-    );
+    const res = await getStoreWalletTransactions(PageIndex, PageSize);
     return res;
   };
 
   const { data, isFetching, refetch } = useQuery({
-    queryKey: ["productList", currentPage, pageSize],
-    queryFn: fetchProducts,
+    queryKey: ["transationList", currentPage, pageSize],
+    queryFn: fetchWalletTransactions,
     refetchOnWindowFocus: true,
     staleTime: 5000,
   });

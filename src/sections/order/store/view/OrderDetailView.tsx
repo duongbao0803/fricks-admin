@@ -1,17 +1,26 @@
 import React from "react";
-import OrderList from "../OrderList";
+import OrderDetail from "../OrderDetail";
+import { useParams } from "react-router-dom";
 import { BreadScrumb } from "@/components";
 
-const OrderView: React.FC = React.memo(() => {
+const OrderDetailView: React.FC = React.memo(() => {
+  const { id } = useParams<{ id: string }>();
+  const orderId = Number(id);
+
   const items = [
     {
       href: "/store/product",
       title: "Trang chủ",
     },
     {
+      href: "/store/order",
       title: "Đơn hàng",
-    }
+    },
+    {
+      title: "Chi tiết",
+    },
   ];
+
   return (
     <>
       <div className="mb-3">
@@ -21,10 +30,10 @@ const OrderView: React.FC = React.memo(() => {
         <p className="text-2xl font-bold text-[#000000]">Quản lý đơn hàng</p>
       </div>
       <div className="bg-[#fff] p-5">
-        <OrderList />
+        <OrderDetail orderId={orderId} />
       </div>
     </>
   );
 });
 
-export default OrderView;
+export default OrderDetailView;

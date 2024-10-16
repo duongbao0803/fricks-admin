@@ -1,15 +1,15 @@
 import React from "react";
-import OrderList from "../OrderList";
+import Wallet from "../Wallet";
 import { BreadScrumb } from "@/components";
 
-const OrderView: React.FC = React.memo(() => {
+const WalletView: React.FC = React.memo(() => {
   const items = [
     {
       href: "/store/product",
       title: "Trang chủ",
     },
     {
-      title: "Đơn hàng",
+      title: "Ví cửa hàng",
     }
   ];
   return (
@@ -18,13 +18,13 @@ const OrderView: React.FC = React.memo(() => {
         <BreadScrumb items={items} />
       </div>
       <div className="rounded-t-xl bg-[#fff] p-5">
-        <p className="text-2xl font-bold text-[#000000]">Quản lý đơn hàng</p>
+        <p className="text-2xl font-bold text-[#000000]">Quản lý ví tiền</p>
       </div>
       <div className="bg-[#fff] p-5">
-        <OrderList />
+        <Wallet />
       </div>
     </>
   );
 });
 
-export default OrderView;
+export default WalletView;

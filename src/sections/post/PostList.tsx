@@ -1,17 +1,21 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Button, Image, Input, Table } from "antd";
+import { Button, Image, Input, Table, Tooltip } from "antd";
 import type { TablePaginationConfig, TableProps } from "antd";
 import { BookOutlined, FilterOutlined } from "@ant-design/icons";
-import { UserInfo } from "@/types/auth.types";
 import { useFetchPosts } from "@/hooks/useFetchPosts";
 import AddPostModal from "./AddPostModal";
-import { formatTimestampWithHour } from "@/utils/validate";
+import { formatTimestampWithHour, timeAgo } from "@/utils/validate";
 import DropdownPostFunc from "./DropdownPostFunc";
+import { useNavigate } from "react-router-dom";
+import { PostData } from "@/types/post.types";
+import parse from "html-react-parser";
 
 const PostList: React.FC = React.memo(() => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = React.useState(10);
+  const [, setPostId] = useState<number | null>(null);
 
   const { data, isFetching, totalCount, refetch } = useFetchPosts(
     currentPage,
@@ -22,26 +26,20 @@ const PostList: React.FC = React.memo(() => {
     refetch();
   }, []);
 
-  // const handleDeleteUser = useCallback(async (userId: number) => {
-  //   try {
-  //     const res = await deleteUser(userId);
-  //     console.log("check res", res);
-  //     if (res && res.status === 200) {
-  //       handleRefetch();
-  //       notify("success", `${res.data.message}`, 3);
-  //     }
-  //   } catch (err: any) {
-  //     console.error("err", err);
-  //     notify("error", `${err.response.data.message}`, 3);
-  //   }
-  // }, []);
-
   const handleTableChange = useCallback((pagination: TablePaginationConfig) => {
     setCurrentPage(pagination.current || 1);
     setPageSize(pagination.pageSize || 10);
   }, []);
 
-  const columns: TableProps<UserInfo>["columns"] = useMemo(
+  const handleRowClick = useCallback(
+    (record: number) => {
+      setPostId(record);
+      navigate(`/post/${record}`);
+    },
+    [navigate],
+  );
+
+  const columns: TableProps<PostData>["columns"] = useMemo(
     () => [
       {
         title: "STT",
@@ -70,14 +68,22 @@ const PostList: React.FC = React.memo(() => {
       {
         title: "Tiêu đề",
         dataIndex: "title",
+        className: "first-column",
         width: "20%",
+        onCell: (record) => {
+          return {
+            onClick: () => {
+              handleRowClick(record.id);
+            },
+          };
+        },
       },
       {
         title: "Nội dung",
         dataIndex: "content",
         width: "15%",
         render: (content) => {
-          return <div className="line-clamp-2">{content}</div>;
+          return <div className="line-clamp-2">{parse(content)}</div>;
         },
       },
 
@@ -88,14 +94,18 @@ const PostList: React.FC = React.memo(() => {
       },
 
       {
-        title: "Ngày tạo",
+        title: "Thời gian tạo",
         dataIndex: "createDate",
         width: "10%",
         render: (createDate) => {
           if (createDate) {
-            return formatTimestampWithHour(createDate);
+            return (
+              <Tooltip title={formatTimestampWithHour(createDate)}>
+                {timeAgo(createDate)}
+              </Tooltip>
+            );
           } else {
-            return "N/A";
+            return "-";
           }
         },
       },
@@ -105,9 +115,13 @@ const PostList: React.FC = React.memo(() => {
         width: "10%",
         render: (updateDate) => {
           if (updateDate) {
-            return formatTimestampWithHour(updateDate);
+            return (
+              <Tooltip title={formatTimestampWithHour(updateDate)}>
+                {timeAgo(updateDate)}
+              </Tooltip>
+            );
           } else {
-            return "N/A";
+            return "-";
           }
         },
       },
@@ -118,7 +132,10 @@ const PostList: React.FC = React.memo(() => {
         dataIndex: "",
         render: (_, record) => (
           <>
-            <DropdownPostFunc postId={record.id} handleRefetch={handleRefetch} />
+            <DropdownPostFunc
+              postId={record.id}
+              handleRefetch={handleRefetch}
+            />
           </>
         ),
       },

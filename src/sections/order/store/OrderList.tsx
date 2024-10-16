@@ -11,11 +11,14 @@ import {
   Tag,
 } from "antd";
 import React, { useCallback, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const OrderList: React.FC = () => {
   // const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = React.useState(10);
+  const [, setOrderId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const { data, isFetching, totalCount } = useFetchOrders(
     currentPage,
@@ -31,6 +34,14 @@ const OrderList: React.FC = () => {
     setPageSize(pagination.pageSize || 10);
   }, []);
 
+  const handleRowClick = useCallback(
+    (record: number) => {
+      setOrderId(record);
+      navigate(`/store/order/${record}`);
+    },
+    [navigate],
+  );
+
   const columns: TableProps<OrderInfo>["columns"] = useMemo(
     () => [
       {
@@ -38,18 +49,13 @@ const OrderList: React.FC = () => {
         dataIndex: "code",
         key: "code",
         width: "10%",
-      },
-      {
-        title: "Ngày tạo",
-        dataIndex: "createDate",
-        key: "createDate",
-        width: "15%",
-        render: (createDate: any) => {
-          if (createDate) {
-            return formatTimestampWithHour(createDate);
-          } else {
-            return "N/A";
-          }
+        className: "first-column",
+        onCell: (record) => {
+          return {
+            onClick: () => {
+              handleRowClick(record.id);
+            },
+          };
         },
       },
       {
@@ -68,7 +74,19 @@ const OrderList: React.FC = () => {
         key: "total",
         render: (total: number) => total.toLocaleString("vi-VN") + " VNĐ",
       },
-
+      {
+        title: "Ngày tạo",
+        dataIndex: "createDate",
+        key: "createDate",
+        width: "15%",
+        render: (createDate: any) => {
+          if (createDate) {
+            return formatTimestampWithHour(createDate);
+          } else {
+            return "-";
+          }
+        },
+      },
       {
         title: "Phương thức",
         dataIndex: "paymentMethod",

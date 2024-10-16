@@ -44,7 +44,10 @@ export function formatDate2(dateString: string | number | Date) {
   }
 }
 
-export function formatTimestamp(timestampStr: string): string {
+export function formatTimestamp(timestampStr: string | null | undefined): string {
+  if (timestampStr === null || timestampStr === undefined) {
+    return "-";
+  }
   const timestamp = new Date(timestampStr);
   return timestamp.toLocaleString('en-GB', {
       day: '2-digit',
@@ -53,7 +56,10 @@ export function formatTimestamp(timestampStr: string): string {
   });
 }
 
-export function formatTimestampWithHour(timestampStr: string): string {
+export function formatTimestampWithHour(timestampStr: string | null | undefined): string {
+  if (timestampStr === null || timestampStr === undefined) {
+    return "-";
+  }
   const timestamp = new Date(timestampStr);
   return timestamp.toLocaleString('en-GB', {
       day: '2-digit',
@@ -127,4 +133,33 @@ export function convertDateFormat(
   } else {
     return null;
   }
+}
+
+export function timeAgo(dateString: string): string {
+  const now = new Date();
+  const date = new Date(dateString);
+  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  type IntervalType = {
+    [key: string]: number;
+  };
+
+  const intervals: IntervalType = {
+    ["năm"]: 31536000,
+    ["tháng"]: 2592000,
+    ["ngày"]: 86400,
+    ["giờ"]: 3600,
+    ["phút"]: 60,
+  };
+
+  for (const interval in intervals) {
+    const value = Math.floor(seconds / intervals[interval]);
+    if (value > 1) {
+      return `${value} ${interval} trước`;
+    } else if (value === 1) {
+      return `${value} ${interval} trước`;
+    }
+  }
+
+  return 'mới';
 }

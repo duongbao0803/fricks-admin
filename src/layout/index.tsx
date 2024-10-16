@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { FloatButton, Layout, Menu } from "antd";
 import {
   PieChartOutlined,
@@ -8,16 +8,16 @@ import {
   BellOutlined,
   BoxPlotOutlined,
   BookOutlined,
+  WalletOutlined,
 } from "@ant-design/icons";
 import LogoWeb from "@/assets/images/logo/logo_web.png";
 import { MdBrandingWatermark, MdCategory } from "react-icons/md";
-
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { notify } from "@/components/Notification";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import ADMIN from "@/assets/images/avatar/avatar_admin.jpg";
 import { RolesLogin } from "@/enums";
 import { Loading } from "@/components";
+import useLogout from "@/hooks/useLogout";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -66,12 +66,26 @@ const items: MenuItem[] = [
     "/store/order",
   ),
   getItem("Bài viết", "12", <BookOutlined />, undefined, "/post"),
+  getItem("Ví tiền", "13", <WalletOutlined />, undefined, "/store/wallet"),
 ];
 
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
   const [collapsed, setCollapsed] = useState<boolean>(true);
   const userInfo = useAuthStore((s) => s.userInfo);
   const isLoading = useAuthStore((s) => s.isLoading);
+  const location = useLocation();
+  const { handleLogout } = useLogout();
+
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const matchedItem = items.find((item) => item.path === currentPath);
+    if (matchedItem) {
+      setSelectedKeys([matchedItem.key]);
+      storeDefaultSelectedKeys(matchedItem.key as string);
+    }
+  }, [location.pathname]);
 
   const filteredItems =
     userInfo?.role === RolesLogin.STORE
@@ -83,26 +97,13 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
             item.key !== "4" &&
             item.key !== "5",
         )
-      : items.filter((items) => items.key !== "9" && items.key !== "8");
-
-  const logout = useAuthStore((s) => s.logout);
-
-  const navigate = useNavigate();
+      : items.filter(
+          (item) => item.key !== "9" && item.key !== "8" && item.key !== "13",
+        );
 
   const storeDefaultSelectedKeys = (key: string) => {
     sessionStorage.setItem("keys", key);
   };
-
-  const resetDefaultSelectedKeys = () => {
-    const selectedKeys = sessionStorage.getItem("keys");
-
-    if (userInfo?.role === RolesLogin.STORE) {
-      return ["8"];
-    }
-    return selectedKeys ? selectedKeys.split(",") : ["1"];
-  };
-
-  const defaultSelectedKeys = useMemo(() => resetDefaultSelectedKeys(), []);
 
   const renderMenuItems = (items: MenuItem[]) => {
     return items.map((item) => {
@@ -131,12 +132,6 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
     });
   };
 
-  const handleLogout = () => {
-    notify("success", "Đăng xuất thành công", 2);
-    logout();
-    navigate("/");
-  };
-
   return (
     <Layout className="min-h-screen">
       <Sider
@@ -152,14 +147,14 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
         <div className="demo-logo-vertical" />
         <div className="my-7 flex justify-center">
           <img
-            className=" w-7/12 select-none object-cover"
+            className="w-7/12 select-none object-cover"
             src={LogoWeb}
             alt=""
           />
         </div>
         <Menu
           theme="light"
-          defaultSelectedKeys={defaultSelectedKeys}
+          selectedKeys={selectedKeys} // Dynamically updated selected keys
           mode="inline"
           className="select-none"
         >
@@ -192,7 +187,7 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
           )}
         </div>
         <Content className="mx-4 mt-[80px]">
-          <div className="min-w-[250px] overflow-x-auto rounded-xl ">
+          <div className="min-w-[250px] overflow-x-auto rounded-xl">
             {children}
           </div>
         </Content>
