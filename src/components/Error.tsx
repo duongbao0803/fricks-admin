@@ -7,7 +7,7 @@ interface ErrorParams {
   title?: string;
   status?: ResultStatusType;
   subTitle?: string;
-  path?: string;
+  path: string;
 }
 
 const Error: React.FC<ErrorParams> = React.memo(

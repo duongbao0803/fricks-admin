@@ -187,7 +187,10 @@ const Router: React.FC = () => {
             <Navigate to="/not-found" replace />
           ),
         },
-        { element: <Error />, path: "*" },
+        {
+          element: <Error path={isAdmin ? "/chart" : "/store/product"} />,
+          path: "*",
+        },
         {
           path: "/not-found",
           element: (
@@ -201,7 +204,10 @@ const Router: React.FC = () => {
         },
       ],
     },
-    { element: <Error />, path: "*" },
+    {
+      element: <Error path={isAdmin ? "/chart" : "/store/product"} />,
+      path: "*",
+    },
   ]);
 
   return routes;

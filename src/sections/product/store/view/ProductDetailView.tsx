@@ -1,7 +1,6 @@
 import React from "react";
 import ProductDetail from "../ProductDetail";
 import { BreadScrumb } from "@/components";
-import { title } from "process";
 
 const ProductDetailView: React.FC = React.memo(() => {
   const items = [
@@ -14,18 +13,20 @@ const ProductDetailView: React.FC = React.memo(() => {
       title: "Sản phẩm",
     },
     {
-      title: "Chi tiết"
-    }
+      title: "Chi tiết",
+    },
   ];
   return (
     <>
-    <div className="mb-3">
+      <div className="mb-3">
         <BreadScrumb items={items} />
       </div>
       <div className="rounded-t-xl bg-[#fff] p-5">
-        <p className="text-2xl font-bold text-[#000000]">Quản lý sản phẩm chi tiết</p>
+        <p className="text-2xl font-bold text-[#000000]">
+          Quản lý sản phẩm chi tiết
+        </p>
       </div>
-      <div className="p-5 bg-[#fff]">
+      <div className="bg-[#fff] p-5">
         <ProductDetail />
       </div>
     </>
