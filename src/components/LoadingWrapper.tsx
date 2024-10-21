@@ -1,7 +1,4 @@
-"use client";
 import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
 
 export default function LoadingWrapper({
   children,
@@ -9,15 +6,6 @@ export default function LoadingWrapper({
   children: React.ReactNode;
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
-
-  const token = Cookies.get("accessToken");
-
-  useEffect(() => {
-    if (token) {
-      navigate("/");
-    }
-  }, [token]);
 
   useEffect(() => {
     const timer = setTimeout(() => {

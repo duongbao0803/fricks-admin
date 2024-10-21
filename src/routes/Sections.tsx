@@ -31,9 +31,17 @@ export const OrderStorePage = lazy(
   () => import("@/pages/order/OrderStorePage"),
 );
 
+export const OrderDetailPage = lazy(
+  () => import("@/pages/order/OrderDetailPage"),
+);
 
 export const BrandPage = lazy(() => import("@/pages/BrandPage"));
-export const PostPage = lazy(() => import("@/pages/PostPage"));
+export const PostPage = lazy(() => import("@/pages/post/PostPage"));
+export const PostDetailPage = lazy(() => import("@/pages/post/PostDetailPage"));
+
+export const WalletStorePage = lazy(
+  () => import("@/pages/wallet/WalletStorePage"),
+);
 
 const Router: React.FC = () => {
   const isChecking = useAuthStore((s) => s.isChecking);
@@ -43,11 +51,6 @@ const Router: React.FC = () => {
   const isStore = userInfo?.role === RolesLogin.STORE;
 
   const routes = useRoutes([
-    // {
-    //   path: "/",
-    //   element:
-    //     isChecking && isAdmin ? <Navigate to="/chart" /> : <AuthenPage />,
-    // },
     {
       path: "/",
       element: isChecking ? (
@@ -80,7 +83,7 @@ const Router: React.FC = () => {
           element: isAdmin ? (
             <ChartPage />
           ) : (
-            <Navigate to="/store/product" replace />
+            <Navigate to="/not-found" replace />
           ),
         },
         {
@@ -88,16 +91,24 @@ const Router: React.FC = () => {
           element: isAdmin ? (
             <UserPage />
           ) : (
-            <Navigate to="/store/product" replace />
+            <Navigate to="/not-found" replace />
           ),
         },
         {
           path: "/store",
-          element: isAdmin && <StorePage />,
+          element: isAdmin ? (
+            <StorePage />
+          ) : (
+            <Navigate to="/not-found" replace />
+          ),
         },
         {
           path: "/store/:id",
-          element: isAdmin && <StoreDetailPage />,
+          element: isAdmin ? (
+            <StoreDetailPage />
+          ) : (
+            <Navigate to="/not-found" replace />
+          ),
         },
         {
           path: "/product",
@@ -105,7 +116,11 @@ const Router: React.FC = () => {
         },
         {
           path: "/store/product",
-          element: <ProductStorePage />,
+          element: isStore ? (
+            <ProductStorePage />
+          ) : (
+            <Navigate to="/not-found" replace />
+          ),
         },
         {
           path: "/brand",
@@ -114,19 +129,43 @@ const Router: React.FC = () => {
 
         {
           path: "/store/product/:id",
-          element: <ProductStoreDetailPage />,
+          element: isStore ? (
+            <ProductStoreDetailPage />
+          ) : (
+            <Navigate to="/not-found" replace />
+          ),
         },
         {
           path: "/store/product/add",
-          element: <AddProductStorePage />,
+          element: isStore ? (
+            <AddProductStorePage />
+          ) : (
+            <Navigate to="/not-found" replace />
+          ),
         },
         {
           path: "/order",
-          element: <OrderAdminPage />,
+          element: isAdmin ? (
+            <OrderAdminPage />
+          ) : (
+            <Navigate to="/not-found" replace />
+          ),
         },
         {
           path: "/store/order",
-          element: <OrderStorePage />,
+          element: isStore ? (
+            <OrderStorePage />
+          ) : (
+            <Navigate to="/not-found" replace />
+          ),
+        },
+        {
+          path: "/store/order/:id",
+          element: isStore ? (
+            <OrderDetailPage />
+          ) : (
+            <Navigate to="/not-found" replace />
+          ),
         },
         {
           path: "/category",
@@ -136,8 +175,38 @@ const Router: React.FC = () => {
           path: "/post",
           element: <PostPage />,
         },
-        { element: <Error />, path: "*" },
+        {
+          path: "/post/:id",
+          element: <PostDetailPage />,
+        },
+        {
+          path: "/store/wallet",
+          element: isStore ? (
+            <WalletStorePage />
+          ) : (
+            <Navigate to="/not-found" replace />
+          ),
+        },
+        {
+          element: <Error path={isAdmin ? "/chart" : "/store/product"} />,
+          path: "*",
+        },
+        {
+          path: "/not-found",
+          element: (
+            <Error
+              status={"404"}
+              title="Lỗi"
+              subTitle="Trang bạn truy cập không tồn tại"
+              path={isAdmin ? "/chart" : "/store/product"}
+            />
+          ),
+        },
       ],
+    },
+    {
+      element: <Error path={isAdmin ? "/chart" : "/store/product"} />,
+      path: "*",
     },
   ]);
 

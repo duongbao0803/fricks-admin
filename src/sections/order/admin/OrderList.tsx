@@ -1,122 +1,130 @@
-import { formatDate2 } from "@/utils/validate";
+import { useFetchOrders } from "@/hooks/useFetchOrders";
+import { OrderInfo } from "@/types/order.types";
+import { formatTimestampWithHour } from "@/utils/validate";
 import { FilterOutlined } from "@ant-design/icons";
-import { Button, Input, Table, Tag } from "antd";
-import React from "react";
+import { Button, Input, Table, TablePaginationConfig, TableProps, Tag } from "antd";
+import React, { useCallback, useMemo, useState } from "react";
 
 const OrderList: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = React.useState(10);
 
-  interface OrderInfo {
-    code: string;
-    createdate: string;
-    paymentdate: string;
-    paymentstatus: string;
-    paymentmethod: string;
-    store: string;
-    total: number;
-  }
+  const { data, isFetching, totalCount } = useFetchOrders(
+    currentPage,
+    pageSize,
+  );
+
   
 
-  const orderData: OrderInfo[] = [
-    {
-      code: 'ORD001',
-      createdate: '2024-10-01',
-      paymentdate: '2024-10-02',
-      paymentstatus: 'Paid',
-      paymentmethod: 'Credit Card',
-      store: 'Store A',
-      total: 150.0,
-    },
-    {
-      code: 'ORD002',
-      createdate: '2024-10-01',
-      paymentdate: '2024-10-02',
-      paymentstatus: 'Pending',
-      paymentmethod: 'PayPal',
-      store: 'Store B',
-      total: 200.0,
-    },
-    {
-      code: 'ORD003',
-      createdate: '2024-10-01',
-      paymentdate: '2024-10-02',
-      paymentstatus: 'Failed',
-      paymentmethod: 'Bank Transfer',
-      store: 'Store C',
-      total: 300.0,
-    },
-  ];
-  
+  const columns: TableProps<OrderInfo>["columns"] = useMemo(
+    () => [
+      {
+        title: "Mã đơn hàng",
+        dataIndex: "code",
+        key: "code",
+        width: "10%",
+        className: "first-column",
+        // onCell: (record) => {
+        //   return {
+        //     onClick: () => {
+        //       handleRowClick(record.id);
+        //     },
+        //   };
+        // },
+      },
+      {
+        title: "Cửa hàng",
+        dataIndex: "storeName",
+        key: "storeName",
+        width: "10%",
+      },
+      {
+        title: "Khách hàng",
+        dataIndex: "customerEmail",
+        key: "customerEmail",
+        width: "12%",
+      },
+      {
+        title: "Số điện thoại",
+        dataIndex: "customerPhone",
+        key: "customerPhone",
+        width: "12%",
+      },
+      {
+        title: "Giá tiền",
+        dataIndex: "total",
+        key: "total",
+        width: "8%",
+        render: (total: number) => total.toLocaleString("vi-VN") + " VNĐ",
+      },
+      {
+        title: "Ngày tạo",
+        dataIndex: "createDate",
+        key: "createDate",
+        width: "12%",
+        render: (createDate: any) => {
+          if (createDate) {
+            return formatTimestampWithHour(createDate);
+          } else {
+            return "-";
+          }
+        },
+      },
+      {
+        title: "Phương thức",
+        dataIndex: "paymentMethod",
+        key: "paymentMethod",
+        width: "8%",
+      },
+      {
+        title: "Thanh toán",
+        dataIndex: "paymentStatus",
+        key: "paymentStatus",
+        width: "10%",
+        render: (paymentStatus: any) => {
+          let statusText = "";
+          let tagColor = "";
+          switch (paymentStatus) {
+            case "PAID":
+              statusText = "THÀNH CÔNG";
+              tagColor = "green";
+              break;
+            case "FAILED":
+              statusText = "THẤT BẠI";
+              tagColor = "pink";
+              break;
+            default:
+              statusText = "ĐANG CHỜ";
+              tagColor = "gray";
+              break;
+          }
+          return <Tag color={tagColor}>{statusText}</Tag>;
+        },
+      },
+      {
+        title: "Ngày thanh toán",
+        dataIndex: "paymentDate",
+        key: "paymentDate",
+        render: (paymentDate: any) => {
+          if (paymentDate) {
+            return (
+              <p className="text-left">
+                {formatTimestampWithHour(paymentDate)}
+              </p>
+            );
+          } else {
+            return <p className="text-left">-</p>;
+          }
+        },
+      },
+    ],
+    [],
+  );
 
-  const columns = [
-    {
-      title: "Code",
-      dataIndex: "code",
-      key: "code",
-    },
-    {
-      title: "Create Date",
-      dataIndex: "createdate",
-      key: "createdate",
-      render: (createdate: any) => {
-        if (createdate) {
-          return formatDate2(createdate);
-        } else {
-          return "N/A";
-        }
-      },
-    },
-    {
-      title: "Payment Date",
-      dataIndex: "paymentdate",
-      key: "paymentdate",
-      render: (paymentdate: any) => {
-        if (paymentdate) {
-          return formatDate2(paymentdate);
-        } else {
-          return "N/A";
-        }
-      },
-    },
-    {
-      title: "Payment Status",
-      dataIndex: "paymentstatus",
-      key: "paymentstatus",
-      render: (paymentstatus: any) => {
-        let statusText = "";
-        let tagColor = "";
-        switch (paymentstatus) {
-          case "Paid":
-            statusText = "THÀNH CÔNG";
-            tagColor = "green";
-            break;
-          case "Failed":
-            statusText = "THẤT BẠI";
-            tagColor = "pink";
-            break;
-          default:
-            statusText = "ĐANG CHỜ";
-            tagColor = "gray";
-            break;
-        }
-        return <Tag color={tagColor}>{statusText}</Tag>;
-      },
-    },
-    {
-      title: "Payment Method",
-      dataIndex: "paymentmethod",
-      key: "paymentmethod",
-    },
-    {
-      title: "Store",
-      dataIndex: "store",
-      key: "store",
-    },
-    {
-      title: "Total",
-      dataIndex: "total",
-      key: "total",
-    },
-  ];
+  const handleTableChange = useCallback((pagination: TablePaginationConfig) => {
+    setCurrentPage(pagination.current || 1);
+    setPageSize(pagination.pageSize || 10);
+  }, []);
 
   return (
     <>
@@ -146,15 +154,14 @@ const OrderList: React.FC = () => {
         className="pagination"
         id="myTable"
         columns={columns}
-        dataSource={orderData}
-        // pagination={{
-        //   current: currentPage,
-        //   total: totalCount || 0,
-        //   pageSize: pageSize,
-        // }}
-        // onChange={handleTableChange}
-        // loading={isFetching}
-        // rowKey={(record) => record.id}
+        dataSource={data?.data}
+        pagination={{
+          current: currentPage,
+          total: totalCount || 0,
+          pageSize: pageSize,
+        }}
+        onChange={handleTableChange}
+        loading={isFetching}
       />
     </>
   );

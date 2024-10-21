@@ -11,7 +11,7 @@ export const useFetchPosts = (currentPage: number, pageSize: number) => {
   const { data, isFetching, refetch } = useQuery({
     queryKey: ["postList", currentPage, pageSize],
     queryFn: fetchPosts,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     staleTime: 5000,
   });
 

@@ -11,7 +11,7 @@ export const useFetchOrders = (currentPage: number, pageSize: number) => {
   const { data, isFetching, refetch } = useQuery({
     queryKey: ["orderList", currentPage, pageSize],
     queryFn: fetchOrders,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     staleTime: 5000,
   });
 

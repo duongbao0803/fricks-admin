@@ -3,22 +3,17 @@ import { Dropdown } from "antd";
 import { DeleteOutlined, EditOutlined, MoreOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import EditProductModal from "./EditProductModal";
-import { ProductInfo } from "@/types/product.types";
 
 export interface DropdownProductFuncProps {
-  productInfo: ProductInfo;
+  productId: number;
 }
 
 const DropdownProductFunc: React.FC<DropdownProductFuncProps> = React.memo(
-  () => {
+  (props) => {
     const [isOpen, setIsOpen] = useState(false);
     // const { deleteProductItem } = useProductService();
-    // const { productInfo } = props;
+    const { productId } = props;
     // const busproductId = productInfo?.id;
-
-    const openEditModal = () => {
-      setIsOpen(true);
-    };
 
     return (
       <>
@@ -30,11 +25,11 @@ const DropdownProductFunc: React.FC<DropdownProductFuncProps> = React.memo(
                 label: (
                   <Link
                     rel="noopener noreferrer"
-                    to="#"
-                    onClick={openEditModal}
+                    to={`/store/product/${productId}`}
+                    // onClick={openEditModal}
                   >
                     <EditOutlined className="pr-2" />
-                    Chỉnh sửa cửa hàng
+                    Chỉnh sửa sản phẩm
                   </Link>
                 ),
               },
@@ -52,7 +47,7 @@ const DropdownProductFunc: React.FC<DropdownProductFuncProps> = React.memo(
                     // }
                   >
                     <DeleteOutlined className="pr-2" />
-                    Xóa cửa hàng
+                    Xóa sản phẩm
                   </Link>
                 ),
               },
