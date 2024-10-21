@@ -35,12 +35,24 @@ export const OrderDetailPage = lazy(
   () => import("@/pages/order/OrderDetailPage"),
 );
 
+export const OrderDetailAdminPage = lazy(
+  () => import("@/pages/order/OrderDetailAdminPage"),
+);
+
 export const BrandPage = lazy(() => import("@/pages/BrandPage"));
 export const PostPage = lazy(() => import("@/pages/post/PostPage"));
 export const PostDetailPage = lazy(() => import("@/pages/post/PostDetailPage"));
 
 export const WalletStorePage = lazy(
-  () => import("@/pages/wallet/WalletStorePage"),
+  () => import("@/pages/wallet/store/WalletStorePage"),
+);
+
+export const WalletAdminPage = lazy(
+  () => import("@/pages/wallet/admin/WalletAdminPage"),
+);
+
+export const BannerPage = lazy(
+  () => import("@/pages/BannerPage"),
 );
 
 const Router: React.FC = () => {
@@ -152,6 +164,14 @@ const Router: React.FC = () => {
           ),
         },
         {
+          path: "/order/:id",
+          element: isAdmin ? (
+            <OrderDetailAdminPage />
+          ) : (
+            <Navigate to="/not-found" replace />
+          ),
+        },
+        {
           path: "/store/order",
           element: isStore ? (
             <OrderStorePage />
@@ -186,6 +206,14 @@ const Router: React.FC = () => {
           ) : (
             <Navigate to="/not-found" replace />
           ),
+        },
+        {
+          path: "/wallet",
+          element: <WalletAdminPage />
+        },
+        {
+          path: "/banner",
+          element: <BannerPage />
         },
         {
           element: <Error path={isAdmin ? "/chart" : "/store/product"} />,

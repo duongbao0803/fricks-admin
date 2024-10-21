@@ -9,6 +9,7 @@ import {
   BoxPlotOutlined,
   BookOutlined,
   WalletOutlined,
+  BgColorsOutlined,
 } from "@ant-design/icons";
 import LogoWeb from "@/assets/images/logo/logo_web.png";
 import { MdBrandingWatermark, MdCategory } from "react-icons/md";
@@ -67,6 +68,8 @@ const items: MenuItem[] = [
   ),
   getItem("Bài viết", "12", <BookOutlined />, undefined, "/post"),
   getItem("Ví tiền", "13", <WalletOutlined />, undefined, "/store/wallet"),
+  getItem("Ví cửa hàng", "14", <WalletOutlined />, undefined, "/wallet"),
+  getItem("Banner", "15", <BgColorsOutlined />, undefined, "/banner"),
 ];
 
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
@@ -95,7 +98,9 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
             item.key !== "2" &&
             item.key !== "3" &&
             item.key !== "4" &&
-            item.key !== "5",
+            item.key !== "5" &&
+            item.key !== "14" &&
+            item.key !== "15",
         )
       : items.filter(
           (item) => item.key !== "9" && item.key !== "8" && item.key !== "13",
