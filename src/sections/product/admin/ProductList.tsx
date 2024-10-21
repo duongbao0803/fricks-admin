@@ -18,7 +18,6 @@ export interface DataType {
 }
 
 const ProductList: React.FC = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = React.useState(10);
   const { data, isFetching, totalCount } = useFetchProducts(
