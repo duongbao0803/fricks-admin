@@ -15,3 +15,17 @@ export enum CreateRoles {
   STORE = 1,
   ADMIN = 2,
 }
+
+export enum WithdrawStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  DONE = 'DONE'
+}
+
+export enum WithdrawStatusRender {
+  PENDING = 'Đang xử lí',
+  APPROVED = 'Đã chấp nhận',
+  REJECTED = 'Đã từ chối',
+  DONE = 'Hoàn thành'
+}

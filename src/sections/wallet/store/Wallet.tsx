@@ -88,7 +88,7 @@ const Wallet: React.FC = () => {
   //   );
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="mx-auto p-4">
       <Card title="Cửa hàng" className="mb-4">
         <p className="text-2xl font-bold">{storeWallet?.storeName}</p>
       </Card>
