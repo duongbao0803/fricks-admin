@@ -11,10 +11,12 @@ import {
   Tag,
 } from "antd";
 import React, { useCallback, useMemo, useState } from "react";
+import { CiEdit } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
+import EditOrderModal from "./EditOrderModal";
 
 const OrderList: React.FC = () => {
-  // const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = React.useState(10);
   const [, setOrderId] = useState<number | null>(null);
@@ -133,6 +135,21 @@ const OrderList: React.FC = () => {
           }
         },
       },
+      {
+        title: "Chức năng",
+        width: "8%",
+        dataIndex: "",
+        render: (_, record) => (
+          <>
+            <div className="flex w-full justify-center">
+              <CiEdit
+                className="cursor-pointer"
+                onClick={() => setIsOpen(true)}
+              />
+            </div>
+          </>
+        ),
+      },
     ],
     [],
   );
@@ -174,6 +191,7 @@ const OrderList: React.FC = () => {
         onChange={handleTableChange}
         loading={isFetching}
       />
+      <EditOrderModal isOpen={isOpen} setIsOpen={setIsOpen} />
     </>
   );
 };

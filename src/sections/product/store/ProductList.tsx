@@ -1,13 +1,13 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { Button, Image, Input, Table } from "antd";
-import type { TablePaginationConfig, TableProps } from "antd";
-import { FilterOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import "react-loading-skeleton/dist/skeleton.css";
-import DropdownProductFunc from "./DropdownProductFunc";
-import { ProductInfo } from "@/types/product.types";
-import { useNavigate } from "react-router-dom";
-import { useFetchProducts } from "@/hooks/useFetchProducts";
 import { useAuthStore } from "@/hooks/useAuthStore";
+import { useFetchProducts } from "@/hooks/useFetchProducts";
+import { ProductInfo } from "@/types/product.types";
+import { FilterOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import type { TablePaginationConfig, TableProps } from "antd";
+import { Button, Image, Input, Table } from "antd";
+import React, { useCallback, useMemo, useState } from "react";
+import "react-loading-skeleton/dist/skeleton.css";
+import { useNavigate } from "react-router-dom";
+import DropdownProductFunc from "./DropdownProductFunc";
 
 export interface DataType {
   key: string;
@@ -25,7 +25,6 @@ const ProductList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = React.useState(10);
   const userInfo = useAuthStore((s) => s.userInfo);
-  console.log("userInfo", userInfo);
 
   const { data, isFetching, totalCount } = useFetchProducts(
     currentPage,
@@ -34,8 +33,6 @@ const ProductList: React.FC = () => {
     0,
     0,
   );
-
-  console.log("check data", data);
 
   // const { Products, totalCount, isFetching, fetchProductDetail } =
   //   useProductService();
