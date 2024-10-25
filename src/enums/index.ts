@@ -29,3 +29,17 @@ export enum WithdrawStatusRender {
   REJECTED = 'Đã từ chối',
   DONE = 'Hoàn thành'
 }
+
+export enum OrderStatus {
+  PENDING = 'PENDING',
+  DELIVERY = 'DELIVERY',
+  DONE = 'DONE',
+  CANCELED = 'CANCELED'
+}
+
+export enum OrderStatusRender {
+  PENDING = 'ĐANG CHỜ',
+  DELIVERY = 'ĐANG GIAO HÀNG',
+  DONE = 'ĐÃ GIAO HÀNG',
+  CANCELED = 'ĐÃ HỦY'
+}
