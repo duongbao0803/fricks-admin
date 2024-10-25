@@ -30,6 +30,13 @@ export enum WithdrawStatusRender {
   DONE = 'Hoàn thành'
 }
 
+export enum UpdateOrderStatus {
+  PENDING = 0,
+  DELIVERY = 1,
+  DONE = 2,
+  CANCELED = 3
+}
+
 export enum OrderStatus {
   PENDING = 'PENDING',
   DELIVERY = 'DELIVERY',

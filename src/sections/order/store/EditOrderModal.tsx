@@ -1,3 +1,4 @@
+import { OrderStatus, UpdateOrderStatus } from "@/enums";
 import { PhoneOutlined } from "@ant-design/icons";
 import { Col, Form, Input, Modal, Row, Select } from "antd";
 import { useState } from "react";
@@ -14,7 +15,7 @@ const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
   const { setIsOpen, isOpen } = props;
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
-  const { Option } = Select;
+  // const { Option } = Select;
 
   // useEffect(() => {
   //   if (isOpen) {
@@ -48,6 +49,13 @@ const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
 
   const handleCancel = () => {
     setIsOpen(false);
+  };
+
+  const orderLables = {
+    [UpdateOrderStatus.PENDING]: "Đang chờ",
+    [UpdateOrderStatus.DELIVERY]: "Đang giao hàng",
+    [UpdateOrderStatus.DONE]: "Đã giao hàng",
+    [UpdateOrderStatus.CANCELED]: "Đã hủy",
   };
 
   return (
@@ -176,12 +184,15 @@ const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
           labelCol={{ span: 24 }}
           className="formItem"
         >
-          <Select>
-            <Option>123</Option>
-            <Option>123</Option>
-            <Option>123</Option>
-            <Option>123</Option>
-          </Select>
+          <Select placeholder="Chọn trạng thái" className="h-10">
+                {Object.values(UpdateOrderStatus)
+                  .filter((value) => typeof value === "number")
+                  .map((value) => (
+                    <Select.Option key={value} value={value}>
+                      {orderLables[value as UpdateOrderStatus]}
+                    </Select.Option>
+                  ))}
+              </Select>
         </Form.Item>
       </Form>
     </Modal>
