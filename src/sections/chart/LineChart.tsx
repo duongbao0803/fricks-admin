@@ -14,7 +14,7 @@ const LineChart: React.FC<LineChartProps> = (props) => {
     <>
       <div className="w-full  p-5 ">
         <div className="mb-10">
-          <p className="text-xl font-bold">Tỉ lệ sử dụng dịch vụ</p>
+          <p className="text-xl font-bold">Biểu đồ Đơn hàng và Doanh thu Tháng Hiện Tại</p>
         </div>
         <Line data={chartData} options={options} />
       </div>
