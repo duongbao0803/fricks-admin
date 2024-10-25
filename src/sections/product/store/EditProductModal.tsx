@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Form, Input, Row, Col } from "antd";
 import {
   CarOutlined,
@@ -89,7 +89,7 @@ const EditProductModal: React.FC<EditProductModalProps> = (props) => {
               className="formItem"
             >
               <Input
-                prefix={<CarOutlined className="site-form-item-icon mr-1"/>}
+                prefix={<CarOutlined className="site-form-item-icon mr-1" />}
                 placeholder="SKU"
                 autoFocus
               />
@@ -133,7 +133,9 @@ const EditProductModal: React.FC<EditProductModalProps> = (props) => {
               className="formItem"
             >
               <Input
-                prefix={<DotChartOutlined className="site-form-item-icon mr-1"/>}
+                prefix={
+                  <DotChartOutlined className="site-form-item-icon mr-1" />
+                }
                 placeholder="Đơn vị tính"
                 autoFocus
               />
@@ -154,7 +156,9 @@ const EditProductModal: React.FC<EditProductModalProps> = (props) => {
               className="formItem"
             >
               <Input
-                prefix={<TransactionOutlined className="site-form-item-icon mr-1" />}
+                prefix={
+                  <TransactionOutlined className="site-form-item-icon mr-1" />
+                }
                 placeholder="Đơn giá"
               />
             </Form.Item>
@@ -180,8 +184,6 @@ const EditProductModal: React.FC<EditProductModalProps> = (props) => {
           />
         </Form.Item>
 
-        
-        
         <Form.Item
           name="img-url"
           rules={[
@@ -195,11 +197,15 @@ const EditProductModal: React.FC<EditProductModalProps> = (props) => {
           labelCol={{ span: 24 }}
           className="formItem"
         >
-          <UploadImage onFileChange={handleFileChange} initialImage={""} titleButton={"Thêm ảnh"} />
+          <UploadImage
+            onFileChange={handleFileChange}
+            initialImage={""}
+            titleButton={"Thêm ảnh"}
+          />
         </Form.Item>
       </Form>
     </Modal>
   );
 };
 
-export default EditProductModal;
+export default React.memo(EditProductModal);

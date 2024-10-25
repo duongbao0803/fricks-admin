@@ -17,36 +17,36 @@ export enum CreateRoles {
 }
 
 export enum WithdrawStatus {
-  PENDING = 'PENDING',
-  APPROVED = 'APPROVED',
-  REJECTED = 'REJECTED',
-  DONE = 'DONE'
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
+  DONE = "DONE",
 }
 
 export enum WithdrawStatusRender {
-  PENDING = 'Đang xử lí',
-  APPROVED = 'Đã chấp nhận',
-  REJECTED = 'Đã từ chối',
-  DONE = 'Hoàn thành'
+  PENDING = "Đang xử lí",
+  APPROVED = "Đã chấp nhận",
+  REJECTED = "Đã từ chối",
+  DONE = "Hoàn thành",
 }
 
 export enum UpdateOrderStatus {
-  PENDING = 0,
-  DELIVERY = 1,
-  DONE = 2,
-  CANCELED = 3
+  PENDING,
+  DELIVERY,
+  DONE,
+  CANCELED,
 }
 
 export enum OrderStatus {
-  PENDING = 'PENDING',
-  DELIVERY = 'DELIVERY',
-  DONE = 'DONE',
-  CANCELED = 'CANCELED'
+  PENDING = "PENDING",
+  DELIVERY = "DELIVERY",
+  DONE = "DONE",
+  CANCELED = "CANCELED",
 }
 
 export enum OrderStatusRender {
-  PENDING = 'ĐANG CHỜ',
-  DELIVERY = 'ĐANG GIAO HÀNG',
-  DONE = 'ĐÃ GIAO HÀNG',
-  CANCELED = 'ĐÃ HỦY'
+  PENDING = "ĐANG CHỜ",
+  DELIVERY = "ĐANG GIAO HÀNG",
+  DONE = "ĐÃ GIAO HÀNG",
+  CANCELED = "ĐÃ HỦY",
 }

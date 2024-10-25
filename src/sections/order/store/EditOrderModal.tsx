@@ -1,7 +1,8 @@
 import { OrderStatus, UpdateOrderStatus } from "@/enums";
+import { OrderInfo } from "@/types/order.types";
 import { PhoneOutlined } from "@ant-design/icons";
 import { Col, Form, Input, Modal, Row, Select } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CiDollar } from "react-icons/ci";
 import { FaBarcode, FaRegUser } from "react-icons/fa";
 import { MdOutlinePayment } from "react-icons/md";
@@ -9,19 +10,39 @@ import { MdOutlinePayment } from "react-icons/md";
 export interface EditOrderModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
+  selectedOrder?: OrderInfo;
 }
 
 const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
-  const { setIsOpen, isOpen } = props;
+  const { setIsOpen, isOpen, selectedOrder } = props;
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
   // const { Option } = Select;
 
-  // useEffect(() => {
-  //   if (isOpen) {
-  //     form.setFieldsValue(orderDetail);
-  //   }
-  // }, [isOpen]);
+  const orderLabels = {
+    [UpdateOrderStatus.PENDING]: "Đang chờ",
+    [UpdateOrderStatus.DELIVERY]: "Đang giao hàng",
+    [UpdateOrderStatus.DONE]: "Đã giao hàng",
+    [UpdateOrderStatus.CANCELED]: "Đã hủy",
+  };
+
+  const orderLabelsUpdate = {
+    [OrderStatus.PENDING]: "Đang chờ",
+    [OrderStatus.DELIVERY]: "Đang giao hàng",
+    [OrderStatus.DONE]: "Đã giao hàng",
+    [OrderStatus.CANCELED]: "Đã hủy",
+  };
+  useEffect(() => {
+    if (isOpen) {
+      const updatedOrder = {
+        ...selectedOrder,
+        status:
+          orderLabelsUpdate[selectedOrder?.status as OrderStatus] ||
+          selectedOrder?.status,
+      };
+      form.setFieldsValue(updatedOrder);
+    }
+  }, [isOpen, selectedOrder]);
 
   const handleOk = async () => {
     try {
@@ -49,13 +70,6 @@ const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
 
   const handleCancel = () => {
     setIsOpen(false);
-  };
-
-  const orderLables = {
-    [UpdateOrderStatus.PENDING]: "Đang chờ",
-    [UpdateOrderStatus.DELIVERY]: "Đang giao hàng",
-    [UpdateOrderStatus.DONE]: "Đã giao hàng",
-    [UpdateOrderStatus.CANCELED]: "Đã hủy",
   };
 
   return (
@@ -173,7 +187,7 @@ const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
         </Row>
 
         <Form.Item
-          name="paymentStatus"
+          name="status"
           rules={[
             {
               required: true,
@@ -185,14 +199,14 @@ const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
           className="formItem"
         >
           <Select placeholder="Chọn trạng thái" className="h-10">
-                {Object.values(UpdateOrderStatus)
-                  .filter((value) => typeof value === "number")
-                  .map((value) => (
-                    <Select.Option key={value} value={value}>
-                      {orderLables[value as UpdateOrderStatus]}
-                    </Select.Option>
-                  ))}
-              </Select>
+            {Object.values(UpdateOrderStatus)
+              .filter((value) => typeof value === "number")
+              .map((value) => (
+                <Select.Option key={value} value={value}>
+                  {orderLabels[value as UpdateOrderStatus]}
+                </Select.Option>
+              ))}
+          </Select>
         </Form.Item>
       </Form>
     </Modal>

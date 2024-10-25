@@ -136,7 +136,7 @@ const ProductList: React.FC = () => {
         dataIndex: "",
         render: (_, record) => (
           <>
-            <DropdownProductFunc productId={record.id} />
+            <DropdownProductFunc productId={record?.id} />
           </>
         ),
       },

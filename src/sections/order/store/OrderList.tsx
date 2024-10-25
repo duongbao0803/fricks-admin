@@ -22,6 +22,7 @@ const OrderList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = React.useState(10);
   const [, setOrderId] = useState<number | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<OrderInfo>();
   const navigate = useNavigate();
 
   const { data, isFetching, totalCount } = useFetchOrders(
@@ -66,13 +67,13 @@ const OrderList: React.FC = () => {
         title: "Khách hàng",
         dataIndex: "customerEmail",
         key: "customerEmail",
-        width: "12%"
+        width: "12%",
       },
       {
         title: "Số điện thoại",
         dataIndex: "customerPhone",
         key: "customerPhone",
-        width: "8%"
+        width: "8%",
       },
       {
         title: "Giá tiền",
@@ -182,7 +183,10 @@ const OrderList: React.FC = () => {
             <div className="flex w-full justify-center">
               <CiEdit
                 className="cursor-pointer"
-                onClick={() => setIsOpen(true)}
+                onClick={() => {
+                  setIsOpen(true);
+                  setSelectedOrder(record);
+                }}
               />
             </div>
           </>
@@ -229,7 +233,11 @@ const OrderList: React.FC = () => {
         onChange={handleTableChange}
         loading={isFetching}
       />
-      <EditOrderModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <EditOrderModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        selectedOrder={selectedOrder}
+      />
     </>
   );
 };
