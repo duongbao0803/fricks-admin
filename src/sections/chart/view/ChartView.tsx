@@ -23,49 +23,54 @@ const ChartView: React.FC = React.memo(() => {
     fetchDashboard();
   }, [fetchDashboard]);
 
-  const getAllDaysInCurrentMonth = () => {
+  const getAllDaysInCurrentWeek = () => {
     const currentDate = dayjs();
-    const daysInMonth = currentDate.daysInMonth();
+    const startOfWeek = currentDate.day(1).startOf('day'); // Set to Monday
+    const daysInWeek = 7;
     const labels = [];
     const displayLabels = [];
+    const dayNames = [];
 
-    for (let day = 1; day <= daysInMonth; day++) {
-      const date = dayjs().date(day);
+    for (let day = 0; day < daysInWeek; day++) {
+      const date = startOfWeek.add(day, 'day');
       labels.push(date.format('DD/MM/YYYY'));
       displayLabels.push(date.format('DD'));
+      dayNames.push(date.format('dddd'));
     }
 
-    return { labels, displayLabels };
+    return { labels, displayLabels, dayNames }; 
   };
 
   const lineData = {
-    labels: getAllDaysInCurrentMonth().displayLabels,
+    labels: getAllDaysInCurrentWeek().dayNames,
     datasets: [
       {
         label: "Đơn hàng",
-        data: getAllDaysInCurrentMonth().labels.map((date) => {
+        data: getAllDaysInCurrentWeek().labels.map((date) => {
           return mainChartData?.find((data) => dayjs(data.date).format("DD/MM/YYYY") === date)?.orderCount || 0;
         }),
-        borderColor: "#36A2EB",
+        type: 'bar',
+        borderColor: "rgba(0, 143, 251, 0.85);",
         pointBorderWidth: 1,
         pointBackgroundColor: "#1b8bd6",
         pointBorderColor: "#36A2EB",
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
-        tension: 0.4,
+        backgroundColor: "rgba(0, 143, 251, 1)",
         yAxisID: 'y',
+        order: 2,
+        barThickness: 30,
       },
       {
         label: "Doanh thu",
-        data: getAllDaysInCurrentMonth().labels.map((date) => {
+        data: getAllDaysInCurrentWeek().labels.map((date) => {
           return mainChartData?.find((data) => dayjs(data.date).format("DD/MM/YYYY") === date)?.revenue || 0;
         }),
-        borderColor: "#FF6384",
+        borderColor: "rgb(0, 227, 150)",
         pointBorderWidth: 1,
-        pointBackgroundColor: "#e73c61",
-        pointBorderColor: "#FF6384",
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        tension: 0.4,
+        pointBackgroundColor: "rgb(0, 227, 150)",
+        pointBorderColor: "#FFFFFF",
+        backgroundColor: "rgb(0, 227, 150)",
         yAxisID: 'y1',
+        order: 1,
       },
     ],
   };
@@ -78,13 +83,10 @@ const ChartView: React.FC = React.memo(() => {
     },
     elements: {
       point: {
-        radius: 3,
+        radius: 2,
         backgroundColor: "currentColor",
-        hoverRadius: 8,
-        hitRadius: 10,
-      },
-      line: {
-        tension: 0.4,
+        hoverRadius: 4,
+        hitRadius: 6,
       },
     },
     scales: {
