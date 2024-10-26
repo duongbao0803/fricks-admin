@@ -1,6 +1,7 @@
 import { getAdminDashboardInfo, getAdminDashboardMainChart, getAdminDashboardRevenueCategory, getAdminDashboardRevenueStore } from '@/apis/dashboardApi';
 import { AdminDashboardInfo, AdminDashboardMainChart, AdminDashboardRevenueCategory, AdminDashboardRevenueStore } from '@/types/dashboard.type';
 import { create } from 'zustand';
+import dayjs from 'dayjs';
 
 interface DashboardState {
     dashboardInfo: AdminDashboardInfo;
@@ -26,10 +27,9 @@ export const useFetchDashboard = create<DashboardState>((set) => ({
     error: null,
     fetchDashboard: async (month?: string, year?: string) => {
         set({ loading: true, error: null });
-
-        const currentDate = new Date();
-        const currentMonth = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-        const currentYear = currentDate.getFullYear().toString();
+        const currentDate = dayjs();
+        const currentMonth = currentDate.format('MM');
+        const currentYear = currentDate.format('YYYY');
 
         const fetchMonth = month || currentMonth;
         const fetchYear = year || currentYear;
