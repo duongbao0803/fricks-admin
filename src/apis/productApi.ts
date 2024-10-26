@@ -25,11 +25,11 @@ export const getDetailProduct = async (productId: number) => {
 };
 
 export const editProduct = async (productData: any) => {
-  const response = await axiosClient.post("/products", productData);
+  const response = await axiosClient.put("/products/info", productData);
   return response;
 };
 
-export const editProductPrice = async (formData: ProductPrice, id: number) => {
-  const response = await axiosClient.post(`/products?id=${id}`, formData);
+export const editProductPrice = async (formData: ProductPrice) => {
+  const response = await axiosClient.put(`/product-prices`, formData);
   return response;
 };

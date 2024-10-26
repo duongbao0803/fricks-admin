@@ -1,28 +1,25 @@
-import { addProduct, editProduct, getDetailProduct } from "@/apis/productApi";
+import { editProduct, getDetailProduct } from "@/apis/productApi";
 import { UploadImage } from "@/components";
 import { notify } from "@/components/Notification";
-import { unitsByCategory } from "@/constants";
 import { useFetchBrands } from "@/hooks/useFetchBrands";
 import { useFetchCategories } from "@/hooks/useFetchCategories";
 import AddBrandModal from "@/sections/brand/AddBrandModal";
 import { BrandInfo } from "@/types/brand.types";
 import { CategoryInfo } from "@/types/category.types";
 import { PriceInfo, ProductInfo, Unit } from "@/types/product.types";
-import { PlusCircleOutlined } from "@ant-design/icons";
 import {
   Button,
   Col,
   Form,
   Input,
   InputNumber,
-  Popconfirm,
   Row,
   Select,
   Space,
   Table,
 } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import AddProductPriceModal from "./AddProductPriceModal";
 import EditProductPriceModal from "./EditProductPriceModal";
@@ -53,7 +50,7 @@ const ProductDetail: React.FC = () => {
             setProductDetail(res.data);
             form.setFieldsValue({
               ...res.data,
-              brand: res?.data?.brand?.name,
+              brand: res?.data?.brand?.id,
               category: res?.data?.category?.id,
             });
           }
@@ -93,40 +90,32 @@ const ProductDetail: React.FC = () => {
   }, []);
 
   const showEditModal = (record: any) => {
-    if (currentCate && currentCate !== "") {
-      setCurrentRecord(record);
-      setIsOpenEdit(true);
-    } else {
-      notify(
-        "warning",
-        "Vui lòng chọn danh mục trước khi chỉnh sửa giá sản phẩm",
-        3,
-      );
-    }
+    setCurrentRecord(record);
+    setIsOpenEdit(true);
   };
 
-  const handleCategoryChange = (value: string) => {
-    const { code, id }: { code: keyof typeof unitsByCategory; id: string } =
-      JSON.parse(value);
-    if (unitsByCategory[code]) {
-      setSelectedUnit(unitsByCategory[code]);
-      setCurrentCate(id);
-    } else {
-      console.error("Invalid category code");
-    }
-  };
+  // const handleCategoryChange = (value: string) => {
+  //   const { code, id }: { code: keyof typeof unitsByCategory; id: string } =
+  //     JSON.parse(value);
+  //   if (unitsByCategory[code]) {
+  //     setSelectedUnit(unitsByCategory[code]);
+  //     setCurrentCate(id);
+  //   } else {
+  //     console.error("Invalid category code");
+  //   }
+  // };
 
-  const openAddProductPriceModal = () => {
-    if (currentCate && currentCate !== "") {
-      setIsOpenAdd(true);
-    } else {
-      notify(
-        "warning",
-        "Vui lòng chọn danh mục trước khi thêm giá sản phẩm",
-        3,
-      );
-    }
-  };
+  // const openAddProductPriceModal = () => {
+  //   if (currentCate && currentCate !== "") {
+  //     setIsOpenAdd(true);
+  //   } else {
+  //     notify(
+  //       "warning",
+  //       "Vui lòng chọn danh mục trước khi thêm giá sản phẩm",
+  //       3,
+  //     );
+  //   }
+  // };
 
   const handleCancel = () => {
     navigate("/store/product");
@@ -166,7 +155,7 @@ const ProductDetail: React.FC = () => {
             >
               <FaEdit />
             </Button>
-            <Popconfirm
+            {/* <Popconfirm
               title="Bạn có muốn xóa giá sản phẩm này không?"
               okText="Có"
               cancelText="Không"
@@ -178,7 +167,7 @@ const ProductDetail: React.FC = () => {
               >
                 <FaTrash />
               </Button>
-            </Popconfirm>
+            </Popconfirm> */}
           </>
         ),
       },
@@ -187,21 +176,23 @@ const ProductDetail: React.FC = () => {
   );
 
   const onFinish = async (values: any) => {
+    console.log("check values", values);
     const updateData = {
-      sku: values?.sku,
+      id: Number(id),
       name: values?.name,
       image: values?.image,
-      categoryId: JSON.parse(values?.category)?.id,
+      categoryId: values?.category,
       brandId: values?.brand,
       description: values?.description,
       quantity: values?.quantity,
-      soldQuantity: values?.soldQuantity,
+      storeId: productDetail?.storeId,
     };
     try {
-      console.log("check updateData", updateData);
+      console.log("check updateData", JSON.stringify(updateData));
       const res = await editProduct(updateData);
+      console.log("check res", res);
       if (res && res.status === 200) {
-        notify("success", "Thêm sản phẩm mới thành công", 3);
+        notify("success", "Cập nhật sản phẩm thành công", 3);
         handleRefetch();
         form.resetFields();
         navigate("/store/product");
@@ -244,23 +235,40 @@ const ProductDetail: React.FC = () => {
             </Form.Item>
           </Col>
           <Col span={16}>
-            <Form.Item
-              name="name"
-              label="Tên sản phẩm"
-              rules={[
-                {
-                  required: true,
-                  message: "Vui lòng nhập tên sản phẩm",
-                },
-                {
-                  pattern: /^(?!^\d+$)[\p{L}\d\s]*$/u,
-                  message:
-                    "Tên sản phẩm không được chỉ chứa số hoặc ký tự đặc biệt",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
+            <Row gutter={16} className="relative mt-1">
+              <Col span={12}>
+                <Form.Item
+                  name="sku"
+                  label="Mã sản phẩm"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
+                  <Input readOnly />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="name"
+                  label="Tên sản phẩm"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui lòng nhập tên sản phẩm",
+                    },
+                    {
+                      pattern: /^(?!^\d+$)[\p{L}\d\s]*$/u,
+                      message:
+                        "Tên sản phẩm không được chỉ chứa số hoặc ký tự đặc biệt",
+                    },
+                  ]}
+                >
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
 
             <Row gutter={16} className="relative mt-1">
               <Col span={12}>
@@ -310,15 +318,13 @@ const ProductDetail: React.FC = () => {
                 >
                   <Select
                     placeholder="Chọn loại sản phẩm"
-                    onChange={handleCategoryChange}
+                    // onChange={handleCategoryChange}
                   >
                     {categories?.map((category: CategoryInfo) => (
                       <Option
                         key={category?.id}
-                        value={JSON.stringify({
-                          code: category?.code,
-                          id: category?.id,
-                        })}
+                        value={category?.id}
+                        label={category?.name}
                       >
                         {category?.name}
                       </Option>
@@ -373,7 +379,7 @@ const ProductDetail: React.FC = () => {
               <div className="flex gap-x-2">
                 <p className="text-[1.1rem] font-bold">Bảng giá</p>
               </div>
-              <div className="flex gap-x-2">
+              {/* <div className="flex gap-x-2">
                 <div></div>
                 <div>
                   <Button type="primary" onClick={openAddProductPriceModal}>
@@ -382,7 +388,7 @@ const ProductDetail: React.FC = () => {
                     </div>
                   </Button>
                 </div>
-              </div>
+              </div> */}
             </div>
             <Table
               dataSource={productDetail?.price}
@@ -416,7 +422,7 @@ const ProductDetail: React.FC = () => {
         isOpen={isOpenEdit}
         handleRefetch={handleRefetch}
         priceInfo={currentRecord}
-        productName={productDetail?.name}
+        productDetail={productDetail}
       />
       <AddBrandModal
         setIsOpen={setIsOpen}

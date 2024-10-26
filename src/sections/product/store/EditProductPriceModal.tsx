@@ -1,22 +1,39 @@
+import { editProductPrice } from "@/apis/productApi";
+import { notify } from "@/components/Notification";
+import { unitsByCategory } from "@/constants";
+import { PriceInfo, ProductInfo, Unit } from "@/types/product.types";
+import { Col, Form, Input, InputNumber, Modal, Row, Select } from "antd";
 import React, { useEffect, useState } from "react";
-import { Modal, Form, Input, Select, Col, Row } from "antd";
-import { formatDate } from "@/utils/validate";
-import { PriceInfo } from "@/types/product.types";
 
 export interface EditModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
-  productName?: string;
+  productDetail?: ProductInfo;
   priceInfo?: PriceInfo;
   handleRefetch: () => void;
 }
 
 const EditProductPriceModal: React.FC<EditModalProps> = React.memo((props) => {
   // const { addNewUserItem } = useUserService();
-  const { setIsOpen, isOpen, productName } = props;
+  const { setIsOpen, isOpen, productDetail } = props;
+  const { Option } = Select;
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
   const [fileChange] = useState<string>("");
+  const [selectedUnit, setSelectedUnit] = useState<Unit[]>();
   const [form] = Form.useForm();
+  const categoryCode =
+    (productDetail?.category?.code as keyof typeof unitsByCategory) ?? "";
+
+  useEffect(() => {
+    if (categoryCode) {
+      setSelectedUnit(unitsByCategory[categoryCode]);
+      form.setFieldsValue({
+        ...productDetail,
+        unitId: productDetail?.price && productDetail?.price[0]?.unit?.id,
+        price: productDetail?.price && productDetail?.price[0]?.price,
+      });
+    }
+  }, [categoryCode]);
 
   useEffect(() => {
     form.setFieldsValue({ avatar: fileChange });
@@ -25,21 +42,20 @@ const EditProductPriceModal: React.FC<EditModalProps> = React.memo((props) => {
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-      console.log("check value", values);
-      const formattedDate = formatDate(values.dob);
-      const updatedValues: string = JSON.stringify({
+      const updateValues = {
         ...values,
-        dob: formattedDate,
-      });
-      console.log("update value", updatedValues);
+        id: productDetail?.price && productDetail?.price[0]?.id,
+      };
       setIsConfirmLoading(true);
       setTimeout(async () => {
         try {
-          // await handleAddUser(updatedValues);
-          form.resetFields();
+          console.log("check updateValues", updateValues);
+          await editProductPrice(updateValues);
+          notify("success", "Cập nhật giá sản phẩm thành công", 2);
           setIsConfirmLoading(false);
           setIsOpen(false);
         } catch (error) {
+          console.error(error);
           setIsConfirmLoading(false);
           setIsOpen(true);
         }
@@ -51,7 +67,6 @@ const EditProductPriceModal: React.FC<EditModalProps> = React.memo((props) => {
 
   const handleCancel = () => {
     setIsOpen(false);
-    form.resetFields();
   };
 
   // const disabledDate = (current: object) => {
@@ -95,14 +110,14 @@ const EditProductPriceModal: React.FC<EditModalProps> = React.memo((props) => {
           label="Tên sản phẩm"
           labelCol={{ span: 24 }}
           className="formItem"
-          initialValue={productName}
+          initialValue={productDetail?.name}
         >
           <Input placeholder="Tên sản phẩm" autoFocus readOnly />
         </Form.Item>
         <Row gutter={16} className="relative mt-1">
           <Col span={12}>
             <Form.Item
-              name="Đơn vị tính"
+              name="unitId"
               rules={[
                 {
                   required: true,
@@ -114,11 +129,12 @@ const EditProductPriceModal: React.FC<EditModalProps> = React.memo((props) => {
               labelCol={{ span: 24 }}
               className="formItem"
             >
-              <Select placeholder="Chọn đơn vị tính" autoFocus>
-                <Select.Option value="1">Mét</Select.Option>
-                <Select.Option value="2">Cái</Select.Option>
-                <Select.Option value="3">Bao</Select.Option>
-                <Select.Option value="4">Cây</Select.Option>
+              <Select placeholder="Chọn đơn vị tính">
+                {selectedUnit?.map((unit: any, index: number) => (
+                  <Option key={index} value={unit?.id} label={unit?.name}>
+                    {unit?.name}
+                  </Option>
+                ))}
               </Select>
             </Form.Item>
           </Col>
@@ -136,7 +152,11 @@ const EditProductPriceModal: React.FC<EditModalProps> = React.memo((props) => {
               labelCol={{ span: 24 }}
               className="formItem"
             >
-              <Input placeholder="Giá" />
+              <InputNumber
+                type="numberd"
+                placeholder="Giá"
+                className="w-full"
+              />
             </Form.Item>
           </Col>
         </Row>

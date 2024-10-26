@@ -1,3 +1,14 @@
+import { addProduct } from "@/apis/productApi";
+import { UploadImage } from "@/components";
+import { notify } from "@/components/Notification";
+import { unitsByCategory } from "@/constants";
+import { useFetchBrands } from "@/hooks/useFetchBrands";
+import { useFetchCategories } from "@/hooks/useFetchCategories";
+import useStore from "@/hooks/useStore";
+import AddBrandModal from "@/sections/brand/AddBrandModal";
+import { BrandInfo } from "@/types/brand.types";
+import { CategoryInfo } from "@/types/category.types";
+import { PriceInfo, Unit } from "@/types/product.types";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -13,20 +24,8 @@ import {
 } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import AddProductPriceModal from "./AddProductPriceModal";
-import EditProductPriceModal from "./EditProductPriceModal";
-import { PriceInfo, ProductType, Unit } from "@/types/product.types";
-import { notify } from "@/components/Notification";
 import { useNavigate } from "react-router-dom";
-import { useFetchBrands } from "@/hooks/useFetchBrands";
-import { useFetchCategories } from "@/hooks/useFetchCategories";
-import { UploadImage } from "@/components";
-import useStore from "@/hooks/useStore";
-import { unitsByCategory } from "@/constants";
-import { addProduct } from "@/apis/productApi";
-import { CategoryInfo } from "@/types/category.types";
-import { BrandInfo } from "@/types/brand.types";
-import AddBrandModal from "@/sections/brand/AddBrandModal";
+import AddProductPriceModal from "./AddProductPriceModal";
 
 const AddProduct: React.FC = () => {
   const [form] = Form.useForm();
@@ -387,13 +386,13 @@ const AddProduct: React.FC = () => {
         cateCode={currentCate}
         selectedUnit={selectedUnit}
       />
-      <EditProductPriceModal
+      {/* <EditProductPriceModal
         setIsOpen={setIsOpenEdit}
         isOpen={isOpenEdit}
         handleRefetch={handleRefetch}
         priceInfo={currentRecord}
         productName={productName}
-      />
+      /> */}
       <AddBrandModal
         setIsOpen={setIsOpen}
         isOpen={isOpen}

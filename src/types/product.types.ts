@@ -39,6 +39,7 @@ export interface PriceInfo {
 export interface PriceUnitInfo {
   id: number;
   name: string;
+  code: string;
 }
 
 export interface ProductType {
@@ -54,6 +55,7 @@ export interface Unit {
 }
 
 export interface ProductPrice {
+  id: number;
   unitId: number;
   price: number;
 }
