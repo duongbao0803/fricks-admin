@@ -52,3 +52,8 @@ export interface Unit {
   name: string;
   code: string;
 }
+
+export interface ProductPrice {
+  unitId: number;
+  price: number;
+}

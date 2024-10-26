@@ -15,7 +15,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import AddProductPriceModal from "./AddProductPriceModal";
 import EditProductPriceModal from "./EditProductPriceModal";
-import { PriceInfo, Unit } from "@/types/product.types";
+import { PriceInfo, ProductType, Unit } from "@/types/product.types";
 import { notify } from "@/components/Notification";
 import { useNavigate } from "react-router-dom";
 import { useFetchBrands } from "@/hooks/useFetchBrands";
@@ -43,6 +43,8 @@ const AddProduct: React.FC = () => {
   const [fileChange, setFileChange] = useState<string>("");
   const [productName, setProductName] = useState<string>("");
   const { data, setData } = useStore();
+
+  console.log("check data", data);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -187,7 +189,7 @@ const AddProduct: React.FC = () => {
       if (res && res.status === 200) {
         notify("success", "Thêm sản phẩm mới thành công", 3);
         handleRefetch();
-        setData([]);
+        setData(() => []);
         form.resetFields();
         navigate("/store/product");
       }

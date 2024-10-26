@@ -1,4 +1,5 @@
 import axiosClient from "@/config/axiosClient";
+import { ProductPrice } from "@/types/product.types";
 
 export const getProductList = async (
   PageIndex: number,
@@ -20,5 +21,15 @@ export const addProduct = async (productData: any) => {
 
 export const getDetailProduct = async (productId: number) => {
   const response = await axiosClient.get(`/products/${productId}`);
+  return response;
+};
+
+export const editProduct = async (productData: any) => {
+  const response = await axiosClient.post("/products", productData);
+  return response;
+};
+
+export const editProductPrice = async (formData: ProductPrice, id: number) => {
+  const response = await axiosClient.post(`/products?id=${id}`, formData);
   return response;
 };

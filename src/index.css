@@ -67,3 +67,7 @@ canvas {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.ant-upload-list-item-thumbnail img {
+  object-fit: cover !important;
+}

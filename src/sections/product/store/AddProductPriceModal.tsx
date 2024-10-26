@@ -23,9 +23,10 @@ const AddProductPriceModal: React.FC<AddModalProps> = React.memo((props) => {
     try {
       const values = await form.validateFields();
       const [code, name] = values.unit.split("-");
-      const updateValues = [{ ...values, unitCode: code, unit: name }];
-      setData(updateValues);
+      const updateValues = { ...values, unitCode: code, unit: name };
+      setData((prevData) => [...prevData, updateValues]);
       setIsOpen(false);
+      form.resetFields();
     } catch (err) {
       console.error("Validation failed:", err);
     }

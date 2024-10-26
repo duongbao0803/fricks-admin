@@ -3,10 +3,11 @@ import { create } from "zustand";
 
 const useStore = create<{
   data: ProductType[];
-  setData: (data: ProductType[]) => void;
+  setData: (updateFunction: (prevData: ProductType[]) => ProductType[]) => void;
 }>((set) => ({
   data: [],
-  setData: (data: ProductType[]) => set({ data }),
+  setData: (updateFunction) =>
+    set((state) => ({ data: updateFunction(state.data) })),
 }));
 
 export default useStore;

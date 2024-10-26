@@ -1,8 +1,9 @@
+import { UploadImage } from "@/components";
 import { OrderStatus, UpdateOrderStatus } from "@/enums";
 import { OrderInfo } from "@/types/order.types";
 import { PhoneOutlined } from "@ant-design/icons";
 import { Col, Form, Input, Modal, Row, Select } from "antd";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CiDollar } from "react-icons/ci";
 import { FaBarcode, FaRegUser } from "react-icons/fa";
 import { MdOutlinePayment } from "react-icons/md";
@@ -16,6 +17,7 @@ export interface EditOrderModalProps {
 const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
   const { setIsOpen, isOpen, selectedOrder } = props;
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
+  const [fileChange, setFileChange] = useState<string>("");
   const [form] = Form.useForm();
   // const { Option } = Select;
 
@@ -47,17 +49,12 @@ const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
   const handleOk = async () => {
     try {
       // const values = await form.validateFields();
-
       setIsConfirmLoading(true);
       setTimeout(async () => {
         try {
-          // if (productInfo && productInfo._id) {
-          //   await updateProductItem(productInfo._id, values);
-          //   setIsConfirmLoading(false);
-          //   setIsOpen(false);
-          // } else {
-          //   console.error("User is undefined");
-          // }
+          // await updateOrder(values);
+          setIsConfirmLoading(false);
+          setIsOpen(false);
         } catch (error) {
           setIsConfirmLoading(false);
           setIsOpen(true);
@@ -71,6 +68,10 @@ const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
   const handleCancel = () => {
     setIsOpen(false);
   };
+
+  const handleFileChange = useCallback((newFileChange: string) => {
+    setFileChange(newFileChange);
+  }, []);
 
   return (
     <Modal
@@ -207,6 +208,20 @@ const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
                 </Select.Option>
               ))}
           </Select>
+        </Form.Item>
+        <Form.Item
+          id="formItem"
+          name="image"
+          colon={true}
+          labelCol={{ span: 24 }}
+          className="formItem"
+          rules={[{ required: true, message: "Vui lòng chọn ảnh" }]}
+        >
+          <UploadImage
+            onFileChange={handleFileChange}
+            initialImage={""}
+            titleButton={"Thêm ảnh"}
+          />
         </Form.Item>
       </Form>
     </Modal>

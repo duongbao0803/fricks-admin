@@ -35,3 +35,9 @@ export interface OrderDetails {
   productUnit: string | null;
   product: ProductInfo;
 }
+
+export interface OrderForm {
+  id: number;
+  image: string;
+  status: number;
+}
