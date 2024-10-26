@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Spin, Divider } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { FaFacebookF, FaGoogle, FaTwitter } from "react-icons/fa";
@@ -6,26 +6,65 @@ import { motion } from "framer-motion";
 import { ButtonCustom } from "@/components/ui/button";
 import { InputCustom } from "@/components/ui/input";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useAuthStore } from "@/hooks/useAuthStore";
 import { auth } from "@/config/firebase";
 import { notify } from "@/components/Notification";
+import { login } from "@/apis/authApi";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+import { RolesLogin } from "@/enums";
+import { useAuthStore } from "@/hooks/useAuthStore";
 
 const provider = new GoogleAuthProvider();
 
 const LoginForm: React.FC = () => {
   const [form] = Form.useForm();
-  // const [login] = useLoginMutation();
-  const login = useAuthStore((s) => s.login);
-  const isLoading = useAuthStore((s) => s.isLoading);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onFinish = async (values: { email: string; password: string }) => {
-    await login(values);
+    setIsLoading(true);
+    try {
+      const res = await login({
+        email: values.email,
+        password: values.password,
+      });
+      if (res && res.status === 200) {
+        const accessToken = res.data.accessToken;
+        if (accessToken) {
+          const decoded: any = jwtDecode(accessToken);
+          const role =
+            decoded[
+              "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+            ];
+          if (role !== RolesLogin.ADMIN && role !== RolesLogin.STORE) {
+            notify("error", "Bạn không có quyền truy cập và trang này", 3);
+            setIsLoading(false);
+            return;
+          } else if (role === RolesLogin.ADMIN) {
+            notify("success", "Đăng nhập thành công", 3);
+            Cookies.set("accessToken", res.data.accessToken);
+            Cookies.set("refreshToken", res.data.refreshToken);
+            const authStore = useAuthStore.getState();
+            authStore.login();
+            return;
+          } else {
+            notify("success", "Đăng nhập thành công", 3);
+            Cookies.set("accessToken", res.data.accessToken);
+            Cookies.set("refreshToken", res.data.refreshToken);
+            const authStore = useAuthStore.getState();
+            authStore.login();
+          }
+        }
+      }
+    } catch (err: any) {
+      setIsLoading(false);
+      notify("error", `${err.response.data.message}`, 3);
+      return;
+    }
   };
 
   const handleGoogleSignIn = async () => {
     try {
-      const result = await signInWithPopup(auth, provider);
-      console.log(result.user);
+      await signInWithPopup(auth, provider);
     } catch (error) {
       console.error("Error login with google", error);
     }
