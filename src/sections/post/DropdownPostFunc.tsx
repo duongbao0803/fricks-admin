@@ -7,7 +7,7 @@ import { notify } from "@/components/Notification";
 
 export interface DropdownPostFuncProps {
   postId: number;
-  handleRefetch: () => void
+  handleRefetch: () => void;
 }
 
 const DropdownPostFunc: React.FC<DropdownPostFuncProps> = React.memo(
@@ -17,7 +17,6 @@ const DropdownPostFunc: React.FC<DropdownPostFuncProps> = React.memo(
     const handleDeletePost = useCallback(async (postId: number) => {
       try {
         const res = await deletePost(postId);
-        console.log("check res", res);
         if (res && res.status === 200) {
           notify("success", `${res.data.message}`, 3);
           handleRefetch();

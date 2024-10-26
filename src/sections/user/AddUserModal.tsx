@@ -32,13 +32,11 @@ const AddUserModal: React.FC<AddModalProps> = React.memo((props) => {
   const handleOk = async () => {
     try {
       const values = await form.validateFields();
-      console.log("check value", values);
       const formattedDate = formatDate(values.dob);
       const updatedValues: string = JSON.stringify({
         ...values,
         dob: formattedDate,
       });
-      console.log("update value", updatedValues);
       setIsConfirmLoading(true);
       setTimeout(async () => {
         try {
@@ -72,7 +70,6 @@ const AddUserModal: React.FC<AddModalProps> = React.memo((props) => {
   const handleAddUser = useCallback(async (userData: any) => {
     try {
       const res = await addUser(userData);
-      console.log("check res", res);
       if (res && res.status === 200) {
         notify("success", `${res.data.message}`, 3);
         handleRefetch();

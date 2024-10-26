@@ -41,7 +41,6 @@ const StoreDetailView: React.FC = () => {
   ];
 
   const handleTabChange = (key: string) => {
-    console.log(`Selected tab: ${key}`);
     setActiveKey(key);
   };
 

@@ -17,7 +17,7 @@ export interface EditOrderModalProps {
 const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
   const { setIsOpen, isOpen, selectedOrder } = props;
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
-  const [fileChange, setFileChange] = useState<string>("");
+  const [, setFileChange] = useState<string>("");
   const [form] = Form.useForm();
   // const { Option } = Select;
 

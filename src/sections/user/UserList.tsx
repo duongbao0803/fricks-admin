@@ -28,7 +28,6 @@ const UserList: React.FC = React.memo(() => {
   const handleDeleteUser = useCallback(async (userId: number) => {
     try {
       const res = await deleteUser(userId);
-      console.log("check res", res);
       if (res && res.status === 200) {
         handleRefetch();
         notify("success", `${res.data.message}`, 3);

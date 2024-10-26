@@ -56,8 +56,6 @@ const StoreDetail: React.FC<StoreDetailProps> = (props) => {
     setFileChange(newFileChange);
   }, []);
 
-  console.log("check store", storeData);
-
   return (
     <>
       <Form form={form} name="store" layout="vertical" autoComplete="off">

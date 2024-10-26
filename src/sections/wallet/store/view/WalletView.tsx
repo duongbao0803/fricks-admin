@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import Wallet from "../Wallet";
 import { BreadScrumb } from "@/components";
 import { InfoCircleOutlined, WalletOutlined } from "@ant-design/icons";
 import { Tabs } from "antd";
+import React, { useState } from "react";
+import Wallet from "../Wallet";
 import WalletWithDraw from "../WalletWithDraw";
 
 const WalletView: React.FC = React.memo(() => {
-
   const [activeKey, setActiveKey] = useState("1");
 
   const itemTabs = [
@@ -27,7 +26,7 @@ const WalletView: React.FC = React.memo(() => {
           Rút tiền
         </span>
       ),
-    }
+    },
   ];
 
   const handleTabChange = (key: string) => {
@@ -41,7 +40,7 @@ const WalletView: React.FC = React.memo(() => {
     },
     {
       title: "Ví cửa hàng",
-    }
+    },
   ];
   return (
     <>
@@ -52,10 +51,12 @@ const WalletView: React.FC = React.memo(() => {
         <p className="text-2xl font-bold text-[#000000]">Quản lý ví tiền</p>
       </div>
       <div className="bg-[#fff] p-5">
-        <Tabs defaultActiveKey="1" items={itemTabs} onChange={handleTabChange} />
-        <div className="mb-3">
-          {activeKey === "1" && <Wallet />}
-        </div>
+        <Tabs
+          defaultActiveKey="1"
+          items={itemTabs}
+          onChange={handleTabChange}
+        />
+        <div className="mb-3">{activeKey === "1" && <Wallet />}</div>
         <div>{activeKey === "2" && <WalletWithDraw />}</div>
       </div>
     </>

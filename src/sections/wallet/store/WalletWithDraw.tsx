@@ -16,14 +16,6 @@ import {
 } from "antd";
 import React, { useCallback, useMemo, useState } from "react";
 
-interface Withdrawal {
-  amount: number;
-  requester: string;
-  status: string;
-  createdDate: string;
-  confirmedDate: string;
-  note: string;
-}
 const WalletWithDraw: React.FC = React.memo(() => {
   const [form] = Form.useForm();
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -45,7 +37,6 @@ const WalletWithDraw: React.FC = React.memo(() => {
   const onFinish = async () => {
     try {
       const values = await form.validateFields();
-      console.log("check value", values);
 
       setTimeout(async () => {
         try {

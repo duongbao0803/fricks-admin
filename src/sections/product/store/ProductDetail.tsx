@@ -33,9 +33,9 @@ const ProductDetail: React.FC = () => {
   const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false);
   const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false);
   const [currentRecord, setCurrentRecord] = useState<PriceInfo>();
-  const [currentCate, setCurrentCate] = useState<string>("");
+  const [currentCate] = useState<string>("");
   const { data: categoriesData } = useFetchCategories(1, 50);
-  const [selectedUnit, setSelectedUnit] = useState<Unit[]>([]);
+  const [selectedUnit] = useState<Unit[]>([]);
   const [fileChange, setFileChange] = useState<string>("");
   const [productDetail, setProductDetail] = useState<ProductInfo>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -93,29 +93,6 @@ const ProductDetail: React.FC = () => {
     setCurrentRecord(record);
     setIsOpenEdit(true);
   };
-
-  // const handleCategoryChange = (value: string) => {
-  //   const { code, id }: { code: keyof typeof unitsByCategory; id: string } =
-  //     JSON.parse(value);
-  //   if (unitsByCategory[code]) {
-  //     setSelectedUnit(unitsByCategory[code]);
-  //     setCurrentCate(id);
-  //   } else {
-  //     console.error("Invalid category code");
-  //   }
-  // };
-
-  // const openAddProductPriceModal = () => {
-  //   if (currentCate && currentCate !== "") {
-  //     setIsOpenAdd(true);
-  //   } else {
-  //     notify(
-  //       "warning",
-  //       "Vui lòng chọn danh mục trước khi thêm giá sản phẩm",
-  //       3,
-  //     );
-  //   }
-  // };
 
   const handleCancel = () => {
     navigate("/store/product");
@@ -176,7 +153,6 @@ const ProductDetail: React.FC = () => {
   );
 
   const onFinish = async (values: any) => {
-    console.log("check values", values);
     const updateData = {
       id: Number(id),
       name: values?.name,
@@ -188,9 +164,7 @@ const ProductDetail: React.FC = () => {
       storeId: productDetail?.storeId,
     };
     try {
-      console.log("check updateData", JSON.stringify(updateData));
       const res = await editProduct(updateData);
-      console.log("check res", res);
       if (res && res.status === 200) {
         notify("success", "Cập nhật sản phẩm thành công", 3);
         handleRefetch();

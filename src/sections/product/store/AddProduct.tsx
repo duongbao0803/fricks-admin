@@ -32,8 +32,8 @@ const AddProduct: React.FC = () => {
   const { Option } = Select;
   const { TextArea } = Input;
   const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false);
-  const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false);
-  const [currentRecord, setCurrentRecord] = useState<PriceInfo>();
+  const [, setIsOpenEdit] = useState<boolean>(false);
+  const [, setCurrentRecord] = useState<PriceInfo>();
   const [currentCate, setCurrentCate] = useState<string>("");
   const navigate = useNavigate();
   const { data: brandsData, refetch: refetchBrand } = useFetchBrands(1, 50);
@@ -42,8 +42,6 @@ const AddProduct: React.FC = () => {
   const [fileChange, setFileChange] = useState<string>("");
   const [productName, setProductName] = useState<string>("");
   const { data, setData } = useStore();
-
-  console.log("check data", data);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 

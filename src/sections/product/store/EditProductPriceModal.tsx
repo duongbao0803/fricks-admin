@@ -49,7 +49,6 @@ const EditProductPriceModal: React.FC<EditModalProps> = React.memo((props) => {
       setIsConfirmLoading(true);
       setTimeout(async () => {
         try {
-          console.log("check updateValues", updateValues);
           await editProductPrice(updateValues);
           notify("success", "Cập nhật giá sản phẩm thành công", 2);
           setIsConfirmLoading(false);
@@ -68,28 +67,6 @@ const EditProductPriceModal: React.FC<EditModalProps> = React.memo((props) => {
   const handleCancel = () => {
     setIsOpen(false);
   };
-
-  // const disabledDate = (current: object) => {
-  //   return current && current > moment().startOf("day");
-  // };
-
-  // const handleFileChange = useCallback((newFileChange: string) => {
-  //   setFileChange(newFileChange);
-  // }, []);
-
-  // const handleAddUser = useCallback(async (userData: any) => {
-  //   try {
-  //     const res = await addUser(userData);
-  //     console.log("check res", res);
-  //     if (res && res.status === 200) {
-  //       notify("success", `${res.data.message}`, 3);
-  //       handleRefetch();
-  //     }
-  //   } catch (err: any) {
-  //     console.error("err", err);
-  //     notify("error", `${err.response.data.message}`, 3);
-  //   }
-  // }, []);
 
   return (
     <Modal

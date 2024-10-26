@@ -28,7 +28,7 @@ const AddStoreModal: React.FC<AddStoreProps> = (props) => {
   const { Option } = Select;
 
   useEffect(() => {
-    form.setFieldsValue({ "image": fileChange });
+    form.setFieldsValue({ image: fileChange });
   }, [fileChange, form]);
 
   const handleOk = async () => {
@@ -60,7 +60,6 @@ const AddStoreModal: React.FC<AddStoreProps> = (props) => {
     try {
       const res = await addStore(storeData);
       if (res && res.status === 200) {
-        console.log("check res", res);
         notify("success", "Thêm cửa hàng mới thành công", 3);
         handleRefetch();
         form.resetFields();
@@ -217,11 +216,7 @@ const AddStoreModal: React.FC<AddStoreProps> = (props) => {
             // onChange={handleCategoryChange}
           >
             {banks?.map((bank: any) => (
-              <Option
-                key={bank.id}
-                value={bank.code}
-                label={bank.name}
-              >
+              <Option key={bank.id} value={bank.code} label={bank.name}>
                 {bank.name}
               </Option>
             ))}
@@ -239,8 +234,8 @@ const AddStoreModal: React.FC<AddStoreProps> = (props) => {
                 },
                 {
                   max: 20,
-                  message: "Tài khoản chứa tối đa 20 chữ số"
-                }
+                  message: "Tài khoản chứa tối đa 20 chữ số",
+                },
               ]}
               colon={true}
               label="Số tài khoản"
@@ -248,9 +243,7 @@ const AddStoreModal: React.FC<AddStoreProps> = (props) => {
               className="formItem"
             >
               <Input
-                prefix={
-                  <BankOutlined className="site-form-item-icon mr-1" />
-                }
+                prefix={<BankOutlined className="site-form-item-icon mr-1" />}
                 placeholder="Số tài khoản"
                 autoFocus
               />

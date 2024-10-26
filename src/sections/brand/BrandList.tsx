@@ -34,7 +34,6 @@ export const BrandList: React.FC = React.memo(() => {
   const handleDeleteBrand = useCallback(async (brandId: number) => {
     try {
       const res = await deleteBrand(brandId);
-      console.log("check res", res);
       if (res && res.status === 200) {
         handleRefetch();
         notify("success", `${res.data.message}`, 3);
