@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Table, Card, Tag, TablePaginationConfig, TableProps } from "antd";
-import { useFetchWalletTransactions } from "@/hooks/useFetchWalletTransactions";
-import { formatTimestampWithHour } from "@/utils/validate";
 import { getStoreWallet } from "@/apis/walletApi";
+import { useFetchWalletTransactions } from "@/hooks/useFetchWalletTransactions";
 import { CommonModel } from "@/types/common.types";
+import { formatTimestampWithHour } from "@/utils/validate";
+import { Card, Table, TablePaginationConfig, TableProps, Tag } from "antd";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 const Wallet: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -26,9 +26,7 @@ const Wallet: React.FC = () => {
       if (res && res.status === 200) {
         setStoreWallet(res.data);
       }
-    } catch (err) {
-      console.log("Error fetching store wallet info: ", err);
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {
@@ -88,7 +86,7 @@ const Wallet: React.FC = () => {
   //   );
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="mx-auto p-4">
       <Card title="Cửa hàng" className="mb-4">
         <p className="text-2xl font-bold">{storeWallet?.storeName}</p>
       </Card>

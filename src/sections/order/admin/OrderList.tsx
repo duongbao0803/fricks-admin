@@ -4,17 +4,26 @@ import { formatTimestampWithHour } from "@/utils/validate";
 import { FilterOutlined } from "@ant-design/icons";
 import { Button, Input, Table, TablePaginationConfig, TableProps, Tag } from "antd";
 import React, { useCallback, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const OrderList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = React.useState(10);
+  const [, setOrderId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const { data, isFetching, totalCount } = useFetchOrders(
     currentPage,
     pageSize,
   );
 
-  
+  const handleRowClick = useCallback(
+    (record: number) => {
+      setOrderId(record);
+      navigate(`/order/${record}`);
+    },
+    [navigate],
+  );
 
   const columns: TableProps<OrderInfo>["columns"] = useMemo(
     () => [
@@ -24,13 +33,13 @@ const OrderList: React.FC = () => {
         key: "code",
         width: "10%",
         className: "first-column",
-        // onCell: (record) => {
-        //   return {
-        //     onClick: () => {
-        //       handleRowClick(record.id);
-        //     },
-        //   };
-        // },
+        onCell: (record) => {
+          return {
+            onClick: () => {
+              handleRowClick(record.id);
+            },
+          };
+        },
       },
       {
         title: "Cửa hàng",

@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { FloatButton, Layout, Menu } from "antd";
+import ADMIN from "@/assets/images/avatar/avatar_admin.jpg";
+import LogoWeb from "@/assets/images/logo/logo_web.png";
+import { Loading } from "@/components";
+import { RolesLogin } from "@/enums";
+import { useAuthStore } from "@/hooks/useAuthStore";
+import useLogout from "@/hooks/useLogout";
 import {
-  PieChartOutlined,
-  HomeOutlined,
-  PushpinOutlined,
-  BellOutlined,
-  BoxPlotOutlined,
+  BgColorsOutlined,
   BookOutlined,
+  BoxPlotOutlined,
+  HomeOutlined,
+  PieChartOutlined,
+  PushpinOutlined,
   WalletOutlined,
 } from "@ant-design/icons";
-import LogoWeb from "@/assets/images/logo/logo_web.png";
-import { MdBrandingWatermark, MdCategory } from "react-icons/md";
+import { FloatButton, Layout, Menu } from "antd";
+import React, { useEffect, useState } from "react";
 import { IoDocumentTextOutline } from "react-icons/io5";
-import { useAuthStore } from "@/hooks/useAuthStore";
-import ADMIN from "@/assets/images/avatar/avatar_admin.jpg";
-import { RolesLogin } from "@/enums";
-import { Loading } from "@/components";
-import useLogout from "@/hooks/useLogout";
+import { MdBrandingWatermark, MdCategory } from "react-icons/md";
+import { Link, useLocation } from "react-router-dom";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -52,12 +52,11 @@ const items: MenuItem[] = [
   getItem("Thống kê", "1", <PieChartOutlined />, undefined, "/chart"),
   getItem("Người dùng", "2", <PushpinOutlined />, undefined, "/user"),
   getItem("Cửa hàng", "3", <HomeOutlined />, undefined, "/store"),
-  getItem("Thương hiệu", "10", <MdBrandingWatermark />, undefined, "/brand"),
   getItem("Sản phẩm", "8", <BoxPlotOutlined />, undefined, "/store/product"),
-  getItem("Sản phẩm", "4", <BoxPlotOutlined />, undefined, "/product"),
+  getItem("Thương hiệu", "10", <MdBrandingWatermark />, undefined, "/brand"),
   getItem("Đơn hàng", "5", <IoDocumentTextOutline />, undefined, "/order"),
+  getItem("Sản phẩm", "4", <BoxPlotOutlined />, undefined, "/product"),
   getItem("Danh mục", "11", <MdCategory />, undefined, "/category"),
-  getItem("Thông báo", "6", <BellOutlined />, undefined, "/notification"),
   getItem(
     "Đơn hàng",
     "9",
@@ -67,6 +66,8 @@ const items: MenuItem[] = [
   ),
   getItem("Bài viết", "12", <BookOutlined />, undefined, "/post"),
   getItem("Ví tiền", "13", <WalletOutlined />, undefined, "/store/wallet"),
+  getItem("Ví cửa hàng", "14", <WalletOutlined />, undefined, "/wallet"),
+  getItem("Banner", "15", <BgColorsOutlined />, undefined, "/banner"),
 ];
 
 const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
@@ -95,7 +96,9 @@ const DashboardLayout: React.FC<LayoutProps> = ({ children }) => {
             item.key !== "2" &&
             item.key !== "3" &&
             item.key !== "4" &&
-            item.key !== "5",
+            item.key !== "5" &&
+            item.key !== "14" &&
+            item.key !== "15",
         )
       : items.filter(
           (item) => item.key !== "9" && item.key !== "8" && item.key !== "13",

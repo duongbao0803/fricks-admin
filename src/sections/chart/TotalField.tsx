@@ -1,8 +1,13 @@
 import React from "react";
 import CountUp from "react-countup";
 import Revenue from "@/assets/images/icons/revenue.png";
+import { AdminDashboardInfo } from "@/types/dashboard.type";
 
-const TotalField: React.FC = () => {
+interface TotalFieldProps {
+  data: AdminDashboardInfo
+}
+
+const TotalField: React.FC<TotalFieldProps> = (props) => {
   return (
     <>
       <div className="grid grid-cols-1 gap-5 transition-all duration-500 md:grid-cols-2 lg:grid-cols-4 ">
@@ -15,7 +20,7 @@ const TotalField: React.FC = () => {
           </div>
           <div>
             <p className="text-3xl font-bold text-[black]">
-              <CountUp end={2653} duration={2} />m
+              <CountUp end={props.data.revenue} duration={2} />đ
             </p>
             <p className="text-[15px] font-semibold text-[#bdbdbd]">
               Doanh thu
@@ -28,10 +33,10 @@ const TotalField: React.FC = () => {
           </div>
           <div>
             <p className="text-3xl font-bold text-[black]">
-              <CountUp end={1500} duration={2} />
+              <CountUp end={props.data.numOfProducts} duration={2} />
             </p>
             <p className="text-[15px] font-semibold text-[#bdbdbd]">
-              Lợi nhuận
+              Sản phẩm
             </p>
           </div>
         </div>
@@ -44,7 +49,7 @@ const TotalField: React.FC = () => {
           </div>
           <div>
             <p className="text-3xl font-bold text-[black]">
-              <CountUp end={150} duration={2} />
+              <CountUp end={props.data.numOfStores} duration={2} />
             </p>
             <p className="text-[15px] font-semibold text-[#bdbdbd]">Cửa hàng</p>
           </div>
@@ -58,7 +63,7 @@ const TotalField: React.FC = () => {
           </div>
           <div>
             <p className="text-3xl font-bold text-[black]">
-              <CountUp end={500} duration={2} />
+              <CountUp end={props.data.numOfUsers} duration={2} />
             </p>
             <p className="text-[15px] font-semibold text-[#bdbdbd]">
               Người dùng

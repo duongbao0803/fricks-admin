@@ -1,212 +1,128 @@
-import { PlusCircleOutlined } from "@ant-design/icons";
+import { editProduct, getDetailProduct } from "@/apis/productApi";
+import { UploadImage } from "@/components";
+import { notify } from "@/components/Notification";
+import { useFetchBrands } from "@/hooks/useFetchBrands";
+import { useFetchCategories } from "@/hooks/useFetchCategories";
+import AddBrandModal from "@/sections/brand/AddBrandModal";
+import { BrandInfo } from "@/types/brand.types";
+import { CategoryInfo } from "@/types/category.types";
+import { PriceInfo, ProductInfo, Unit } from "@/types/product.types";
 import {
   Button,
   Col,
   Form,
-  Image,
   Input,
-  Popconfirm,
+  InputNumber,
   Row,
   Select,
   Space,
   Table,
 } from "antd";
-import React, { useCallback, useMemo, useState } from "react";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { FaEdit } from "react-icons/fa";
+import { useNavigate, useParams } from "react-router-dom";
 import AddProductPriceModal from "./AddProductPriceModal";
 import EditProductPriceModal from "./EditProductPriceModal";
-import { PriceInfo } from "@/types/product.types";
-import { notify } from "@/components/Notification";
-import { useNavigate } from "react-router-dom";
 
 const ProductDetail: React.FC = () => {
   const [form] = Form.useForm();
   const { Option } = Select;
   const { TextArea } = Input;
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [isOpenAdd, setIsOpenAdd] = useState<boolean>(false);
   const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false);
   const [currentRecord, setCurrentRecord] = useState<PriceInfo>();
-  const [currentCate, setCurrentCate] = useState<string>("");
-  const navigate = useNavigate();
+  const [currentCate] = useState<string>("");
+  const { data: categoriesData } = useFetchCategories(1, 50);
+  const [selectedUnit] = useState<Unit[]>([]);
+  const [fileChange, setFileChange] = useState<string>("");
+  const [productDetail, setProductDetail] = useState<ProductInfo>();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { data: brandsData, refetch: refetchBrand } = useFetchBrands(1, 50);
+
+  useEffect(() => {
+    if (id) {
+      const fetchData = async () => {
+        try {
+          const res = await getDetailProduct(Number(id));
+          if (res && res.status === 200) {
+            setProductDetail(res.data);
+            form.setFieldsValue({
+              ...res.data,
+              brand: res?.data?.brand?.id,
+              category: res?.data?.category?.id,
+            });
+          }
+        } catch (err) {
+          console.error("Error get detail product", err);
+        }
+      };
+      fetchData();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    form.setFieldsValue({ image: fileChange });
+  }, [fileChange, form]);
+
+  const handleFileChange = useCallback((newFileChange: string) => {
+    setFileChange(newFileChange);
+  }, []);
+
+  const brands = useMemo(() => brandsData?.data || [], [brandsData]);
+  const updateBrand = [...brands, { id: 0, name: "Khác" }];
+
+  const handleAddBrand = (values: number) => {
+    const otherBrand = values === 0 ? true : false;
+    if (otherBrand) {
+      setIsOpen(true);
+    }
+  };
+
+  const categories = useMemo(
+    () => categoriesData?.data || [],
+    [categoriesData],
+  );
 
   const handleRefetch = useCallback(() => {
-    // refetch();
+    refetchBrand();
   }, []);
 
   const showEditModal = (record: any) => {
-    if (currentCate && currentCate !== "") {
-      setCurrentRecord(record);
-      setIsOpenEdit(true);
-    } else {
-      notify(
-        "error",
-        "Vui lòng chọn danh mục trước khi chỉnh sửa giá sản phẩm",
-        3,
-      );
-    }
-  };
-
-  const handleCategoryChange = (value: any) => {
-    setCurrentCate(value);
-  };
-
-  const openAddProductPriceModal = () => {
-    if (currentCate && currentCate !== "") {
-      setIsOpenAdd(true);
-    } else {
-      notify("error", "Vui lòng chọn danh mục trước khi thêm giá sản phẩm", 3);
-    }
+    setCurrentRecord(record);
+    setIsOpenEdit(true);
   };
 
   const handleCancel = () => {
     navigate("/store/product");
   };
 
-  const categories = [
-    {
-      id: 1,
-      name: "Cát, đá",
-      code: "CT001",
-    },
-    {
-      id: 2,
-      name: "Xi măng, bột trét",
-      code: "CT002",
-    },
-    {
-      id: 3,
-      name: "Gạch",
-      code: "CT003",
-    },
-    {
-      id: 4,
-      name: "Sắt, thép",
-      code: "CT004",
-    },
-    {
-      id: 5,
-      name: "Gỗ, ván ép",
-      code: "CT005",
-    },
-    {
-      id: 6,
-      name: "Sơn",
-      code: "CT006",
-    },
-    {
-      id: 7,
-      name: "Vật liệu cách nhiệt",
-      code: "CT007",
-    },
-    {
-      id: 8,
-      name: "Dụng cụ xây dựng",
-      code: "CT008",
-    },
-    {
-      id: 9,
-      name: "Ống nước, phụ kiện",
-      code: "CT009",
-    },
-    {
-      id: 10,
-      name: "Thiết bị điện",
-      code: "CT010",
-    },
-    {
-      id: 11,
-      name: "Thiết bị vệ sinh",
-      code: "CT011",
-    },
-    {
-      id: 12,
-      name: "Phụ kiện khác",
-      code: "CT012",
-    },
-  ];
-
-  const dataSource = [
-    {
-      id: 1,
-      sku: "BM_21",
-      name: "Ống nước phi 21",
-      image: "https://via.placeholder.com/100",
-      categoryId: 5,
-      brandId: 3,
-      description: "Đây là ống nước",
-      quantity: 50,
-      storeId: 1,
-      soldQuantity: 0,
-      brand: {
-        id: 3,
-        name: "Bình Minh",
-      },
-      category: {
-        id: 5,
-        name: "Ống nước & Phụ kiện",
-      },
-      price: [
-        {
-          id: 1,
-          productId: 1,
-          unitId: 1,
-          price: 100000,
-          unit: {
-            id: 1,
-            name: "Cây",
-          },
-        },
-        {
-          id: 2,
-          productId: 1,
-          unitId: 2,
-          price: 20000,
-          unit: {
-            id: 2,
-            name: "Mét",
-          },
-        },
-      ],
-      createDate: "2024-09-25T22:27:01.7236043",
-      updateDate: null,
-      isDeleted: false,
-      version: "AAAAAAAAD88=",
-    },
-  ];
-
-  const transformedData = dataSource.flatMap((product) =>
-    product.price.map((priceDetail) => ({
-      id: priceDetail.id,
-      name: product.name,
-      unit: priceDetail.unit.name,
-      price: priceDetail.price,
-    })),
-  );
-
   const columns = useMemo(
     () => [
       {
         title: "Tên sản phẩm",
-        dataIndex: "name",
         key: "name",
-        with: "30%",
+        width: "30%",
+        render: () => `${productDetail?.name || "N/A"}`,
       },
       {
         title: "Đơn vị tính",
-        dataIndex: "unit",
-        key: "unit",
-        with: "20%",
+        key: "unitPrice",
+        width: "30%",
+        render: (_: any, record: { unit: { name: string } }) =>
+          record.unit?.name || "N/A",
       },
       {
         title: "Giá",
         dataIndex: "price",
-        key: "price",
-        with: "30%",
-        render: (text: any) => `${text.toLocaleString()} VND`,
+        width: "25%",
       },
       {
         title: "Thao tác",
         dataIndex: "",
+        key: "actions",
+        width: "30%",
         render: (record: any) => (
           <>
             <Button
@@ -216,9 +132,8 @@ const ProductDetail: React.FC = () => {
             >
               <FaEdit />
             </Button>
-            <Popconfirm
+            {/* <Popconfirm
               title="Bạn có muốn xóa giá sản phẩm này không?"
-              // onConfirm={() => handleDeleteUser(record.id)}
               okText="Có"
               cancelText="Không"
             >
@@ -229,46 +144,100 @@ const ProductDetail: React.FC = () => {
               >
                 <FaTrash />
               </Button>
-            </Popconfirm>
+            </Popconfirm> */}
           </>
         ),
       },
     ],
-    [],
+    [productDetail],
   );
+
+  const onFinish = async (values: any) => {
+    const updateData = {
+      id: Number(id),
+      name: values?.name,
+      image: values?.image,
+      categoryId: values?.category,
+      brandId: values?.brand,
+      description: values?.description,
+      quantity: values?.quantity,
+      storeId: productDetail?.storeId,
+    };
+    try {
+      const res = await editProduct(updateData);
+      if (res && res.status === 200) {
+        notify("success", "Cập nhật sản phẩm thành công", 3);
+        handleRefetch();
+        form.resetFields();
+        navigate("/store/product");
+      }
+    } catch (err: any) {
+      console.error(err);
+      notify("error", `${err.response.data.message}`, 3);
+    }
+  };
+
+  const filterOption = (
+    input: string,
+    option?: { label: string; value: string },
+  ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   return (
     <>
-      <Form form={form} name="product" layout="vertical" autoComplete="off">
+      <Form
+        form={form}
+        onFinish={onFinish}
+        name="product"
+        layout="vertical"
+        autoComplete="off"
+      >
         <Row gutter={16}>
-          <Col span={8}>
-            <Image
-              width={300}
-              height={300}
-              src="error"
-              fallback="data:image/png;base64,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"
-            />
+          <Col span={8} className="flex items-center justify-center">
+            <Form.Item
+              id="formItem"
+              name="image"
+              colon={true}
+              labelCol={{ span: 24 }}
+              className="formItem"
+              rules={[{ required: true, message: "Vui lòng chọn ảnh" }]}
+            >
+              <UploadImage
+                onFileChange={handleFileChange}
+                initialImage={productDetail?.image}
+                titleButton={"Thêm ảnh"}
+              />
+            </Form.Item>
           </Col>
           <Col span={16}>
-            <Row gutter={16}>
+            <Row gutter={16} className="relative mt-1">
               <Col span={12}>
                 <Form.Item
-                  id="formItem"
                   name="sku"
-                  colon={true}
-                  label="SKU"
-                  labelCol={{ span: 24 }}
-                  className="formItem"
-                  rules={[{ required: true }]}
+                  label="Mã sản phẩm"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
                 >
-                  <Input />
+                  <Input readOnly />
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item
                   name="name"
                   label="Tên sản phẩm"
-                  rules={[{ required: true }]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui lòng nhập tên sản phẩm",
+                    },
+                    {
+                      pattern: /^(?!^\d+$)[\p{L}\d\s]*$/u,
+                      message:
+                        "Tên sản phẩm không được chỉ chứa số hoặc ký tự đặc biệt",
+                    },
+                  ]}
                 >
                   <Input />
                 </Form.Item>
@@ -284,9 +253,27 @@ const ProductDetail: React.FC = () => {
                   label="Thương hiệu"
                   labelCol={{ span: 24 }}
                   className="formItem"
-                  rules={[{ required: true }]}
+                  rules={[
+                    { required: true, message: "Vui lòng nhập thương hiệu" },
+                  ]}
                 >
-                  <Input />
+                  <Select
+                    placeholder="Chọn thương hiệu"
+                    showSearch
+                    optionFilterProp="children"
+                    filterOption={filterOption}
+                    onChange={handleAddBrand}
+                  >
+                    {updateBrand?.map((brand: BrandInfo) => (
+                      <Option
+                        key={brand.id}
+                        value={brand.id}
+                        label={brand.name}
+                      >
+                        {brand.name}
+                      </Option>
+                    ))}
+                  </Select>
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -305,19 +292,23 @@ const ProductDetail: React.FC = () => {
                 >
                   <Select
                     placeholder="Chọn loại sản phẩm"
-                    onChange={handleCategoryChange}
+                    // onChange={handleCategoryChange}
                   >
-                    {categories.map((category) => (
-                      <Option key={category.id} value={category.code}>
-                        {category.name}
+                    {categories?.map((category: CategoryInfo) => (
+                      <Option
+                        key={category?.id}
+                        value={category?.id}
+                        label={category?.name}
+                      >
+                        {category?.name}
                       </Option>
                     ))}
                   </Select>
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={16} className="relative mt-1">
-              <Col span={12}>
+            <Row gutter={8} className="relative mt-1">
+              <Col span={4}>
                 <Form.Item
                   id="formItem"
                   name="quantity"
@@ -325,9 +316,26 @@ const ProductDetail: React.FC = () => {
                   label="Số lượng"
                   labelCol={{ span: 24 }}
                   className="formItem"
-                  rules={[{ required: true }]}
+                  rules={[
+                    { required: true, message: "Vui lòng nhập số lượng" },
+                  ]}
                 >
-                  <Input />
+                  <InputNumber min={1} type="number" />
+                </Form.Item>
+              </Col>
+              <Col span={4}>
+                <Form.Item
+                  id="formItem"
+                  name="soldQuantity"
+                  colon={true}
+                  label="Số lượng đã bán"
+                  labelCol={{ span: 24 }}
+                  className="formItem"
+                  // rules={[
+                  //   { required: true, message: "Vui lòng nhập số lượng" },
+                  // ]}
+                >
+                  <InputNumber type="number" readOnly />
                 </Form.Item>
               </Col>
             </Row>
@@ -337,6 +345,7 @@ const ProductDetail: React.FC = () => {
               label="Mô tả sản phẩm"
               labelCol={{ span: 24 }}
               className="formItem"
+              rules={[{ required: true, message: "Vui lòng nhập mô tả" }]}
             >
               <TextArea showCount placeholder="Mô tả sản phẩm" />
             </Form.Item>
@@ -344,7 +353,7 @@ const ProductDetail: React.FC = () => {
               <div className="flex gap-x-2">
                 <p className="text-[1.1rem] font-bold">Bảng giá</p>
               </div>
-              <div className="flex gap-x-2">
+              {/* <div className="flex gap-x-2">
                 <div></div>
                 <div>
                   <Button type="primary" onClick={openAddProductPriceModal}>
@@ -353,10 +362,10 @@ const ProductDetail: React.FC = () => {
                     </div>
                   </Button>
                 </div>
-              </div>
+              </div> */}
             </div>
             <Table
-              dataSource={transformedData}
+              dataSource={productDetail?.price}
               columns={columns}
               rowKey="id"
               pagination={false}
@@ -367,7 +376,7 @@ const ProductDetail: React.FC = () => {
                   Hủy bỏ
                 </Button>
                 <Button type="primary" htmlType="submit">
-                  Cập nhật
+                  Chỉnh sửa
                 </Button>
               </Space>
             </Form.Item>
@@ -378,18 +387,24 @@ const ProductDetail: React.FC = () => {
         setIsOpen={setIsOpenAdd}
         isOpen={isOpenAdd}
         handleRefetch={handleRefetch}
-        productName={dataSource[0]?.name}
+        productName={productDetail?.name}
         cateCode={currentCate}
+        selectedUnit={selectedUnit}
       />
       <EditProductPriceModal
         setIsOpen={setIsOpenEdit}
         isOpen={isOpenEdit}
         handleRefetch={handleRefetch}
         priceInfo={currentRecord}
-        productName={dataSource[0]?.name}
+        productDetail={productDetail}
+      />
+      <AddBrandModal
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        handleRefetch={handleRefetch}
       />
     </>
   );
 };
 
-export default ProductDetail;
+export default React.memo(ProductDetail);

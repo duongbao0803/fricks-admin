@@ -68,4 +68,4 @@ const DropdownProductFunc: React.FC<DropdownProductFuncProps> = React.memo(
   },
 );
 
-export default DropdownProductFunc;
+export default React.memo(DropdownProductFunc);

@@ -8,6 +8,7 @@
 }
 
 .scrollbar,
+*,
 #myTable {
   &::-webkit-scrollbar {
     width: 5px;
@@ -65,4 +66,8 @@ canvas {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.ant-upload-list-item-thumbnail img {
+  object-fit: cover !important;
 }

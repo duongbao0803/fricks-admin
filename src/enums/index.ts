@@ -15,3 +15,38 @@ export enum CreateRoles {
   STORE = 1,
   ADMIN = 2,
 }
+
+export enum WithdrawStatus {
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
+  DONE = "DONE",
+}
+
+export enum WithdrawStatusRender {
+  PENDING = "Đang xử lí",
+  APPROVED = "Đã chấp nhận",
+  REJECTED = "Đã từ chối",
+  DONE = "Hoàn thành",
+}
+
+export enum UpdateOrderStatus {
+  PENDING,
+  DELIVERY,
+  DONE,
+  CANCELED,
+}
+
+export enum OrderStatus {
+  PENDING = "PENDING",
+  DELIVERY = "DELIVERY",
+  DONE = "DONE",
+  CANCELED = "CANCELED",
+}
+
+export enum OrderStatusRender {
+  PENDING = "ĐANG CHỜ",
+  DELIVERY = "ĐANG GIAO HÀNG",
+  DONE = "ĐÃ GIAO HÀNG",
+  CANCELED = "ĐÃ HỦY",
+}

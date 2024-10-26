@@ -33,8 +33,8 @@ const PostDetail: React.FC<PostDetailProps> = React.memo((props) => {
         title: values.title,
         content: content,
         image: fileChange || postData?.image,
-     }
-     
+      };
+
       if (updateValues) {
         setTimeout(async () => {
           try {
@@ -45,13 +45,12 @@ const PostDetail: React.FC<PostDetailProps> = React.memo((props) => {
           }
         }, 1500);
       }
-    
     } catch (err) {
       console.error("Validation failed:", err);
     }
   };
 
-  const handleUpdatePost = useCallback(async (postData:any) => {
+  const handleUpdatePost = useCallback(async (postData: any) => {
     try {
       const res = await updatePost(postData);
       if (res && res.status === 200) {
@@ -98,7 +97,6 @@ const PostDetail: React.FC<PostDetailProps> = React.memo((props) => {
     option?: { label: string; value: string },
   ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
-  console.log("check postData", postData)
   return (
     <div className="w-full p-4">
       <Form form={form} onFinish={handleUpdate} layout="vertical">
@@ -183,7 +181,7 @@ const PostDetail: React.FC<PostDetailProps> = React.memo((props) => {
             </Form.Item>
 
             <Form.Item>
-              <div className="mt-10 flex space-x-2 justify-end">
+              <div className="mt-10 flex justify-end space-x-2">
                 <Button onClick={handleCancel}>Hủy bỏ</Button>
                 <Button type="primary" htmlType="submit">
                   Cập nhật

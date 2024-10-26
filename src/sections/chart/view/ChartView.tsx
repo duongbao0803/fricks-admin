@@ -1,125 +1,126 @@
-import React, { useState } from "react";
-import TotalField from "../TotalField";
-import { SystemData } from "@/constants";
+import { useFetchDashboard } from "@/hooks/useFetchDashboard";
+import { ArcElement, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  ChartData,
-} from "chart.js";
-ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
+import dayjs from "dayjs";
+import React, { useEffect } from "react";
 import DonutChart from "../DonutChart";
 import LineChart from "../LineChart";
-import BarChart from "../BarChart";
+import TotalField from "../TotalField";
+
+ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 const ChartView: React.FC = React.memo(() => {
-  const [donutData] = useState({
-    labels: ["Gạch", "Thiết bị điện", "Xi măng", "Đất"],
-    datasets: [
-      {
-        label: "Doanh thu",
-        data: [2000000, 2500000, 1500000, 1000000],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
-        hoverOffset: 4,
-      },
-    ],
-  });
+  const { dashboardInfo, mainChartData, revenueStoreData, fetchDashboard } =
+    useFetchDashboard();
+
+  useEffect(() => {
+    fetchDashboard();
+  }, [fetchDashboard]);
+
+  const getAllDaysInCurrentWeek = () => {
+    const currentDate = dayjs();
+    const startOfWeek = currentDate.day(1).startOf("day"); // Set to Monday
+    const daysInWeek = 7;
+    const labels = [];
+    const displayLabels = [];
+    const dayNames = [];
+
+    for (let day = 0; day < daysInWeek; day++) {
+      const date = startOfWeek.add(day, "day");
+      labels.push(date.format("DD/MM/YYYY"));
+      displayLabels.push(date.format("DD"));
+      dayNames.push(date.format("dddd"));
+    }
+
+    return { labels, displayLabels, dayNames };
+  };
 
   const lineData = {
-    labels: SystemData.map((data) => `T${data.month} / ${data.year}`),
+    labels: getAllDaysInCurrentWeek().dayNames,
     datasets: [
       {
-        label: "Dịch vụ A",
-        data: [65, 59, 80, 81, 56, 65, 59, 80, 81, 56, 23, 32],
-        borderColor: "#36A2EB",
+        label: "Đơn hàng",
+        data: getAllDaysInCurrentWeek().labels.map((date) => {
+          return (
+            mainChartData?.find(
+              (data) => dayjs(data.date).format("DD/MM/YYYY") === date,
+            )?.orderCount || 0
+          );
+        }),
+        type: "bar",
+        borderColor: "rgba(0, 143, 251, 0.85);",
         pointBorderWidth: 1,
         pointBackgroundColor: "#1b8bd6",
         pointBorderColor: "#36A2EB",
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
-        tension: 0.4,
+        backgroundColor: "rgba(0, 143, 251, 1)",
+        yAxisID: "y",
+        order: 2,
+        barThickness: 30,
       },
       {
-        label: "Dịch vụ B",
-        data: [28, 48, 40, 19, 86, 28, 48, 40, 19, 86, 66, 44],
-        borderColor: "#FF6384",
+        label: "Doanh thu",
+        data: getAllDaysInCurrentWeek().labels.map((date) => {
+          return (
+            mainChartData?.find(
+              (data) => dayjs(data.date).format("DD/MM/YYYY") === date,
+            )?.revenue || 0
+          );
+        }),
+        borderColor: "rgb(0, 227, 150)",
         pointBorderWidth: 1,
-        pointBackgroundColor: "#e73c61",
-        pointBorderColor: "#FF6384",
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        tension: 0.4,
+        pointBackgroundColor: "rgb(0, 227, 150)",
+        pointBorderColor: "#FFFFFF",
+        backgroundColor: "rgb(0, 227, 150)",
+        yAxisID: "y1",
+        order: 1,
       },
     ],
   };
 
-  const [barData] = useState<
-    ChartData<"bar", (number | [number, number] | null)[]>
-  >({
-    labels: SystemData.map((data) => `T${data.month} / ${data.year}`),
-    datasets: [
-      {
-        label: "Marketing",
-        data: SystemData.map((data) => data.sales),
-        backgroundColor: ["#4BC0C0"],
+  const lineOptions = {
+    plugins: {
+      datalabels: {
+        display: false,
       },
-      {
-        label: "Vận chuyển",
-        data: SystemData.map((data) => data.sales),
-        backgroundColor: ["#FFCE56"],
+    },
+    elements: {
+      point: {
+        radius: 2,
+        backgroundColor: "currentColor",
+        hoverRadius: 4,
+        hitRadius: 6,
       },
-      {
-        label: "Giao dịch",
-        data: SystemData.map((data) => data.inventory),
-        backgroundColor: ["#36A2EB"],
+    },
+    scales: {
+      y: {
+        type: "linear",
+        display: true,
+        position: "left",
       },
-      {
-        label: "Khác",
-        data: SystemData.map((data) => data.inventory),
-        backgroundColor: ["#FF6384"],
+      y1: {
+        type: "linear",
+        display: true,
+        position: "right",
+        grid: {
+          drawOnChartArea: false,
+        },
       },
-    ],
-  });
+    },
+    responsive: true,
+  };
 
-  const [barData2] = useState<
-    ChartData<"bar", (number | [number, number] | null)[]>
-  >({
-    labels: SystemData.map((data) => `T${data.month} / ${data.year}`),
+  const donutData = {
+    labels: revenueStoreData?.map((data) => data.storeName) || [],
     datasets: [
       {
-        type: "bar",
-        label: "Chi phí",
-        data: SystemData.map((data) => data.sales),
-        backgroundColor: "#FFCE56",
-      },
-      {
-        type: "bar",
         label: "Doanh thu",
-        data: SystemData.map((data) => data.inventory),
-        backgroundColor: "#36A2EB",
+        data: revenueStoreData?.map((data) => data.revenue) || [],
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
+        hoverOffset: 4,
       },
     ],
-  });
+  };
 
-  const [lineData2] = useState<
-    ChartData<"line", (number | [number, number] | null)[]>
-  >({
-    labels: SystemData.map((data) => `T${data.month} / ${data.year}`),
-    datasets: [
-      {
-        type: "line",
-        label: "Biên lợi nhuận",
-        data: SystemData.map((data) => data.inventory - data.sales),
-        backgroundColor: "#4BC0C0",
-        borderColor: "red",
-        pointBorderWidth: 1,
-        pointBackgroundColor: "#4BC0C0",
-        pointBorderColor: "#4BC0C0",
-        tension: 0.4,
-        borderWidth: 2,
-      },
-    ],
-  });
   const donutOptions = {
     plugins: {
       datalabels: {
@@ -129,8 +130,7 @@ const ChartView: React.FC = React.memo(() => {
             0,
           );
           const percentage = ((value / total) * 100).toFixed(2) + "%";
-          const label = context.chart.data.labels[context.dataIndex];
-          return `${label}\n${percentage}`;
+          return `${percentage}`;
         },
         color: "#fff",
         font: {
@@ -144,91 +144,23 @@ const ChartView: React.FC = React.memo(() => {
     responsive: true,
   };
 
-  const lineOptions = {
-    plugins: {
-      datalabels: {
-        display: false,
-      },
-    },
-    elements: {
-      point: {
-        radius: 3,
-        backgroundColor: "currentColor",
-        hoverRadius: 8,
-        hitRadius: 10,
-      },
-      line: {
-        tension: 0.4,
-      },
-    },
-    responsive: true,
-  };
-
-  const barOptions = {
-    plugins: {
-      datalabels: {
-        display: false,
-      },
-    },
-    responsive: true,
-    elements: {
-      point: {
-        radius: 3,
-        backgroundColor: "currentColor",
-        hoverRadius: 8,
-        hitRadius: 10,
-      },
-      line: {
-        tension: 0.4,
-      },
-    },
-    scales: {
-      x: {
-        stacked: true,
-      },
-      y: {
-        stacked: true,
-      },
-    },
-  };
-
-  const combinedChartData: ChartData<
-    "bar" | "line",
-    (number | [number, number] | null)[]
-  > = {
-    labels: SystemData.map((data) => `T${data.month} / ${data.year}`),
-    datasets: [...lineData2.datasets, ...barData2.datasets],
-  };
-
   return (
     <>
       <div className="p-5">
-        <TotalField />
+        <TotalField data={dashboardInfo} />
       </div>
       <div className="grid grid-cols-1 gap-5 p-5 sm:grid-cols-3">
-        <div className="col-span-1 rounded-xl bg-[#fff] shadow-md  sm:col-span-2">
+        <div className="col-span-1 rounded-xl bg-[#fff] shadow-md sm:col-span-2">
           <LineChart chartData={lineData} options={lineOptions} />
         </div>
-        <div className="col-span-1 rounded-xl bg-[#fff] shadow-md  sm:col-span-1">
-          <DonutChart chartData={donutData} options={donutOptions} />
+
+        <div className="col-span-1 flex flex-col rounded-xl bg-[#fff] sm:col-span-1">
+          <div className="h-full flex-1">
+            <DonutChart chartData={donutData} options={donutOptions} />
+          </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-5 p-5 sm:grid-cols-2">
-        <div className="col-span-1 rounded-xl bg-[#fff] shadow-md  sm:col-span-1">
-          <BarChart
-            title="Cơ cấu chi phí cửa hàng A"
-            chartData={barData}
-            options={barOptions}
-          />
-        </div>
-        <div className="col-span-1 rounded-xl bg-[#fff] shadow-md  sm:col-span-1">
-          <BarChart
-            title="Doanh thu, Lợi nhuận và Biên Lợi Nhuận cửa hàng A"
-            chartData={combinedChartData}
-            options={barOptions}
-          />
-        </div>
-      </div>
+      <div className="grid grid-cols-1 gap-5 p-5 sm:grid-cols-3"></div>
     </>
   );
 });

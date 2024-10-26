@@ -39,7 +39,6 @@ axiosClient.interceptors.response.use(
             const newAccessToken = res.data.accessToken;
             const newRefreshToken = res.data.refreshToken;
 
-            console.log("check data", newAccessToken);
             Cookies.set("accessToken", newAccessToken);
             Cookies.set("refreshToken", newRefreshToken);
 

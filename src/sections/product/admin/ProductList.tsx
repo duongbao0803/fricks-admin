@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo, useState } from "react";
-import { Button, Image, Input, Table } from "antd";
-import type { TablePaginationConfig, TableProps } from "antd";
-import { FilterOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import "react-loading-skeleton/dist/skeleton.css";
-import { ProductInfo } from "@/types/product.types";
-import DropdownProductFunc from "./DropdownProductFunc";
 import { useFetchProducts } from "@/hooks/useFetchProducts";
+import { ProductInfo } from "@/types/product.types";
+import { FilterOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import type { TablePaginationConfig, TableProps } from "antd";
+import { Button, Image, Input, Table } from "antd";
+import React, { useCallback, useMemo, useState } from "react";
+import "react-loading-skeleton/dist/skeleton.css";
+import DropdownProductFunc from "./DropdownProductFunc";
 
 export interface DataType {
   key: string;
@@ -18,7 +18,7 @@ export interface DataType {
 }
 
 const ProductList: React.FC = () => {
-  const [,setIsOpen] = useState(false)
+  const [, setIsOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = React.useState(10);
   const { data, isFetching, totalCount } = useFetchProducts(

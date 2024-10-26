@@ -15,7 +15,7 @@ const DonutChart: React.FC<DonutChartProps> = (props) => {
     <>
       <div className="w-full p-5">
         <div className="mb-10">
-          <p className="text-xl font-bold">Danh mục hàng theo doanh thu</p>
+          <p className="text-xl font-bold">Danh thu theo cửa hàng</p>
         </div>
         <Doughnut data={chartData} options={options} />
       </div>
