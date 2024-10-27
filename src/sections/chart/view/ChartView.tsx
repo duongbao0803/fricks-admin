@@ -19,7 +19,10 @@ const ChartView: React.FC = React.memo(() => {
 
   const getAllDaysInCurrentWeek = () => {
     const currentDate = dayjs();
-    const startOfWeek = currentDate.day(1).startOf("day"); // Set to Monday
+    // const startOfWeek = currentDate.day(1).startOf("day"); // Set to Monday
+    const startOfWeek = currentDate.day() === 0 
+        ? currentDate.day(-6).startOf("day")
+        : currentDate.day(1).startOf("day");
     const daysInWeek = 7;
     const labels = [];
     const displayLabels = [];
