@@ -1,3 +1,4 @@
+import { OrderStatus, OrderStatusRender } from "@/enums";
 import { useFetchOrders } from "@/hooks/useFetchOrders";
 import { OrderInfo } from "@/types/order.types";
 import { formatTimestampWithHour, timeAgo } from "@/utils/validate";
@@ -15,7 +16,6 @@ import React, { useCallback, useMemo, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import EditOrderModal from "./EditOrderModal";
-import { OrderStatus, OrderStatusRender } from "@/enums";
 
 const OrderList: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,14 +25,14 @@ const OrderList: React.FC = () => {
   const [selectedOrder, setSelectedOrder] = useState<OrderInfo>();
   const navigate = useNavigate();
 
-  const { data, isFetching, totalCount } = useFetchOrders(
+  const { data, isFetching, totalCount, refetch } = useFetchOrders(
     currentPage,
     pageSize,
   );
 
-  // const handleRefetch = useCallback(() => {
-  //   refetch();
-  // }, []);
+  const handleRefetch = useCallback(() => {
+    refetch();
+  }, []);
 
   const handleTableChange = useCallback((pagination: TablePaginationConfig) => {
     setCurrentPage(pagination.current || 1);
@@ -237,6 +237,7 @@ const OrderList: React.FC = () => {
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         selectedOrder={selectedOrder}
+        handleRefetch={handleRefetch}
       />
     </>
   );
