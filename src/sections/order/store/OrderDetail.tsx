@@ -182,6 +182,14 @@ const OrderDetail: React.FC<OrderDetailProps> = React.memo((props) => {
               <td className="px-4 py-2">{orderData?.customerPhone}</td>
             </tr>
             <tr>
+              <td className="px-4 py-2"><strong>Phí giao hàng:</strong></td>
+              <td className="px-4 py-2">{orderData?.shipFee?.toLocaleString("vi-VN") + " VNĐ"}</td>
+            </tr>
+            <tr>
+              <td className="px-4 py-2"><strong>Giảm giá:</strong></td>
+              <td className="px-4 py-2">{orderData?.discount?.toLocaleString("vi-VN") + " VNĐ"}</td>
+            </tr>
+            <tr>
               <td className="px-4 py-2">
                 <strong>Tổng tiền:</strong>
               </td>
