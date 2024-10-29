@@ -16,6 +16,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import EditOrderModal from "./EditOrderModal";
+import ExportOrder from "../admin/ExportOrder";
 
 const OrderList: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -217,6 +218,7 @@ const OrderList: React.FC = () => {
                 <UserAddOutlined className="mr-1 text-lg" /> Thêm người dùng
               </div>
             </Button> */}
+            <ExportOrder />
           </div>
         </div>
       </div>

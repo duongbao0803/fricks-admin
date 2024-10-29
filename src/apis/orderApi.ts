@@ -8,6 +8,11 @@ export const getOrderList = async (PageIndex: number, PageSize: number) => {
   return response;
 };
 
+export const getOrderAll = async () => {
+  const response = await axiosClient.get(`/orders/all`);
+  return response;
+};
+
 export const getOrderDetail = async (orderId: number) => {
   const response = await axiosClient.get(`/orders/${orderId}`);
   return response;

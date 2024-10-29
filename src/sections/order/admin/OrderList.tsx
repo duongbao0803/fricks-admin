@@ -2,9 +2,18 @@ import { useFetchOrders } from "@/hooks/useFetchOrders";
 import { OrderInfo } from "@/types/order.types";
 import { formatTimestampWithHour, timeAgo } from "@/utils/validate";
 import { FilterOutlined } from "@ant-design/icons";
-import { Button, Input, Table, TablePaginationConfig, TableProps, Tag, Tooltip } from "antd";
+import {
+  Button,
+  Input,
+  Table,
+  TablePaginationConfig,
+  TableProps,
+  Tag,
+  Tooltip,
+} from "antd";
 import React, { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ExportOrder from "./ExportOrder";
 
 const OrderList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -159,6 +168,7 @@ const OrderList: React.FC = () => {
                 <UserAddOutlined className="mr-1 text-lg" /> Thêm người dùng
               </div>
             </Button> */}
+            <ExportOrder />
           </div>
         </div>
       </div>
