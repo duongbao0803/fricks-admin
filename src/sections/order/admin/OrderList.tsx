@@ -1,8 +1,8 @@
 import { useFetchOrders } from "@/hooks/useFetchOrders";
 import { OrderInfo } from "@/types/order.types";
-import { formatTimestampWithHour } from "@/utils/validate";
+import { formatTimestampWithHour, timeAgo } from "@/utils/validate";
 import { FilterOutlined } from "@ant-design/icons";
-import { Button, Input, Table, TablePaginationConfig, TableProps, Tag } from "antd";
+import { Button, Input, Table, TablePaginationConfig, TableProps, Tag, Tooltip } from "antd";
 import React, { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -51,13 +51,13 @@ const OrderList: React.FC = () => {
         title: "Khách hàng",
         dataIndex: "customerEmail",
         key: "customerEmail",
-        width: "12%",
+        width: "10%",
       },
       {
         title: "Số điện thoại",
         dataIndex: "customerPhone",
         key: "customerPhone",
-        width: "12%",
+        width: "8%",
       },
       {
         title: "Giá tiền",
@@ -70,7 +70,7 @@ const OrderList: React.FC = () => {
         title: "Ngày tạo",
         dataIndex: "createDate",
         key: "createDate",
-        width: "12%",
+        width: "11%",
         render: (createDate: any) => {
           if (createDate) {
             return formatTimestampWithHour(createDate);
@@ -83,13 +83,13 @@ const OrderList: React.FC = () => {
         title: "Phương thức",
         dataIndex: "paymentMethod",
         key: "paymentMethod",
-        width: "8%",
+        width: "5%",
       },
       {
         title: "Thanh toán",
         dataIndex: "paymentStatus",
         key: "paymentStatus",
-        width: "10%",
+        width: "8%",
         render: (paymentStatus: any) => {
           let statusText = "";
           let tagColor = "";
@@ -114,11 +114,14 @@ const OrderList: React.FC = () => {
         title: "Ngày thanh toán",
         dataIndex: "paymentDate",
         key: "paymentDate",
+        width: "10%",
         render: (paymentDate: any) => {
           if (paymentDate) {
             return (
               <p className="text-left">
-                {formatTimestampWithHour(paymentDate)}
+                <Tooltip title={formatTimestampWithHour(paymentDate)}>
+                  {timeAgo(paymentDate)}
+                </Tooltip>
               </p>
             );
           } else {
