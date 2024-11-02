@@ -33,10 +33,10 @@ const TotalField: React.FC<TotalFieldProps> = (props) => {
           </div>
           <div>
             <p className="text-3xl font-bold text-[black]">
-              <CountUp end={props.data.numOfProducts} duration={2} />
+              <CountUp end={props.data.numOfOrders} duration={2} />
             </p>
             <p className="text-[15px] font-semibold text-[#bdbdbd]">
-              Sản phẩm
+              Đơn hàng
             </p>
           </div>
         </div>

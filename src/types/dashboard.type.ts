@@ -1,7 +1,7 @@
 export interface AdminDashboardInfo {
     revenue: number;
     numOfStores: number;
-    numOfProducts: number;
+    numOfOrders: number;
     numOfUsers: number;
     lastUpdated?: string;
 }
