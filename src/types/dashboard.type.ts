@@ -1,28 +1,28 @@
 export interface AdminDashboardInfo {
-    revenue: number;
-    numOfStores: number;
-    numOfProducts: number;
-    numOfUsers: number;
-    lastUpdated?: string;
+  revenue: number;
+  numOfProducts: number;
+  numOfStores: number;
+  numOfOrders?: number;
+  numOfUsers: number;
+  lastUpdated?: string;
 }
 
 export interface AdminDashboardRevenueCategory {
-    categoryId: number;
-    categoryName: string;
-    revenue: number;
-    lastUpdated: string;
+  categoryId: number;
+  categoryName: string;
+  revenue: number;
+  lastUpdated: string;
 }
 
 export interface AdminDashboardRevenueStore {
-    storeId: number;
-    storeName: string;
-    revenue: number;
-    lastUpdated: string;
+  storeId: number;
+  storeName: string;
+  revenue: number;
+  lastUpdated: string;
 }
 
-
 export interface AdminDashboardMainChart {
-    date: string;
-    orderCount: number;
-    revenue: number;
+  date: string;
+  orderCount: number;
+  revenue: number;
 }
