@@ -1,4 +1,6 @@
+import { updateOrder } from "@/apis/orderApi";
 import { UploadImage } from "@/components";
+import { notify } from "@/components/Notification";
 import { OrderStatus, UpdateOrderStatus } from "@/enums";
 import { OrderInfo } from "@/types/order.types";
 import { PhoneOutlined } from "@ant-design/icons";
@@ -12,12 +14,13 @@ export interface EditOrderModalProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isOpen: boolean;
   selectedOrder?: OrderInfo;
+  handleRefetch: any;
 }
 
 const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
-  const { setIsOpen, isOpen, selectedOrder } = props;
+  const { setIsOpen, isOpen, selectedOrder, handleRefetch } = props;
   const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
-  const [, setFileChange] = useState<string>("");
+  const [fileChange, setFileChange] = useState<string>("");
   const [form] = Form.useForm();
   // const { Option } = Select;
 
@@ -34,6 +37,7 @@ const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
     [OrderStatus.DONE]: "Đã giao hàng",
     [OrderStatus.CANCELED]: "Đã hủy",
   };
+
   useEffect(() => {
     if (isOpen) {
       const updatedOrder = {
@@ -41,21 +45,44 @@ const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
         status:
           orderLabelsUpdate[selectedOrder?.status as OrderStatus] ||
           selectedOrder?.status,
+        image: fileChange,
       };
       form.setFieldsValue(updatedOrder);
     }
-  }, [isOpen, selectedOrder]);
+  }, [isOpen, selectedOrder, fileChange]);
 
   const handleOk = async () => {
     try {
-      // const values = await form.validateFields();
+      const values = await form.validateFields();
+      const updateValues = {
+        ...values,
+        id: selectedOrder?.id,
+        status:
+          values?.status === "Đang giao hàng"
+            ? 1
+            : values?.status === "Đang chờ"
+              ? 0
+              : values?.status === "Đã giao hàng"
+                ? 2
+                : values?.status === "Đã hủy"
+                  ? 3
+                  : null,
+      };
+
       setIsConfirmLoading(true);
       setTimeout(async () => {
         try {
-          // await updateOrder(values);
+          const res = await updateOrder(updateValues);
+          console.log("check res", res);
+          if (res && res.status === 200) {
+            notify("success", `${res.data.message}`, 2);
+            handleRefetch();
+          }
           setIsConfirmLoading(false);
           setIsOpen(false);
-        } catch (error) {
+        } catch (error: any) {
+          notify("error", `${error.response.data.message}`, 2);
+
           setIsConfirmLoading(false);
           setIsOpen(true);
         }
@@ -203,7 +230,10 @@ const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
             {Object.values(UpdateOrderStatus)
               .filter((value) => typeof value === "number")
               .map((value) => (
-                <Select.Option key={value} value={value}>
+                <Select.Option
+                  key={value}
+                  value={orderLabels[value as UpdateOrderStatus]}
+                >
                   {orderLabels[value as UpdateOrderStatus]}
                 </Select.Option>
               ))}
@@ -219,7 +249,7 @@ const EditOrderModal: React.FC<EditOrderModalProps> = (props) => {
         >
           <UploadImage
             onFileChange={handleFileChange}
-            initialImage={""}
+            initialImage={selectedOrder?.image}
             titleButton={"Thêm ảnh"}
           />
         </Form.Item>

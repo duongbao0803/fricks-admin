@@ -9,11 +9,11 @@ const OrderDetailView: React.FC = React.memo(() => {
 
   const items = [
     {
-      href: "/store/product",
+      href: "/chart",
       title: "Trang chủ",
     },
     {
-      href: "/store/order",
+      href: "/order",
       title: "Đơn hàng",
     },
     {

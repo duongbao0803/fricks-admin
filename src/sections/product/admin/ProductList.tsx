@@ -41,12 +41,12 @@ const ProductList: React.FC = () => {
       {
         title: "SKU",
         dataIndex: "sku",
-        width: "10%",
+        width: "5%",
       },
       {
         title: "Hình ảnh",
         dataIndex: "image",
-        width: "10%",
+        width: "8%",
         render: (image) => (
           <Image
             src={image}
@@ -62,13 +62,13 @@ const ProductList: React.FC = () => {
       {
         title: "Tên sản phẩm",
         dataIndex: "name",
-        width: "15%",
+        width: "12%",
         className: "first-column",
       },
       {
         title: "Loại",
         dataIndex: "categoryName",
-        width: "15%",
+        width: "10%",
       },
       {
         title: "Thương hiệu",
@@ -78,6 +78,11 @@ const ProductList: React.FC = () => {
       {
         title: "Số lượng",
         dataIndex: "quantity",
+        width: "8%",
+      },
+      {
+        title: "Đã bán",
+        dataIndex: "soldQuantity",
         width: "8%",
       },
       {

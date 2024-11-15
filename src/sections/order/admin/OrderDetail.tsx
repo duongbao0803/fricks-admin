@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Table, TableProps } from "antd";
+import { Table, TableProps, Tag } from "antd";
 import { OrderDetails, OrderInfo } from "@/types/order.types";
 import { getOrderDetail } from "@/apis/orderApi";
 import { formatTimestampWithHour } from "@/utils/validate";
+import { OrderStatus, OrderStatusRender } from "@/enums";
 
 export interface OrderDetailProps {
   orderId: number;
@@ -56,20 +57,31 @@ const OrderDetail: React.FC<OrderDetailProps> = React.memo((props) => {
     [],
   );
 
-  const getStatusText = (status: string | undefined): string => {
+  const getStatusText = (status: string | undefined): any => {
     if (status === undefined) {
-        return "-"
+      return <Tag color={'gray'}>-</Tag>;;
     }
+    let statusText = "";
+    let tagColor = "";
     switch (status) {
-      case 'SUCCESS':
-        return 'Đã thanh toán';
-      case 'ERROR':
-        return 'Đã hủy';
-      case 'PENDING':
-        return 'Đang chờ thanh toán';
+      case OrderStatus.DONE.toString():
+        statusText = OrderStatusRender.DONE.toString();
+        tagColor = "green";
+        break;
+      case OrderStatus.DELIVERY.toString():
+        statusText = OrderStatusRender.DELIVERY.toString();
+        tagColor = "orange";
+        break;
+      case OrderStatus.CANCELED.toString():
+        statusText = OrderStatusRender.CANCELED.toString();
+        tagColor = "pink";
+        break;
       default:
-        return status;
+        statusText = OrderStatusRender.PENDING.toString();
+        tagColor = "gray";
+        break;
     }
+    return <Tag color={tagColor}>{statusText}</Tag>;
   };
 
   return (
@@ -100,6 +112,14 @@ const OrderDetail: React.FC<OrderDetailProps> = React.memo((props) => {
             <tr>
               <td className="px-4 py-2"><strong>Số điện thoại khách hàng:</strong></td>
               <td className="px-4 py-2">{orderData?.customerPhone}</td>
+            </tr>
+            <tr>
+              <td className="px-4 py-2"><strong>Phí giao hàng:</strong></td>
+              <td className="px-4 py-2">{orderData?.shipFee?.toLocaleString("vi-VN") + " VNĐ"}</td>
+            </tr>
+            <tr>
+              <td className="px-4 py-2"><strong>Giảm giá:</strong></td>
+              <td className="px-4 py-2">{orderData?.discount?.toLocaleString("vi-VN") + " VNĐ"}</td>
             </tr>
             <tr>
               <td className="px-4 py-2"><strong>Tổng tiền:</strong></td>

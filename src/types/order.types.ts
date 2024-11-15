@@ -18,6 +18,7 @@ export interface OrderInfo extends CommonModel {
   customerAddress: string;
   customerEmail: string;
   customerPhone: string;
+  image: string;
   storeId: number;
   storeName: string;
   storePhone: string;
