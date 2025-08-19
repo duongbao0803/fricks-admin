@@ -20,7 +20,8 @@ const ChartView: React.FC = React.memo(() => {
   const getAllDaysInCurrentWeek = () => {
     const currentDate = dayjs();
     // const startOfWeek = currentDate.day(1).startOf("day"); // Set to Monday
-    const startOfWeek = currentDate.day() === 0 
+    const startOfWeek =
+      currentDate.day() === 0
         ? currentDate.day(-6).startOf("day")
         : currentDate.day(1).startOf("day");
     const daysInWeek = 7;
@@ -112,17 +113,23 @@ const ChartView: React.FC = React.memo(() => {
     responsive: true,
   };
 
-  const donutData = {
-    labels: revenueStoreData?.map((data) => data.storeName) || [],
-    datasets: [
-      {
-        label: "Doanh thu",
-        data: revenueStoreData?.map((data) => data.revenue) || [],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
-        hoverOffset: 4,
-      },
-    ],
-  };
+  const donutData = (() => {
+    // Lọc ra những store có revenue > 0
+    const filteredData =
+      revenueStoreData?.filter((data) => data.revenue > 0) || [];
+
+    return {
+      labels: filteredData.map((data) => data.storeName),
+      datasets: [
+        {
+          label: "Doanh thu",
+          data: filteredData.map((data) => data.revenue),
+          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
+          hoverOffset: 4,
+        },
+      ],
+    };
+  })();
 
   const donutOptions = {
     plugins: {

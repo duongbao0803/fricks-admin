@@ -1,10 +1,11 @@
-import Router from "./routes/Sections";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ConfigProvider } from "antd";
+import Cookies from "js-cookie";
+import { useEffect } from "react";
+import { LoadingWrapper } from "./components";
 import { NotificationProvider } from "./components/Notification";
 import { useAuthStore } from "./hooks/useAuthStore";
-import { useEffect } from "react";
-import Cookies from "js-cookie";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { LoadingWrapper } from "./components";
+import Router from "./routes/Sections";
 const queryClient = new QueryClient();
 
 function App() {
@@ -18,11 +19,19 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <NotificationProvider>
-          <LoadingWrapper>
-            <Router />
-          </LoadingWrapper>
-        </NotificationProvider>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: "#ff7b29",
+            },
+          }}
+        >
+          <NotificationProvider>
+            <LoadingWrapper>
+              <Router />
+            </LoadingWrapper>
+          </NotificationProvider>
+        </ConfigProvider>
       </QueryClientProvider>
     </>
   );
